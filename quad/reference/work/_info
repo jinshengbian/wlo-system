@@ -1,0 +1,228 @@
+m255
+K4
+z2
+!s12c _opt2
+Z0 !s99 nomlopt
+Z1 !s12c _opt1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+Z2 !s12c _opt
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+!s11f vlog 2023.3 2023.07, Jul 17 2023
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z3 d/home/jinsheng/Documents/Workspace/wlo_system/quad/reference
+T_opt
+!s110 1716806391
+VCb;UB[_z6Z;9likGRR@4z0
+Z4 04 6 4 work top_tb fast 0
+=1-000ae431a4f1-665462f7-2738c-3383e7
+R0
+Z5 !s12b OEM100
+Z6 !s124 OEM10U6 
+Z7 o-quiet -auto_acc_if_foreign -work work +acc
+Z8 tCvgOpt 0
+n@_opt
+Z9 OL;O;2023.3;77
+R3
+T_opt1
+!s110 1716808311
+VWf^mz4G5YhWL_5lX2lMdz0
+R4
+=1-000ae431a4f1-66546a77-ca474-33b4c6
+R0
+R5
+R6
+R7
+R8
+n@_opt1
+R9
+R3
+T_opt2
+!s110 1716900933
+VUfjed5NPTj1eXVBf?QWmC2
+R4
+=1-000ae431a4f1-6655d445-45f84-3a68ef
+R0
+R5
+R6
+R7
+R8
+n@_opt2
+R9
+R3
+vbit_switch
+Z10 2./design/bit_switch.sv|./design/quad.sv|./design/top.sv|./design/top_tb.sv
+Z11 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z12 !s110 1716900986
+!i10b 1
+!s100 2MPNY;N_l8M@a@2N<06NA0
+I5lAPSaI4FMTP3Y3JHPbC[0
+S1
+R3
+Z13 w1716805967
+8./design/bit_switch.sv
+F./design/bit_switch.sv
+!i122 170
+L0 4 58
+Z14 VDg1SIo80bB@j0V0VzS_@n1
+Z15 OL;L;2023.3;77
+r1
+!s85 0
+31
+Z16 !s108 1716900986.000000
+!s107 ./design/top_tb.sv|./design/top.sv|./design/quad.sv|./design/bit_switch.sv|
+Z17 !s90 ./design/bit_switch.sv|./design/quad.sv|./design/top.sv|./design/top_tb.sv|
+!i113 0
+Z18 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R8
+vquad
+R10
+R11
+R12
+!i10b 1
+!s100 e4H_0FR;;naQZJaNak7kj2
+I4CVDRUL[]`S@bG]EK;1AT0
+S1
+R3
+R13
+8./design/quad.sv
+F./design/quad.sv
+!i122 170
+L0 3 34
+R14
+R15
+r1
+!s85 0
+31
+R16
+Z19 !s107 ./design/top_tb.sv|./design/top.sv|./design/quad.sv|./design/bit_switch.sv|
+R17
+!i113 0
+R18
+R8
+vtop
+R10
+R11
+R12
+!i10b 1
+!s100 `F`jf8Tm15HB=kF5NU9[K0
+I]JIY>X=D19:XIdL4C:5Ro2
+S1
+R3
+R13
+8./design/top.sv
+F./design/top.sv
+!i122 170
+L0 1 64
+R14
+R15
+r1
+!s85 0
+31
+R16
+R19
+R17
+!i113 0
+R18
+R8
+vtop_tb
+R10
+R11
+R12
+!i10b 1
+!s100 ZEYeM_mkH8;GcCcSNn5CT0
+I28]CiWZVDdO8acZSOIFO]2
+S1
+R3
+w1716806033
+8./design/top_tb.sv
+F./design/top_tb.sv
+!i122 170
+L0 2 77
+R14
+R15
+r1
+!s85 0
+31
+R16
+R19
+R17
+!i113 0
+R18
+R8
