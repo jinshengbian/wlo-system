@@ -20,7 +20,6 @@ class hyb_host(host):
     def uart_send_config(self, serial_ob:serial.Serial,config: np.array):
         cmd = bytes([2])
         serial_ob.write(cmd)
-        print(config)
         for i in config:
             cmd = bytes([int(i)])
             serial_ob.write(cmd)
@@ -45,20 +44,25 @@ class hyb_host(host):
         msg = []
         while(1):
             msg.append(int.from_bytes(serial_ob.read(1), byteorder='big'))
-            if len(msg)==16:
+            if len(msg)==8*self.batch_siz:
                 break      
             # calculate mse
         for i in range(self.batch_siz):
             mse_val = 0
             for j in range(8):
                 mse_val = mse_val + msg[i*8+j]*256**j
-                mse_val = mse_val/2**14/1e5
+
+            mse_val = mse_val*2**13/131072
             self.cur_prec = np.append(self.cur_prec, np.array([mse_val]))
                 # record mse
 
 if __name__ == '__main__':
-    serial_ob = serial.Serial('/dev/ttyUSB0', 115200)
-    host = hyb_host('hyb_host', 100, 10,2)
-    host.cur_config = np.array([[30,30,30],[2,2,2]])
+    serial_ob = serial.Serial('/dev/ttyUSB1', 115200)
+    host = hyb_host('hyb_host', 100, 10,1)
+    host.cur_config = np.array([[24,23,17]])
+    # host.get_cost()
+    # print(host.cur_cost)
     host.get_prec()
     print(host.cur_prec)
+    # host.calc_loss()
+    # print(host.cur_loss)

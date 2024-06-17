@@ -5,7 +5,7 @@ module quad (
     input  logic rstn,
     input  logic [11:0] a,
     input  logic [11:0] b,
-    output logic [22:0] c
+    output logic [21:0] c
 );
  
 logic [23:0] a_sq;

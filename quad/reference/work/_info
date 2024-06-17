@@ -1,55 +1,17 @@
 m255
 K4
 z2
-!s12c _opt2
+!s12c _opt4
 Z0 !s99 nomlopt
-Z1 !s12c _opt1
+!s12c _opt3
+R0
+Z1 !s12c _opt2
+R0
+Z2 !s12c _opt1
+R0
+Z3 !s12c _opt
 R0
 R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-R1
-R0
-Z2 !s12c _opt
 R0
 R2
 R0
@@ -78,6 +40,54 @@ R0
 R2
 R0
 R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R2
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
+R0
+R3
 R0
 !s11f vlog 2023.3 2023.07, Jul 17 2023
 13
@@ -86,143 +96,169 @@ R0
 !i10e 25
 !i10f 100
 cModel Technology
-Z3 d/home/jinsheng/Documents/Workspace/wlo_system/quad/reference
+Z4 d/home/jinsheng/Documents/Workspace/wlo_system/quad/reference
 T_opt
-!s110 1716806391
-VCb;UB[_z6Z;9likGRR@4z0
-Z4 04 6 4 work top_tb fast 0
-=1-000ae431a4f1-665462f7-2738c-3383e7
+!s110 1717280592
+VZb1Pj^O;1PBiLdLY3>MJ^2
+Z5 04 6 4 work top_tb fast 0
+=1-000ae431a4f1-665b9f4f-f1de1-29679
 R0
-Z5 !s12b OEM100
-Z6 !s124 OEM10U6 
-Z7 o-quiet -auto_acc_if_foreign -work work +acc
-Z8 tCvgOpt 0
+Z6 !s12b OEM100
+Z7 !s124 OEM10U6 
+Z8 o-quiet -auto_acc_if_foreign -work work +acc
+Z9 tCvgOpt 0
 n@_opt
-Z9 OL;O;2023.3;77
-R3
+Z10 OL;O;2023.3;77
+R4
 T_opt1
-!s110 1716808311
-VWf^mz4G5YhWL_5lX2lMdz0
-R4
-=1-000ae431a4f1-66546a77-ca474-33b4c6
-R0
+!s110 1717345885
+V[Y]G3QSOc_3X_@PzA_KK=1
 R5
+=1-000ae431a4f1-665c9e5c-e9cba-730d5
+R0
 R6
 R7
 R8
+R9
 n@_opt1
-R9
-R3
-T_opt2
-!s110 1716900933
-VUfjed5NPTj1eXVBf?QWmC2
+R10
 R4
-=1-000ae431a4f1-6655d445-45f84-3a68ef
-R0
+T_opt2
+!s110 1717345944
+VMCT2og0LicCV5R`Z]jU5e3
 R5
+=1-000ae431a4f1-665c9e98-5b010-7350d
+R0
 R6
 R7
 R8
-n@_opt2
 R9
-R3
+n@_opt2
+R10
+R4
+T_opt3
+!s110 1717346460
+V:Q3iJ?L<oTRLT5U^:b`<80
+R5
+=1-000ae431a4f1-665ca09c-11a97-74cb3
+R0
+R6
+R7
+R8
+R9
+n@_opt3
+R10
+R4
+T_opt4
+!s110 1717368248
+VF:68ac4c8i5We?Jl@ZYoQ2
+R5
+=1-000ae431a4f1-665cf5b8-1d41-eeb30
+R0
+R6
+R7
+R8
+R9
+n@_opt4
+R10
+R4
 vbit_switch
-Z10 2./design/bit_switch.sv|./design/quad.sv|./design/top.sv|./design/top_tb.sv
-Z11 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
-Z12 !s110 1716900986
+Z11 2./design/bit_switch.sv|./design/quad.sv|./design/top.sv|./design/top_tb.sv
+Z12 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z13 !s110 1717441138
 !i10b 1
 !s100 2MPNY;N_l8M@a@2N<06NA0
 I5lAPSaI4FMTP3Y3JHPbC[0
 S1
-R3
-Z13 w1716805967
+Z14 d/home/jinsheng/Documents/Github/wlo-system/quad/reference
+Z15 w1716805967
 8./design/bit_switch.sv
 F./design/bit_switch.sv
-!i122 170
+!i122 3554
 L0 4 58
-Z14 VDg1SIo80bB@j0V0VzS_@n1
-Z15 OL;L;2023.3;77
+Z16 VDg1SIo80bB@j0V0VzS_@n1
+Z17 OL;L;2023.3;77
 r1
 !s85 0
 31
-Z16 !s108 1716900986.000000
+Z18 !s108 1717441138.000000
 !s107 ./design/top_tb.sv|./design/top.sv|./design/quad.sv|./design/bit_switch.sv|
-Z17 !s90 ./design/bit_switch.sv|./design/quad.sv|./design/top.sv|./design/top_tb.sv|
+Z19 !s90 ./design/bit_switch.sv|./design/quad.sv|./design/top.sv|./design/top_tb.sv|
 !i113 0
-Z18 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
-R8
+Z20 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R9
 vquad
-R10
 R11
 R12
+R13
 !i10b 1
 !s100 e4H_0FR;;naQZJaNak7kj2
 I4CVDRUL[]`S@bG]EK;1AT0
 S1
-R3
-R13
-8./design/quad.sv
-F./design/quad.sv
-!i122 170
-L0 3 34
 R14
 R15
+8./design/quad.sv
+F./design/quad.sv
+!i122 3554
+L0 3 34
+R16
+R17
 r1
 !s85 0
 31
-R16
-Z19 !s107 ./design/top_tb.sv|./design/top.sv|./design/quad.sv|./design/bit_switch.sv|
-R17
-!i113 0
 R18
-R8
+Z21 !s107 ./design/top_tb.sv|./design/top.sv|./design/quad.sv|./design/bit_switch.sv|
+R19
+!i113 0
+R20
+R9
 vtop
-R10
 R11
 R12
+R13
 !i10b 1
 !s100 `F`jf8Tm15HB=kF5NU9[K0
 I]JIY>X=D19:XIdL4C:5Ro2
 S1
-R3
-R13
-8./design/top.sv
-F./design/top.sv
-!i122 170
-L0 1 64
 R14
 R15
+8./design/top.sv
+F./design/top.sv
+!i122 3554
+L0 1 64
+R16
+R17
 r1
 !s85 0
 31
-R16
-R19
-R17
-!i113 0
 R18
-R8
+R21
+R19
+!i113 0
+R20
+R9
 vtop_tb
-R10
 R11
 R12
+R13
 !i10b 1
 !s100 ZEYeM_mkH8;GcCcSNn5CT0
 I28]CiWZVDdO8acZSOIFO]2
 S1
-R3
+R14
 w1716806033
 8./design/top_tb.sv
 F./design/top_tb.sv
-!i122 170
+!i122 3554
 L0 2 77
-R14
-R15
+R16
+R17
 r1
 !s85 0
 31
-R16
-R19
-R17
-!i113 0
 R18
-R8
+R21
+R19
+!i113 0
+R20
+R9

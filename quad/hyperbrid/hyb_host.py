@@ -100,14 +100,14 @@ class hyb_host(host):
         msg = []
         while(1):
             msg.append(int.from_bytes(serial_ob.read(1), byteorder='big'))
-            if len(msg)==16:
+            if len(msg)==8*self.batch_siz:
                 break      
         # calculate mse
         for i in range(self.batch_siz):
             mse_val = 0
             for j in range(8):
                 mse_val = mse_val + msg[i*8+j]*256**j
-                mse_val = mse_val*2**14/131072
+            mse_val = mse_val*2**13/131072
             self.cur_prec = np.append(self.cur_prec, np.array([mse_val]))
             # record mse
             self.record['mse'] = self.record['mse'] + [mse_val]
@@ -155,26 +155,23 @@ class hyb_host(host):
         print(f"MSE   : {self.cur_prec} ")
 
         # record configurations
-        if self.batch_siz == 1:
-            self.record['x1'] = self.record['x1'] + [config[0].tolist()]
-            self.record['x2'] = self.record['x2'] + [config[1].tolist()]
-            self.record['x3'] = self.record['x3'] + [config[2].tolist()]
-        else:
-            self.record['x1'] = self.record['x1'] + [config[0][0].tolist()]
-            self.record['x2'] = self.record['x2'] + [config[0][1].tolist()]
-            self.record['x3'] = self.record['x3'] + [config[0][2].tolist()]
+        for i in range(self.batch_siz):
+            self.record['x1'] = self.record['x1'] + [config[i][0].tolist()]
+            self.record['x2'] = self.record['x2'] + [config[i][1].tolist()]
+            self.record['x3'] = self.record['x3'] + [config[i][2].tolist()]
+
         return self.cur_loss
         
     
     def run(self):
         search_space = np.array([
-            [1,30],
-            [1,30],
-            [1,30]
+            [0,12],
+            [0,12],
+            [0,24]
         ])
 
         global serial_ob
-        serial_ob = serial.Serial("/dev/ttyUSB0",115200)
+        serial_ob = serial.Serial("/dev/ttyUSB3",115200)
         time_start = time.time()
 
         ############################## timer start
@@ -195,5 +192,5 @@ class hyb_host(host):
 
 
 if __name__ == "__main__":
-    obj = hyb_host("test111", 200, 16, 2)
-    obj.draw_figure(2)
+    obj = hyb_host("batch2-100re", 100, 6, 2)
+    obj.run()

@@ -1,15 +1,15 @@
 // simple DSP module that computes the sum of the squares of two inputs
- 
+
 module quad (
     input  logic clk,
     input  logic rstn,
-    input  logic [9:0] a,
-    input  logic [9:0] b,
-    output logic [15:0] c
+    input  logic [13:0] a,
+    input  logic [13:0] b,
+    output logic [28:0] c
 );
- 
-logic [19:0] a_sq;
-logic [19:0] b_sq;
+
+logic [27:0] a_sq;
+logic [27:0] b_sq;
 
 always @(posedge clk) begin
     if (~rstn) begin
@@ -20,7 +20,7 @@ always @(posedge clk) begin
         b_sq <= b * b;
     end
 end
- 
+
 always @(posedge clk) begin
     if (~rstn) begin
         c <= 0;
@@ -28,5 +28,5 @@ always @(posedge clk) begin
         c <= a_sq + b_sq;
     end
 end
- 
+
 endmodule

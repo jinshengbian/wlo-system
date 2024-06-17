@@ -131,17 +131,8 @@ class ref_host(host):
         self.record['mse'] = self.record['mse'] + [self.cur_prec]
 
     def cal_loss(self):
-        alpha = 10000
-        power_max = 1e-4
-        power_min = 5*1e-5
-        power_diff = 0.0
-        if self.cur_cost > power_max:
-            power_diff = self.cur_cost - power_max
-        elif self.cur_cost < power_min:
-            power_diff = power_min - self.cur_cost
-        else:
-            power_diff = 0
-        self.cur_loss = self.cur_prec + alpha*power_diff
+        
+        self.cur_loss = (self.cur_prec + 1e-8) * self.cur_cost
         # record loss
         self.record['loss'] = self.record['loss'] + [self.cur_loss]
 
@@ -154,16 +145,18 @@ class ref_host(host):
         wl_config = np.array(list(eval_config.values()))
         self.run_sim(wl_config)
         # Calculate loss
+        print(f"Current Configuration: {wl_config}")
         self.get_cost(wl_config)
         self.get_prec(wl_config,ref_seq)
         self.cal_loss()
-        print(f"MSE: {self.cur_cost}")
+        print(f"MSE: {self.cur_prec}")
         print(f"Loss: {self.cur_loss}")
 
         # record config
-        self.record['x1'] = self.record['x1'] + [wl_config[0]]
-        self.record['x2'] = self.record['x2'] + [wl_config[1]]
-        self.record['x3'] = self.record['x3'] + [wl_config[2]]
+        config_list = wl_config.tolist()
+        self.record['x1'] = self.record['x1'] + [config_list[0]]
+        self.record['x2'] = self.record['x2'] + [config_list[1]]
+        self.record['x3'] = self.record['x3'] + [config_list[2]]
 
         return {"loss": self.cur_loss}, time.time() - start_time
 
@@ -172,7 +165,7 @@ class ref_host(host):
     def run(self):
         # Open files outside the loop
         with open("simulation/input1.txt", "w") as input_file1, open("simulation/input2.txt", "w") as input_file2:
-            for _ in range(self.num_ite):
+            for _ in range(131072):
                 random_data_1 = random.randint(0, 2**14)
                 random_data_2 = random.randint(0, 2**14)
                 # Write data to files using the file objects
@@ -180,8 +173,10 @@ class ref_host(host):
                 input_file2.write(str(random_data_2) + "\n")
         dim = 3
         cs = CS.ConfigurationSpace()
-        for d in range(dim):
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x{d}", lower=1, upper=30))
+        # for d in range(dim):
+        cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x0", lower=0, upper=12))
+        cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x1", lower=0, upper=12))
+        cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x2", lower=0, upper=24))
 
         start_time = time.time()
 
@@ -191,9 +186,9 @@ class ref_host(host):
         sim_time = time.time() - start_time
         print("Overall time spent: ", sim_time, ", speed: ", sim_time/self.num_ite, " s/ite")
         self.record['time'] = self.record['time'] + [sim_time]
-
+        print("Record: ", self.record)
         self.dump_record()
 
 if __name__ == "__main__":
-    obj = ref_host("ref_host", 20)
+    obj = ref_host("ref-100", 100)
     obj.run()

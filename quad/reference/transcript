@@ -10,7 +10,7 @@
 # Modifying modelsim.ini
             vlog ./design/*.sv
 # Questa Intel Starter FPGA Edition-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
-# Start time: 14:56:26 on May 28,2024
+# Start time: 20:58:58 on Jun 03,2024
 # vlog ./design/bit_switch.sv ./design/quad.sv ./design/top.sv ./design/top_tb.sv 
 # -- Compiling module bit_switch
 # -- Compiling module quad
@@ -19,12 +19,12 @@
 # 
 # Top level modules:
 # 	top_tb
-# End time: 14:56:26 on May 28,2024, Elapsed time: 0:00:00
+# End time: 20:58:58 on Jun 03,2024, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
             vsim top_tb -voptargs=+acc
 # vsim top_tb -voptargs="+acc" 
-# Start time: 14:56:26 on May 28,2024
-# ** Note: (vsim-8009) Loading existing optimized design _opt2
+# Start time: 20:58:58 on Jun 03,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt1
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -51,9 +51,9 @@
 #    Time: 0 ps  Iteration: 0  Instance: /top_tb File: ./design/top_tb.sv Line: 52
             force num_frac_a 8'd12
             force num_frac_b 8'd12
-            force num_frac_c 8'd23
+            force num_frac_c 8'd22
             run -all
 # ** Note: $finish    : ./design/top_tb.sv(61)
-#    Time: 400 ns  Iteration: 0  Instance: /top_tb
-# End time: 14:56:26 on May 28,2024, Elapsed time: 0:00:00
+#    Time: 1310920 ns  Iteration: 0  Instance: /top_tb
+# End time: 20:59:02 on Jun 03,2024, Elapsed time: 0:00:04
 # Errors: 0, Warnings: 2

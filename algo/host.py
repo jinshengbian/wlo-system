@@ -47,6 +47,13 @@ class host:
             if i == 0:
                 trend = np.append(trend, [loss_val[i]])
                 index = np.append(index, [i+1])
+            elif i == loss_len - 1:
+                if loss_val[i] < trend[-1]:
+                    trend = np.append(trend, [loss_val[i]])
+                    index = np.append(index, [i+1])
+                else:
+                    trend = np.append(trend, [trend[-1]])
+                    index = np.append(index, [i+1])
             elif loss_val[i] < trend[-1]:
                 trend = np.append(trend, [loss_val[i]])
                 index = np.append(index, [i+1])
