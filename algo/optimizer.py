@@ -142,12 +142,16 @@ class optimizer:
             w_best = 0
             for i in self.previous_point_buffer:
                 if self.detect_alias(current_point.astype(int),self.points):
-                    current_point = i
+                    random_move = np.array([random.randint(-1,1) for _ in range(self.dim)])
+                    current_point = current_point + random_move
                 else:
                     break
             for i in range(self.batch_size):
                 w = (i+1)/self.batch_size
                 batch_point[i,:] = current_point*w + self.lx[0,:]*(1-w)
+                if self.detect_alias(batch_point[i,:].astype(int),self.points):
+                    random_move = np.array([random.randint(-1,1) for _ in range(self.dim)])
+                    batch_point[i,:] = batch_point[i,:] + random_move
             return batch_point.astype(int)
         else:
             self.expore_n += 1
@@ -228,9 +232,9 @@ class optimizer:
             "best_observations": self.best.tolist(),
         }
         
-        with open("./TPE_result.json",'w') as result_file:
-            json.dump(result, result_file,)
-        return self.lx[0,:]
+        # with open("./TPE_result.json",'w') as result_file:
+        #     json.dump(result, result_file,)
+        # return self.lx[0,:]
 
 if __name__ == "__main__":
     def object_func_test(input_points:np.array) -> float:
@@ -255,7 +259,7 @@ if __name__ == "__main__":
         return object_value
 
 
-    sphere = 1
+    sphere = 2
     dim = 10
 
     if sphere == 1:
@@ -265,10 +269,10 @@ if __name__ == "__main__":
         print("solution is ", test_point,", obj value is:" + str(Sphere_WLO(test_point)))
 
     else:
-        search_space_test = np.array([[8,32] for _ in range(dim)])
+        search_space_test = np.array([[-16,16] for _ in range(dim)])
         # print("best obj value is: -0.73529")
         print("best obj value is: -0.33")
-        opt = optimizer(objec_func=object_func_test,n_iterations=200,n_init_points=15,search_space=search_space_test,SGD_learn_rate=10,batch_size=2)
+        opt = optimizer(objec_func=Rosenbrock_WLO,n_iterations=200,n_init_points=15,search_space=search_space_test,SGD_learn_rate=10,batch_size=2)
 
     start_time  = time.time()
     temp=opt.optimization()
@@ -313,6 +317,5 @@ if __name__ == "__main__":
 
 #     plt.pause(1/20)
 # plt.show()
-
 
 

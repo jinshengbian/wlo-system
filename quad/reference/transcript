@@ -10,7 +10,7 @@
 # Modifying modelsim.ini
             vlog ./design/*.sv
 # Questa Intel Starter FPGA Edition-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
-# Start time: 20:58:58 on Jun 03,2024
+# Start time: 17:36:18 on Jun 17,2024
 # vlog ./design/bit_switch.sv ./design/quad.sv ./design/top.sv ./design/top_tb.sv 
 # -- Compiling module bit_switch
 # -- Compiling module quad
@@ -19,12 +19,12 @@
 # 
 # Top level modules:
 # 	top_tb
-# End time: 20:58:58 on Jun 03,2024, Elapsed time: 0:00:00
+# End time: 17:36:18 on Jun 17,2024, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
             vsim top_tb -voptargs=+acc
 # vsim top_tb -voptargs="+acc" 
-# Start time: 20:58:58 on Jun 03,2024
-# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# Start time: 17:36:18 on Jun 17,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt4
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -49,11 +49,11 @@
 #    Time: 0 ps  Iteration: 0  Instance: /top_tb File: ./design/top_tb.sv Line: 51
 # ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$fscanf'.
 #    Time: 0 ps  Iteration: 0  Instance: /top_tb File: ./design/top_tb.sv Line: 52
-            force num_frac_a 8'd12
+            force num_frac_a 8'd11
             force num_frac_b 8'd12
-            force num_frac_c 8'd22
+            force num_frac_c 8'd24
             run -all
 # ** Note: $finish    : ./design/top_tb.sv(61)
 #    Time: 1310920 ns  Iteration: 0  Instance: /top_tb
-# End time: 20:59:02 on Jun 03,2024, Elapsed time: 0:00:04
+# End time: 17:36:21 on Jun 17,2024, Elapsed time: 0:00:03
 # Errors: 0, Warnings: 2

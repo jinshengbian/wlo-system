@@ -1,6 +1,8 @@
 import sys
 sys.path.append('../../algo')
 from host import *
+import paramiko
+import paramiko.client
 
 import subprocess
 import time
@@ -29,7 +31,10 @@ class ref_host(host):
             'loss': [],
             'time': []
         }
-
+        self.ssh_cli = paramiko.client.SSHClient()
+        self.ssh_cli.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.ssh_cli.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
+        self.ssh_chan = self.ssh_cli.invoke_shell()
 
     ##### self defined functions #####
 
@@ -85,38 +90,60 @@ class ref_host(host):
                         pass
         seq = np.array(seq)
         return seq
+    
+    # power
+    def send_command(self,command,method=1):
+        self.ssh_chan.send(command + "\n")
+        if method == 1:
+            while not self.ssh_chan.recv_ready():
+                time.sleep(1)
+            
+            output = ""
+            while self.ssh_chan.recv_ready():
+                output += self.ssh_chan.recv(999999).decode('utf-8')
+        elif method == 2:
+            output = ""
+            while 1:
+                while not self.ssh_chan.recv_ready():
+                    time.sleep(1)
+                while self.ssh_chan.recv_ready():
+                    output += self.ssh_chan.recv(999999).decode('utf-8')
+                if "@genus:root:" in output:
+                    break
+        return output
+    def power_init(self):  
+        command = "cd Downloads/quad && ls"
+        output = self.send_command(command)
+        command = "source setup.sh"
+        output = self.send_command(command)
+        command = "cd reference/tcl"
+        output = self.send_command(command)
+        command = "genus"
+        output = self.send_command(command,2)
+    def power_run(self,wl_config):
+        command = f"delete_obj [get_db design:quad]"
+        output = self.send_command(command,2)
+        command = f"shell rm genus.* fv -rf"
+        output = self.send_command(command,2)
+        command = f"shell ./run.sh {wl_config[0]} {wl_config[1]} {wl_config[2]}"
+        output = self.send_command(command,2)
+        command = "source syn.tcl"
+        output = self.send_command(command,2)
+        command = "shell cat ../rpt/power.rpt"
+        output = self.send_command(command,2)
+        lines = output.split('\n')
+        result = lines[19].split()[4]
+        return float(result)
+
+        
 
     ##################################
     
     def get_cost(self,wl_config):
-        # get configurations
-        input_wl1 = wl_config[0]
-        input_wl2 = wl_config[1]
-        output_wl = wl_config[2]
 
-        # modify the wordlength of the design
-        with open("./synthesis/quad_syn.sv",'r') as dsp_design:
-            content = dsp_design.readlines()
-        with open("./synthesis/quad_syn.sv",'w') as dsp_design:
-            content[5] = f"    input  logic [{input_wl1-1}:0] a,\n"
-            content[6] = f"    input  logic [{input_wl2-1}:0] b,\n"
-            content[7] = f"    output logic [{output_wl-1}:0] c\n"
-            content[10] = f"logic [{2*input_wl1-1}:0] a_sq;\n"
-            content[11] = f"logic [{2*input_wl2-1}:0] b_sq;\n"
-            dsp_design.writelines(content)
-            
-        # run the synthesis script
-        subprocess.run("python3 ./syn_power.py", shell=True, capture_output=True,text=True)
-        # read power info
-        rpt_file = "./synthesis/power.rpt"
-        read_power_command = f"awk '/^Total/ {{print $5}}' {rpt_file}"
-        res = subprocess.run(read_power_command, shell=True, capture_output=True, text=True)
-
-        if res.returncode == 0:
-            total_power = res.stdout.strip()
-            print(f"Total Power: {total_power} Watts")
-        else:
-            print("Failed to extract the power value.")   
+        total_power = self.power_run(wl_config)
+        print(f"Total Power: {total_power} nWatts")
+         
         total_power = float(total_power) 
         self.cur_cost = total_power
         # record power
@@ -177,6 +204,8 @@ class ref_host(host):
         cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x0", lower=0, upper=12))
         cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x1", lower=0, upper=12))
         cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x2", lower=0, upper=24))
+
+        self.power_init()
 
         start_time = time.time()
 

@@ -165,7 +165,7 @@ R4
 vbit_switch
 Z11 2./design/bit_switch.sv|./design/quad.sv|./design/top.sv|./design/top_tb.sv
 Z12 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
-Z13 !s110 1717441138
+Z13 !s110 1718638578
 !i10b 1
 !s100 2MPNY;N_l8M@a@2N<06NA0
 I5lAPSaI4FMTP3Y3JHPbC[0
@@ -174,14 +174,14 @@ Z14 d/home/jinsheng/Documents/Github/wlo-system/quad/reference
 Z15 w1716805967
 8./design/bit_switch.sv
 F./design/bit_switch.sv
-!i122 3554
+!i122 3959
 L0 4 58
 Z16 VDg1SIo80bB@j0V0VzS_@n1
 Z17 OL;L;2023.3;77
 r1
 !s85 0
 31
-Z18 !s108 1717441138.000000
+Z18 !s108 1718638578.000000
 !s107 ./design/top_tb.sv|./design/top.sv|./design/quad.sv|./design/bit_switch.sv|
 Z19 !s90 ./design/bit_switch.sv|./design/quad.sv|./design/top.sv|./design/top_tb.sv|
 !i113 0
@@ -199,7 +199,7 @@ R14
 R15
 8./design/quad.sv
 F./design/quad.sv
-!i122 3554
+!i122 3959
 L0 3 34
 R16
 R17
@@ -224,7 +224,7 @@ R14
 R15
 8./design/top.sv
 F./design/top.sv
-!i122 3554
+!i122 3959
 L0 1 64
 R16
 R17
@@ -249,7 +249,7 @@ R14
 w1716806033
 8./design/top_tb.sv
 F./design/top_tb.sv
-!i122 3554
+!i122 3959
 L0 2 77
 R16
 R17

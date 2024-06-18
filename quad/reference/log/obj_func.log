@@ -5366,3 +5366,595 @@ The observations: {'x0': array([ 5,  6,  1,  4,  4,  3,  9,  1, 10,  2,  9, 10, 
        14.641774 , 14.09206  , 14.234297 , 13.948905 , 14.018241 ,
        14.332207 , 14.445116 , 14.383413 , 14.193335 , 14.45044  ],
       dtype=float32)}
+2024-06-17 15:32:12,468 [INFO/base_optimizer.py:125] 
+Iteration: 1
+2024-06-17 15:33:11,545 [INFO/base_optimizer.py:138] Cur. loss: 3.4364e+19, Cur. Config: {'x0': 3, 'x1': 11, 'x2': 3}
+2024-06-17 15:33:11,545 [INFO/base_optimizer.py:139] Best loss: 3.4364e+19, Best Config: {'x0': 3, 'x1': 11, 'x2': 3}
+2024-06-17 15:33:11,545 [INFO/base_optimizer.py:125] 
+Iteration: 2
+2024-06-17 15:33:25,128 [INFO/base_optimizer.py:138] Cur. loss: 6.9696e+18, Cur. Config: {'x0': 4, 'x1': 8, 'x2': 21}
+2024-06-17 15:33:25,128 [INFO/base_optimizer.py:139] Best loss: 6.9696e+18, Best Config: {'x0': 4, 'x1': 8, 'x2': 21}
+2024-06-17 15:33:25,128 [INFO/base_optimizer.py:125] 
+Iteration: 3
+2024-06-17 15:33:39,087 [INFO/base_optimizer.py:138] Cur. loss: 1.2161e+17, Cur. Config: {'x0': 10, 'x1': 9, 'x2': 5}
+2024-06-17 15:33:39,087 [INFO/base_optimizer.py:139] Best loss: 1.2161e+17, Best Config: {'x0': 10, 'x1': 9, 'x2': 5}
+2024-06-17 15:33:39,087 [INFO/base_optimizer.py:125] 
+Iteration: 4
+2024-06-17 15:38:31,315 [INFO/base_optimizer.py:125] 
+Iteration: 1
+2024-06-17 15:39:30,104 [INFO/base_optimizer.py:138] Cur. loss: 1.1795e+20, Cur. Config: {'x0': 2, 'x1': 5, 'x2': 21}
+2024-06-17 15:39:30,104 [INFO/base_optimizer.py:139] Best loss: 1.1795e+20, Best Config: {'x0': 2, 'x1': 5, 'x2': 21}
+2024-06-17 15:39:30,104 [INFO/base_optimizer.py:125] 
+Iteration: 2
+2024-06-17 15:39:43,885 [INFO/base_optimizer.py:138] Cur. loss: 3.1813e+20, Cur. Config: {'x0': 2, 'x1': 2, 'x2': 13}
+2024-06-17 15:39:43,885 [INFO/base_optimizer.py:139] Best loss: 1.1795e+20, Best Config: {'x0': 2, 'x1': 5, 'x2': 21}
+2024-06-17 15:39:43,885 [INFO/base_optimizer.py:125] 
+Iteration: 3
+2024-06-17 15:43:00,971 [INFO/base_optimizer.py:125] 
+Iteration: 1
+2024-06-17 15:43:17,776 [INFO/base_optimizer.py:138] Cur. loss: 1.8648e+20, Cur. Config: {'x0': 3, 'x1': 2, 'x2': 18}
+2024-06-17 15:43:17,776 [INFO/base_optimizer.py:139] Best loss: 1.8648e+20, Best Config: {'x0': 3, 'x1': 2, 'x2': 18}
+2024-06-17 15:43:17,776 [INFO/base_optimizer.py:125] 
+Iteration: 2
+2024-06-17 15:43:33,194 [INFO/base_optimizer.py:138] Cur. loss: 1.0208e+19, Cur. Config: {'x0': 11, 'x1': 5, 'x2': 2}
+2024-06-17 15:43:33,194 [INFO/base_optimizer.py:139] Best loss: 1.0208e+19, Best Config: {'x0': 11, 'x1': 5, 'x2': 2}
+2024-06-17 15:43:33,194 [INFO/base_optimizer.py:125] 
+Iteration: 3
+2024-06-17 15:43:48,571 [INFO/base_optimizer.py:138] Cur. loss: 2.3685e+19, Cur. Config: {'x0': 12, 'x1': 6, 'x2': 1}
+2024-06-17 15:43:48,571 [INFO/base_optimizer.py:139] Best loss: 1.0208e+19, Best Config: {'x0': 11, 'x1': 5, 'x2': 2}
+2024-06-17 15:43:48,572 [INFO/base_optimizer.py:125] 
+Iteration: 4
+2024-06-17 15:44:03,711 [INFO/base_optimizer.py:138] Cur. loss: 1.5716e+21, Cur. Config: {'x0': 5, 'x1': 0, 'x2': 8}
+2024-06-17 15:44:03,711 [INFO/base_optimizer.py:139] Best loss: 1.0208e+19, Best Config: {'x0': 11, 'x1': 5, 'x2': 2}
+2024-06-17 15:44:03,711 [INFO/base_optimizer.py:125] 
+Iteration: 5
+2024-06-17 15:44:19,558 [INFO/base_optimizer.py:138] Cur. loss: 1.5184e+21, Cur. Config: {'x0': 0, 'x1': 7, 'x2': 10}
+2024-06-17 15:44:19,558 [INFO/base_optimizer.py:139] Best loss: 1.0208e+19, Best Config: {'x0': 11, 'x1': 5, 'x2': 2}
+2024-06-17 15:44:19,558 [INFO/base_optimizer.py:125] 
+Iteration: 6
+2024-06-17 15:44:34,366 [INFO/base_optimizer.py:138] Cur. loss: 1.3908e+20, Cur. Config: {'x0': 4, 'x1': 2, 'x2': 7}
+2024-06-17 15:44:34,366 [INFO/base_optimizer.py:139] Best loss: 1.0208e+19, Best Config: {'x0': 11, 'x1': 5, 'x2': 2}
+2024-06-17 15:44:34,366 [INFO/base_optimizer.py:125] 
+Iteration: 7
+2024-06-17 15:44:49,471 [INFO/base_optimizer.py:138] Cur. loss: 4.2903e+20, Cur. Config: {'x0': 1, 'x1': 5, 'x2': 14}
+2024-06-17 15:44:49,471 [INFO/base_optimizer.py:139] Best loss: 1.0208e+19, Best Config: {'x0': 11, 'x1': 5, 'x2': 2}
+2024-06-17 15:44:49,471 [INFO/base_optimizer.py:125] 
+Iteration: 8
+2024-06-17 15:45:04,838 [INFO/base_optimizer.py:138] Cur. loss: 1.6451e+18, Cur. Config: {'x0': 11, 'x1': 5, 'x2': 12}
+2024-06-17 15:45:04,838 [INFO/base_optimizer.py:139] Best loss: 1.6451e+18, Best Config: {'x0': 11, 'x1': 5, 'x2': 12}
+2024-06-17 15:45:04,838 [INFO/base_optimizer.py:125] 
+Iteration: 9
+2024-06-17 15:45:19,951 [INFO/base_optimizer.py:138] Cur. loss: 2.6132e+19, Cur. Config: {'x0': 11, 'x1': 3, 'x2': 13}
+2024-06-17 15:45:19,951 [INFO/base_optimizer.py:139] Best loss: 1.6451e+18, Best Config: {'x0': 11, 'x1': 5, 'x2': 12}
+2024-06-17 15:45:19,951 [INFO/base_optimizer.py:125] 
+Iteration: 10
+2024-06-17 15:45:34,991 [INFO/base_optimizer.py:138] Cur. loss: 2.6332e+19, Cur. Config: {'x0': 3, 'x1': 10, 'x2': 8}
+2024-06-17 15:45:34,991 [INFO/base_optimizer.py:139] Best loss: 1.6451e+18, Best Config: {'x0': 11, 'x1': 5, 'x2': 12}
+2024-06-17 15:45:34,991 [INFO/base_optimizer.py:125] 
+Iteration: 11
+2024-06-17 15:48:21,907 [INFO/base_optimizer.py:125] 
+Iteration: 1
+2024-06-17 15:48:39,992 [INFO/base_optimizer.py:138] Cur. loss: 8.8395e+17, Cur. Config: {'x0': 6, 'x1': 8, 'x2': 5}
+2024-06-17 15:48:39,992 [INFO/base_optimizer.py:139] Best loss: 8.8395e+17, Best Config: {'x0': 6, 'x1': 8, 'x2': 5}
+2024-06-17 15:48:39,992 [INFO/base_optimizer.py:125] 
+Iteration: 2
+2024-06-17 15:48:55,813 [INFO/base_optimizer.py:138] Cur. loss: 4.2765e+20, Cur. Config: {'x0': 5, 'x1': 1, 'x2': 21}
+2024-06-17 15:48:55,813 [INFO/base_optimizer.py:139] Best loss: 8.8395e+17, Best Config: {'x0': 6, 'x1': 8, 'x2': 5}
+2024-06-17 15:48:55,813 [INFO/base_optimizer.py:125] 
+Iteration: 3
+2024-06-17 15:49:10,529 [INFO/base_optimizer.py:138] Cur. loss: 4.0155e+20, Cur. Config: {'x0': 2, 'x1': 2, 'x2': 1}
+2024-06-17 15:49:10,529 [INFO/base_optimizer.py:139] Best loss: 8.8395e+17, Best Config: {'x0': 6, 'x1': 8, 'x2': 5}
+2024-06-17 15:49:10,529 [INFO/base_optimizer.py:125] 
+Iteration: 4
+2024-06-17 15:49:25,931 [INFO/base_optimizer.py:138] Cur. loss: 1.5248e+21, Cur. Config: {'x0': 7, 'x1': 0, 'x2': 6}
+2024-06-17 15:49:25,932 [INFO/base_optimizer.py:139] Best loss: 8.8395e+17, Best Config: {'x0': 6, 'x1': 8, 'x2': 5}
+2024-06-17 15:49:25,932 [INFO/base_optimizer.py:125] 
+Iteration: 5
+2024-06-17 15:49:42,127 [INFO/base_optimizer.py:138] Cur. loss: 6.5539e+18, Cur. Config: {'x0': 4, 'x1': 11, 'x2': 12}
+2024-06-17 15:49:42,127 [INFO/base_optimizer.py:139] Best loss: 8.8395e+17, Best Config: {'x0': 6, 'x1': 8, 'x2': 5}
+2024-06-17 15:49:42,127 [INFO/base_optimizer.py:125] 
+Iteration: 6
+2024-06-17 15:49:56,718 [INFO/base_optimizer.py:138] Cur. loss: 2.1420e+21, Cur. Config: {'x0': 2, 'x1': 0, 'x2': 1}
+2024-06-17 15:49:56,718 [INFO/base_optimizer.py:139] Best loss: 8.8395e+17, Best Config: {'x0': 6, 'x1': 8, 'x2': 5}
+2024-06-17 15:49:56,718 [INFO/base_optimizer.py:125] 
+Iteration: 7
+2024-06-17 15:52:04,520 [INFO/base_optimizer.py:125] 
+Iteration: 1
+2024-06-17 15:52:22,322 [INFO/base_optimizer.py:138] Cur. loss: 4.0415e+20, Cur. Config: {'x0': 8, 'x1': 1, 'x2': 12}
+2024-06-17 15:52:22,322 [INFO/base_optimizer.py:139] Best loss: 4.0415e+20, Best Config: {'x0': 8, 'x1': 1, 'x2': 12}
+2024-06-17 15:52:22,322 [INFO/base_optimizer.py:125] 
+Iteration: 2
+2024-06-17 15:52:38,190 [INFO/base_optimizer.py:138] Cur. loss: 1.0393e+20, Cur. Config: {'x0': 2, 'x1': 8, 'x2': 23}
+2024-06-17 15:52:38,190 [INFO/base_optimizer.py:139] Best loss: 1.0393e+20, Best Config: {'x0': 2, 'x1': 8, 'x2': 23}
+2024-06-17 15:52:38,190 [INFO/base_optimizer.py:125] 
+Iteration: 3
+2024-06-17 15:52:54,194 [INFO/base_optimizer.py:138] Cur. loss: 4.3031e+20, Cur. Config: {'x0': 1, 'x1': 5, 'x2': 8}
+2024-06-17 15:52:54,194 [INFO/base_optimizer.py:139] Best loss: 1.0393e+20, Best Config: {'x0': 2, 'x1': 8, 'x2': 23}
+2024-06-17 15:52:54,194 [INFO/base_optimizer.py:125] 
+Iteration: 4
+2024-06-17 15:54:54,217 [INFO/base_optimizer.py:125] 
+Iteration: 1
+2024-06-17 15:55:12,644 [INFO/base_optimizer.py:138] Cur. loss: 4.1563e+17, Cur. Config: {'x0': 6, 'x1': 11, 'x2': 10}
+2024-06-17 15:55:12,644 [INFO/base_optimizer.py:139] Best loss: 4.1563e+17, Best Config: {'x0': 6, 'x1': 11, 'x2': 10}
+2024-06-17 15:55:12,644 [INFO/base_optimizer.py:125] 
+Iteration: 2
+2024-06-17 15:55:29,238 [INFO/base_optimizer.py:138] Cur. loss: 1.2781e+17, Cur. Config: {'x0': 9, 'x1': 7, 'x2': 19}
+2024-06-17 15:55:29,238 [INFO/base_optimizer.py:139] Best loss: 1.2781e+17, Best Config: {'x0': 9, 'x1': 7, 'x2': 19}
+2024-06-17 15:55:29,238 [INFO/base_optimizer.py:125] 
+Iteration: 3
+2024-06-17 15:55:45,165 [INFO/base_optimizer.py:138] Cur. loss: 1.1236e+18, Cur. Config: {'x0': 6, 'x1': 7, 'x2': 5}
+2024-06-17 15:55:45,165 [INFO/base_optimizer.py:139] Best loss: 1.2781e+17, Best Config: {'x0': 9, 'x1': 7, 'x2': 19}
+2024-06-17 15:55:45,165 [INFO/base_optimizer.py:125] 
+Iteration: 4
+2024-06-17 15:57:31,165 [INFO/base_optimizer.py:125] 
+Iteration: 1
+2024-06-17 15:58:13,872 [INFO/base_optimizer.py:138] Cur. loss: 4.7237e+19, Cur. Config: {'x0': 7, 'x1': 2, 'x2': 6}
+2024-06-17 15:58:13,872 [INFO/base_optimizer.py:139] Best loss: 4.7237e+19, Best Config: {'x0': 7, 'x1': 2, 'x2': 6}
+2024-06-17 15:58:13,872 [INFO/base_optimizer.py:125] 
+Iteration: 2
+2024-06-17 15:58:28,929 [INFO/base_optimizer.py:138] Cur. loss: 1.7543e+17, Cur. Config: {'x0': 12, 'x1': 6, 'x2': 19}
+2024-06-17 15:58:28,929 [INFO/base_optimizer.py:139] Best loss: 1.7543e+17, Best Config: {'x0': 12, 'x1': 6, 'x2': 19}
+2024-06-17 15:58:28,929 [INFO/base_optimizer.py:125] 
+Iteration: 3
+2024-06-17 15:58:43,681 [INFO/base_optimizer.py:138] Cur. loss: 1.7029e+19, Cur. Config: {'x0': 3, 'x1': 5, 'x2': 4}
+2024-06-17 15:58:43,681 [INFO/base_optimizer.py:139] Best loss: 1.7543e+17, Best Config: {'x0': 12, 'x1': 6, 'x2': 19}
+2024-06-17 15:58:43,681 [INFO/base_optimizer.py:125] 
+Iteration: 4
+2024-06-17 16:10:18,566 [INFO/base_optimizer.py:125] 
+Iteration: 1
+2024-06-17 16:11:02,508 [INFO/base_optimizer.py:138] Cur. loss: 5.5981e+17, Cur. Config: {'x0': 6, 'x1': 7, 'x2': 23}
+2024-06-17 16:11:02,508 [INFO/base_optimizer.py:139] Best loss: 5.5981e+17, Best Config: {'x0': 6, 'x1': 7, 'x2': 23}
+2024-06-17 16:11:02,508 [INFO/base_optimizer.py:125] 
+Iteration: 2
+2024-06-17 16:11:52,515 [INFO/base_optimizer.py:138] Cur. loss: 1.2156e+18, Cur. Config: {'x0': 5, 'x1': 9, 'x2': 12}
+2024-06-17 16:11:52,515 [INFO/base_optimizer.py:139] Best loss: 5.5981e+17, Best Config: {'x0': 6, 'x1': 7, 'x2': 23}
+2024-06-17 16:11:52,515 [INFO/base_optimizer.py:125] 
+Iteration: 3
+2024-06-17 16:12:38,521 [INFO/base_optimizer.py:138] Cur. loss: 9.9537e+17, Cur. Config: {'x0': 11, 'x1': 5, 'x2': 8}
+2024-06-17 16:12:38,521 [INFO/base_optimizer.py:139] Best loss: 5.5981e+17, Best Config: {'x0': 6, 'x1': 7, 'x2': 23}
+2024-06-17 16:12:38,521 [INFO/base_optimizer.py:125] 
+Iteration: 4
+2024-06-17 16:13:11,195 [INFO/base_optimizer.py:138] Cur. loss: 1.6940e+20, Cur. Config: {'x0': 1, 'x1': 3, 'x2': 3}
+2024-06-17 16:13:11,196 [INFO/base_optimizer.py:139] Best loss: 5.5981e+17, Best Config: {'x0': 6, 'x1': 7, 'x2': 23}
+2024-06-17 16:13:11,196 [INFO/base_optimizer.py:125] 
+Iteration: 5
+2024-06-17 16:13:56,859 [INFO/base_optimizer.py:138] Cur. loss: 7.0864e+18, Cur. Config: {'x0': 5, 'x1': 4, 'x2': 14}
+2024-06-17 16:13:56,859 [INFO/base_optimizer.py:139] Best loss: 5.5981e+17, Best Config: {'x0': 6, 'x1': 7, 'x2': 23}
+2024-06-17 16:13:56,859 [INFO/base_optimizer.py:125] 
+Iteration: 6
+2024-06-17 16:14:34,343 [INFO/base_optimizer.py:138] Cur. loss: 2.3346e+20, Cur. Config: {'x0': 2, 'x1': 1, 'x2': 19}
+2024-06-17 16:14:34,343 [INFO/base_optimizer.py:139] Best loss: 5.5981e+17, Best Config: {'x0': 6, 'x1': 7, 'x2': 23}
+2024-06-17 16:14:34,343 [INFO/base_optimizer.py:125] 
+Iteration: 7
+2024-06-17 16:15:20,474 [INFO/base_optimizer.py:138] Cur. loss: 1.6218e+16, Cur. Config: {'x0': 9, 'x1': 9, 'x2': 23}
+2024-06-17 16:15:20,475 [INFO/base_optimizer.py:139] Best loss: 1.6218e+16, Best Config: {'x0': 9, 'x1': 9, 'x2': 23}
+2024-06-17 16:15:20,475 [INFO/base_optimizer.py:125] 
+Iteration: 8
+2024-06-17 16:15:57,238 [INFO/base_optimizer.py:138] Cur. loss: 6.7362e+19, Cur. Config: {'x0': 2, 'x1': 10, 'x2': 13}
+2024-06-17 16:15:57,238 [INFO/base_optimizer.py:139] Best loss: 1.6218e+16, Best Config: {'x0': 9, 'x1': 9, 'x2': 23}
+2024-06-17 16:15:57,238 [INFO/base_optimizer.py:125] 
+Iteration: 9
+2024-06-17 16:16:44,157 [INFO/base_optimizer.py:138] Cur. loss: 1.9587e+17, Cur. Config: {'x0': 7, 'x1': 7, 'x2': 7}
+2024-06-17 16:16:44,157 [INFO/base_optimizer.py:139] Best loss: 1.6218e+16, Best Config: {'x0': 9, 'x1': 9, 'x2': 23}
+2024-06-17 16:16:44,157 [INFO/base_optimizer.py:125] 
+Iteration: 10
+2024-06-17 16:17:15,996 [INFO/base_optimizer.py:138] Cur. loss: 1.2373e+19, Cur. Config: {'x0': 9, 'x1': 3, 'x2': 6}
+2024-06-17 16:17:15,996 [INFO/base_optimizer.py:139] Best loss: 1.6218e+16, Best Config: {'x0': 9, 'x1': 9, 'x2': 23}
+2024-06-17 16:17:15,996 [INFO/base_optimizer.py:125] 
+Iteration: 11
+2024-06-17 16:18:04,052 [INFO/base_optimizer.py:138] Cur. loss: 3.4604e+15, Cur. Config: {'x0': 10, 'x1': 10, 'x2': 22}
+2024-06-17 16:18:04,052 [INFO/base_optimizer.py:139] Best loss: 3.4604e+15, Best Config: {'x0': 10, 'x1': 10, 'x2': 22}
+2024-06-17 16:18:04,052 [INFO/base_optimizer.py:125] 
+Iteration: 12
+2024-06-17 16:18:54,151 [INFO/base_optimizer.py:138] Cur. loss: 1.7800e+15, Cur. Config: {'x0': 11, 'x1': 10, 'x2': 21}
+2024-06-17 16:18:54,151 [INFO/base_optimizer.py:139] Best loss: 1.7800e+15, Best Config: {'x0': 11, 'x1': 10, 'x2': 21}
+2024-06-17 16:18:54,151 [INFO/base_optimizer.py:125] 
+Iteration: 13
+2024-06-17 16:19:47,236 [INFO/base_optimizer.py:138] Cur. loss: 5.9521e+15, Cur. Config: {'x0': 12, 'x1': 9, 'x2': 21}
+2024-06-17 16:19:47,236 [INFO/base_optimizer.py:139] Best loss: 1.7800e+15, Best Config: {'x0': 11, 'x1': 10, 'x2': 21}
+2024-06-17 16:19:47,236 [INFO/base_optimizer.py:125] 
+Iteration: 14
+2024-06-17 16:20:45,345 [INFO/base_optimizer.py:138] Cur. loss: 1.8441e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 22}
+2024-06-17 16:20:45,345 [INFO/base_optimizer.py:139] Best loss: 1.8441e+14, Best Config: {'x0': 12, 'x1': 11, 'x2': 22}
+2024-06-17 16:20:45,345 [INFO/base_optimizer.py:125] 
+Iteration: 15
+2024-06-17 16:21:14,354 [INFO/base_optimizer.py:138] Cur. loss: 1.4343e+18, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 2}
+2024-06-17 16:21:14,354 [INFO/base_optimizer.py:139] Best loss: 1.8441e+14, Best Config: {'x0': 12, 'x1': 11, 'x2': 22}
+2024-06-17 16:21:14,355 [INFO/base_optimizer.py:125] 
+Iteration: 16
+2024-06-17 16:22:01,661 [INFO/base_optimizer.py:138] Cur. loss: 1.7171e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 20}
+2024-06-17 16:22:01,662 [INFO/base_optimizer.py:139] Best loss: 1.7171e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 20}
+2024-06-17 16:22:01,662 [INFO/base_optimizer.py:125] 
+Iteration: 17
+2024-06-17 16:22:56,681 [INFO/base_optimizer.py:138] Cur. loss: 3.6387e+20, Cur. Config: {'x0': 11, 'x1': 1, 'x2': 24}
+2024-06-17 16:22:56,681 [INFO/base_optimizer.py:139] Best loss: 1.7171e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 20}
+2024-06-17 16:22:56,681 [INFO/base_optimizer.py:125] 
+Iteration: 18
+2024-06-17 16:23:48,717 [INFO/base_optimizer.py:138] Cur. loss: 5.7413e+15, Cur. Config: {'x0': 9, 'x1': 12, 'x2': 20}
+2024-06-17 16:23:48,717 [INFO/base_optimizer.py:139] Best loss: 1.7171e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 20}
+2024-06-17 16:23:48,718 [INFO/base_optimizer.py:125] 
+Iteration: 19
+2024-06-17 16:24:44,921 [INFO/base_optimizer.py:138] Cur. loss: 1.7872e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 21}
+2024-06-17 16:24:44,921 [INFO/base_optimizer.py:139] Best loss: 1.7171e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 20}
+2024-06-17 16:24:44,921 [INFO/base_optimizer.py:125] 
+Iteration: 20
+2024-06-17 16:25:29,899 [INFO/base_optimizer.py:138] Cur. loss: 4.7076e+14, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 20}
+2024-06-17 16:25:29,900 [INFO/base_optimizer.py:139] Best loss: 1.7171e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 20}
+2024-06-17 16:25:29,900 [INFO/base_optimizer.py:125] 
+Iteration: 21
+2024-06-17 16:26:36,330 [INFO/base_optimizer.py:138] Cur. loss: 1.5823e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 18}
+2024-06-17 16:26:36,330 [INFO/base_optimizer.py:139] Best loss: 1.5823e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 18}
+2024-06-17 16:26:36,330 [INFO/base_optimizer.py:125] 
+Iteration: 22
+2024-06-17 16:27:32,440 [INFO/base_optimizer.py:138] Cur. loss: 4.1861e+14, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 17}
+2024-06-17 16:27:32,441 [INFO/base_optimizer.py:139] Best loss: 1.5823e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 18}
+2024-06-17 16:27:32,441 [INFO/base_optimizer.py:125] 
+Iteration: 23
+2024-06-17 16:28:31,554 [INFO/base_optimizer.py:138] Cur. loss: 4.1861e+14, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 17}
+2024-06-17 16:28:31,554 [INFO/base_optimizer.py:139] Best loss: 1.5823e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 18}
+2024-06-17 16:28:31,554 [INFO/base_optimizer.py:125] 
+Iteration: 24
+2024-06-17 16:29:30,726 [INFO/base_optimizer.py:138] Cur. loss: 4.1861e+14, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 17}
+2024-06-17 16:29:30,726 [INFO/base_optimizer.py:139] Best loss: 1.5823e+14, Best Config: {'x0': 11, 'x1': 12, 'x2': 18}
+2024-06-17 16:29:30,726 [INFO/base_optimizer.py:125] 
+Iteration: 25
+2024-06-17 16:30:25,043 [INFO/base_optimizer.py:138] Cur. loss: 2.4317e+08, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:30:25,043 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:30:25,043 [INFO/base_optimizer.py:125] 
+Iteration: 26
+2024-06-17 16:31:04,132 [INFO/base_optimizer.py:138] Cur. loss: 1.6841e+10, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 16}
+2024-06-17 16:31:04,132 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:31:04,132 [INFO/base_optimizer.py:125] 
+Iteration: 27
+2024-06-17 16:31:46,923 [INFO/base_optimizer.py:138] Cur. loss: 3.3326e+20, Cur. Config: {'x0': 1, 'x1': 10, 'x2': 24}
+2024-06-17 16:31:46,923 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:31:46,923 [INFO/base_optimizer.py:125] 
+Iteration: 28
+2024-06-17 16:32:46,941 [INFO/base_optimizer.py:138] Cur. loss: 1.4269e+15, Cur. Config: {'x0': 10, 'x1': 11, 'x2': 15}
+2024-06-17 16:32:46,941 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:32:46,941 [INFO/base_optimizer.py:125] 
+Iteration: 29
+2024-06-17 16:33:29,177 [INFO/base_optimizer.py:138] Cur. loss: 1.4609e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 16}
+2024-06-17 16:33:29,178 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:33:29,178 [INFO/base_optimizer.py:125] 
+Iteration: 30
+2024-06-17 16:34:19,400 [INFO/base_optimizer.py:138] Cur. loss: 3.6199e+12, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 12}
+2024-06-17 16:34:19,400 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:34:19,400 [INFO/base_optimizer.py:125] 
+Iteration: 31
+2024-06-17 16:35:20,488 [INFO/base_optimizer.py:138] Cur. loss: 1.5249e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 17}
+2024-06-17 16:35:20,488 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:35:20,488 [INFO/base_optimizer.py:125] 
+Iteration: 32
+2024-06-17 16:35:59,265 [INFO/base_optimizer.py:138] Cur. loss: 1.5387e+20, Cur. Config: {'x0': 1, 'x1': 9, 'x2': 5}
+2024-06-17 16:35:59,265 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:35:59,265 [INFO/base_optimizer.py:125] 
+Iteration: 33
+2024-06-17 16:36:53,472 [INFO/base_optimizer.py:138] Cur. loss: 2.4317e+08, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:36:53,472 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:36:53,472 [INFO/base_optimizer.py:125] 
+Iteration: 34
+2024-06-17 16:37:48,637 [INFO/base_optimizer.py:138] Cur. loss: 1.1631e+15, Cur. Config: {'x0': 12, 'x1': 10, 'x2': 19}
+2024-06-17 16:37:48,637 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:37:48,637 [INFO/base_optimizer.py:125] 
+Iteration: 35
+2024-06-17 16:38:55,968 [INFO/base_optimizer.py:138] Cur. loss: 1.5823e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 18}
+2024-06-17 16:38:55,969 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:38:55,969 [INFO/base_optimizer.py:125] 
+Iteration: 36
+2024-06-17 16:39:37,805 [INFO/base_optimizer.py:138] Cur. loss: 2.1897e+20, Cur. Config: {'x0': 1, 'x1': 5, 'x2': 19}
+2024-06-17 16:39:37,805 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:39:37,805 [INFO/base_optimizer.py:125] 
+Iteration: 37
+2024-06-17 16:40:24,912 [INFO/base_optimizer.py:138] Cur. loss: 1.7266e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 20}
+2024-06-17 16:40:24,913 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:40:24,913 [INFO/base_optimizer.py:125] 
+Iteration: 38
+2024-06-17 16:41:19,102 [INFO/base_optimizer.py:138] Cur. loss: 2.4317e+08, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:41:19,102 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:41:19,102 [INFO/base_optimizer.py:125] 
+Iteration: 39
+2024-06-17 16:41:57,042 [INFO/base_optimizer.py:138] Cur. loss: 7.6326e+20, Cur. Config: {'x0': 12, 'x1': 0, 'x2': 10}
+2024-06-17 16:41:57,042 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:41:57,042 [INFO/base_optimizer.py:125] 
+Iteration: 40
+2024-06-17 16:42:39,056 [INFO/base_optimizer.py:138] Cur. loss: 1.5483e+18, Cur. Config: {'x0': 10, 'x1': 5, 'x2': 19}
+2024-06-17 16:42:39,056 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:42:39,056 [INFO/base_optimizer.py:125] 
+Iteration: 41
+2024-06-17 16:43:35,128 [INFO/base_optimizer.py:138] Cur. loss: 2.4317e+08, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:43:35,128 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:43:35,128 [INFO/base_optimizer.py:125] 
+Iteration: 42
+2024-06-17 16:44:16,130 [INFO/base_optimizer.py:138] Cur. loss: 1.1006e+21, Cur. Config: {'x0': 10, 'x1': 0, 'x2': 17}
+2024-06-17 16:44:16,130 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:44:16,130 [INFO/base_optimizer.py:125] 
+Iteration: 43
+2024-06-17 16:44:56,229 [INFO/base_optimizer.py:138] Cur. loss: 1.0999e+18, Cur. Config: {'x0': 5, 'x1': 11, 'x2': 4}
+2024-06-17 16:44:56,229 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:44:56,229 [INFO/base_optimizer.py:125] 
+Iteration: 44
+2024-06-17 16:45:46,472 [INFO/base_optimizer.py:138] Cur. loss: 1.7171e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 20}
+2024-06-17 16:45:46,473 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:45:46,473 [INFO/base_optimizer.py:125] 
+Iteration: 45
+2024-06-17 16:46:35,506 [INFO/base_optimizer.py:138] Cur. loss: 5.8289e+18, Cur. Config: {'x0': 4, 'x1': 12, 'x2': 19}
+2024-06-17 16:46:35,506 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:46:35,506 [INFO/base_optimizer.py:125] 
+Iteration: 46
+2024-06-17 16:47:32,602 [INFO/base_optimizer.py:138] Cur. loss: 1.6640e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 19}
+2024-06-17 16:47:32,602 [INFO/base_optimizer.py:139] Best loss: 2.4317e+08, Best Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:47:32,602 [INFO/base_optimizer.py:125] 
+Iteration: 47
+2024-06-17 16:48:19,757 [INFO/base_optimizer.py:138] Cur. loss: 5.1845e+07, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:48:19,757 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:48:19,757 [INFO/base_optimizer.py:125] 
+Iteration: 48
+2024-06-17 16:49:07,926 [INFO/base_optimizer.py:138] Cur. loss: 4.7076e+14, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 20}
+2024-06-17 16:49:07,926 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:49:07,926 [INFO/base_optimizer.py:125] 
+Iteration: 49
+2024-06-17 16:49:58,820 [INFO/base_optimizer.py:138] Cur. loss: 1.5525e+19, Cur. Config: {'x0': 5, 'x1': 3, 'x2': 5}
+2024-06-17 16:49:58,820 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:49:58,820 [INFO/base_optimizer.py:125] 
+Iteration: 50
+2024-06-17 16:50:47,868 [INFO/base_optimizer.py:138] Cur. loss: 5.1845e+07, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:50:47,868 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:50:47,868 [INFO/base_optimizer.py:125] 
+Iteration: 51
+2024-06-17 16:51:49,125 [INFO/base_optimizer.py:138] Cur. loss: 1.8380e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 22}
+2024-06-17 16:51:49,125 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:51:49,125 [INFO/base_optimizer.py:125] 
+Iteration: 52
+2024-06-17 16:52:48,418 [INFO/base_optimizer.py:138] Cur. loss: 1.7946e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 21}
+2024-06-17 16:52:48,418 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:52:48,418 [INFO/base_optimizer.py:125] 
+Iteration: 53
+2024-06-17 16:53:46,529 [INFO/base_optimizer.py:138] Cur. loss: 2.4317e+08, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 16:53:46,529 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:53:46,529 [INFO/base_optimizer.py:125] 
+Iteration: 54
+2024-06-17 16:54:34,624 [INFO/base_optimizer.py:138] Cur. loss: 2.2504e+16, Cur. Config: {'x0': 8, 'x1': 12, 'x2': 7}
+2024-06-17 16:54:34,624 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:54:34,624 [INFO/base_optimizer.py:125] 
+Iteration: 55
+2024-06-17 16:55:31,768 [INFO/base_optimizer.py:138] Cur. loss: 1.7872e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 21}
+2024-06-17 16:55:31,768 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:55:31,768 [INFO/base_optimizer.py:125] 
+Iteration: 56
+2024-06-17 16:56:21,038 [INFO/base_optimizer.py:138] Cur. loss: 4.7076e+14, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 20}
+2024-06-17 16:56:21,038 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:56:21,038 [INFO/base_optimizer.py:125] 
+Iteration: 57
+2024-06-17 16:57:04,863 [INFO/base_optimizer.py:138] Cur. loss: 6.8216e+19, Cur. Config: {'x0': 6, 'x1': 2, 'x2': 20}
+2024-06-17 16:57:04,863 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:57:04,863 [INFO/base_optimizer.py:125] 
+Iteration: 58
+2024-06-17 16:58:04,057 [INFO/base_optimizer.py:138] Cur. loss: 1.9064e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 24}
+2024-06-17 16:58:04,057 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:58:04,057 [INFO/base_optimizer.py:125] 
+Iteration: 59
+2024-06-17 16:59:00,336 [INFO/base_optimizer.py:138] Cur. loss: 1.2554e+15, Cur. Config: {'x0': 10, 'x1': 12, 'x2': 22}
+2024-06-17 16:59:00,336 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:59:00,336 [INFO/base_optimizer.py:125] 
+Iteration: 60
+2024-06-17 16:59:46,141 [INFO/base_optimizer.py:138] Cur. loss: 1.1470e+21, Cur. Config: {'x0': 0, 'x1': 11, 'x2': 18}
+2024-06-17 16:59:46,142 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 16:59:46,142 [INFO/base_optimizer.py:125] 
+Iteration: 61
+2024-06-17 17:00:41,093 [INFO/base_optimizer.py:138] Cur. loss: 8.4065e+16, Cur. Config: {'x0': 10, 'x1': 7, 'x2': 12}
+2024-06-17 17:00:41,093 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:00:41,093 [INFO/base_optimizer.py:125] 
+Iteration: 62
+2024-06-17 17:01:39,063 [INFO/base_optimizer.py:138] Cur. loss: 4.8981e+14, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 21}
+2024-06-17 17:01:39,063 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:01:39,063 [INFO/base_optimizer.py:125] 
+Iteration: 63
+2024-06-17 17:02:11,154 [INFO/base_optimizer.py:138] Cur. loss: 5.0499e+18, Cur. Config: {'x0': 8, 'x1': 9, 'x2': 1}
+2024-06-17 17:02:11,154 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:02:11,154 [INFO/base_optimizer.py:125] 
+Iteration: 64
+2024-06-17 17:03:02,206 [INFO/base_optimizer.py:138] Cur. loss: 1.7408e+18, Cur. Config: {'x0': 12, 'x1': 5, 'x2': 24}
+2024-06-17 17:03:02,206 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:03:02,206 [INFO/base_optimizer.py:125] 
+Iteration: 65
+2024-06-17 17:03:58,226 [INFO/base_optimizer.py:138] Cur. loss: 1.0356e+17, Cur. Config: {'x0': 7, 'x1': 12, 'x2': 21}
+2024-06-17 17:03:58,226 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:03:58,226 [INFO/base_optimizer.py:125] 
+Iteration: 66
+2024-06-17 17:05:07,439 [INFO/base_optimizer.py:138] Cur. loss: 1.0383e+09, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 18}
+2024-06-17 17:05:07,439 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:05:07,439 [INFO/base_optimizer.py:125] 
+Iteration: 67
+2024-06-17 17:06:06,571 [INFO/base_optimizer.py:138] Cur. loss: 1.7946e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 21}
+2024-06-17 17:06:06,571 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:06:06,571 [INFO/base_optimizer.py:125] 
+Iteration: 68
+2024-06-17 17:06:54,713 [INFO/base_optimizer.py:138] Cur. loss: 5.1845e+07, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:06:54,713 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:06:54,713 [INFO/base_optimizer.py:125] 
+Iteration: 69
+2024-06-17 17:07:24,634 [INFO/base_optimizer.py:138] Cur. loss: 3.1206e+19, Cur. Config: {'x0': 11, 'x1': 3, 'x2': 0}
+2024-06-17 17:07:24,634 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:07:24,634 [INFO/base_optimizer.py:125] 
+Iteration: 70
+2024-06-17 17:08:11,933 [INFO/base_optimizer.py:138] Cur. loss: 5.1845e+07, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:08:11,933 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:08:11,933 [INFO/base_optimizer.py:125] 
+Iteration: 71
+2024-06-17 17:09:02,029 [INFO/base_optimizer.py:138] Cur. loss: 5.1845e+07, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:09:02,029 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:09:02,029 [INFO/base_optimizer.py:125] 
+Iteration: 72
+2024-06-17 17:09:59,347 [INFO/base_optimizer.py:138] Cur. loss: 2.4317e+08, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 17:09:59,347 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:09:59,347 [INFO/base_optimizer.py:125] 
+Iteration: 73
+2024-06-17 17:10:49,519 [INFO/base_optimizer.py:138] Cur. loss: 5.1845e+07, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:10:49,519 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:10:49,519 [INFO/base_optimizer.py:125] 
+Iteration: 74
+2024-06-17 17:11:47,741 [INFO/base_optimizer.py:138] Cur. loss: 2.4317e+08, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 19}
+2024-06-17 17:11:47,741 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:11:47,741 [INFO/base_optimizer.py:125] 
+Iteration: 75
+2024-06-17 17:12:37,885 [INFO/base_optimizer.py:138] Cur. loss: 1.7266e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 20}
+2024-06-17 17:12:37,885 [INFO/base_optimizer.py:139] Best loss: 5.1845e+07, Best Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:12:37,886 [INFO/base_optimizer.py:125] 
+Iteration: 76
+2024-06-17 17:13:36,976 [INFO/base_optimizer.py:138] Cur. loss: 9.5570e+06, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:13:36,976 [INFO/base_optimizer.py:139] Best loss: 9.5570e+06, Best Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:13:36,976 [INFO/base_optimizer.py:125] 
+Iteration: 77
+2024-06-17 17:14:39,910 [INFO/base_optimizer.py:138] Cur. loss: 2.0041e+19, Cur. Config: {'x0': 3, 'x1': 8, 'x2': 21}
+2024-06-17 17:14:39,910 [INFO/base_optimizer.py:139] Best loss: 9.5570e+06, Best Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:14:39,910 [INFO/base_optimizer.py:125] 
+Iteration: 78
+2024-06-17 17:15:14,659 [INFO/base_optimizer.py:138] Cur. loss: 4.2938e+20, Cur. Config: {'x0': 10, 'x1': 0, 'x2': 3}
+2024-06-17 17:15:14,659 [INFO/base_optimizer.py:139] Best loss: 9.5570e+06, Best Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:15:14,659 [INFO/base_optimizer.py:125] 
+Iteration: 79
+2024-06-17 17:16:09,836 [INFO/base_optimizer.py:138] Cur. loss: 5.1845e+07, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:16:09,836 [INFO/base_optimizer.py:139] Best loss: 9.5570e+06, Best Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:16:09,836 [INFO/base_optimizer.py:125] 
+Iteration: 80
+2024-06-17 17:17:00,944 [INFO/base_optimizer.py:138] Cur. loss: 5.1845e+07, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 20}
+2024-06-17 17:17:00,944 [INFO/base_optimizer.py:139] Best loss: 9.5570e+06, Best Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:17:00,944 [INFO/base_optimizer.py:125] 
+Iteration: 81
+2024-06-17 17:17:59,208 [INFO/base_optimizer.py:138] Cur. loss: 9.5570e+06, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:17:59,208 [INFO/base_optimizer.py:139] Best loss: 9.5570e+06, Best Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:17:59,208 [INFO/base_optimizer.py:125] 
+Iteration: 82
+2024-06-17 17:18:58,525 [INFO/base_optimizer.py:138] Cur. loss: 9.5570e+06, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:18:58,525 [INFO/base_optimizer.py:139] Best loss: 9.5570e+06, Best Config: {'x0': 12, 'x1': 12, 'x2': 21}
+2024-06-17 17:18:58,525 [INFO/base_optimizer.py:125] 
+Iteration: 83
+2024-06-17 17:19:56,739 [INFO/base_optimizer.py:138] Cur. loss: 5.4170e+05, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:19:56,739 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:19:56,739 [INFO/base_optimizer.py:125] 
+Iteration: 84
+2024-06-17 17:20:58,903 [INFO/base_optimizer.py:138] Cur. loss: 1.8837e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 23}
+2024-06-17 17:20:58,903 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:20:58,903 [INFO/base_optimizer.py:125] 
+Iteration: 85
+2024-06-17 17:21:54,143 [INFO/base_optimizer.py:138] Cur. loss: 4.9750e+14, Cur. Config: {'x0': 11, 'x1': 11, 'x2': 24}
+2024-06-17 17:21:54,144 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:21:54,144 [INFO/base_optimizer.py:125] 
+Iteration: 86
+2024-06-17 17:22:57,940 [INFO/base_optimizer.py:138] Cur. loss: 2.0055e+19, Cur. Config: {'x0': 8, 'x1': 3, 'x2': 23}
+2024-06-17 17:22:57,940 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:22:57,940 [INFO/base_optimizer.py:125] 
+Iteration: 87
+2024-06-17 17:23:58,173 [INFO/base_optimizer.py:138] Cur. loss: 5.4170e+05, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:23:58,173 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:23:58,173 [INFO/base_optimizer.py:125] 
+Iteration: 88
+2024-06-17 17:24:57,510 [INFO/base_optimizer.py:138] Cur. loss: 5.4170e+05, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:24:57,510 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:24:57,510 [INFO/base_optimizer.py:125] 
+Iteration: 89
+2024-06-17 17:25:31,631 [INFO/base_optimizer.py:138] Cur. loss: 2.0488e+18, Cur. Config: {'x0': 12, 'x1': 6, 'x2': 2}
+2024-06-17 17:25:31,631 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:25:31,631 [INFO/base_optimizer.py:125] 
+Iteration: 90
+2024-06-17 17:26:33,667 [INFO/base_optimizer.py:138] Cur. loss: 1.9064e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 24}
+2024-06-17 17:26:33,667 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:26:33,667 [INFO/base_optimizer.py:125] 
+Iteration: 91
+2024-06-17 17:27:30,868 [INFO/base_optimizer.py:138] Cur. loss: 5.4170e+05, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:27:30,868 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:27:30,868 [INFO/base_optimizer.py:125] 
+Iteration: 92
+2024-06-17 17:28:33,265 [INFO/base_optimizer.py:138] Cur. loss: 1.9064e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 24}
+2024-06-17 17:28:33,265 [INFO/base_optimizer.py:139] Best loss: 5.4170e+05, Best Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:28:33,265 [INFO/base_optimizer.py:125] 
+Iteration: 93
+2024-06-17 17:29:30,507 [INFO/base_optimizer.py:138] Cur. loss: 1.0983e-02, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:29:30,507 [INFO/base_optimizer.py:139] Best loss: 1.0983e-02, Best Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:29:30,507 [INFO/base_optimizer.py:125] 
+Iteration: 94
+2024-06-17 17:30:29,535 [INFO/base_optimizer.py:138] Cur. loss: 1.8837e+14, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 23}
+2024-06-17 17:30:29,535 [INFO/base_optimizer.py:139] Best loss: 1.0983e-02, Best Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:30:29,535 [INFO/base_optimizer.py:125] 
+Iteration: 95
+2024-06-17 17:31:27,777 [INFO/base_optimizer.py:138] Cur. loss: 5.4170e+05, Cur. Config: {'x0': 12, 'x1': 12, 'x2': 23}
+2024-06-17 17:31:27,777 [INFO/base_optimizer.py:139] Best loss: 1.0983e-02, Best Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:31:27,777 [INFO/base_optimizer.py:125] 
+Iteration: 96
+2024-06-17 17:32:21,099 [INFO/base_optimizer.py:138] Cur. loss: 1.3076e+15, Cur. Config: {'x0': 10, 'x1': 12, 'x2': 24}
+2024-06-17 17:32:21,099 [INFO/base_optimizer.py:139] Best loss: 1.0983e-02, Best Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:32:21,100 [INFO/base_optimizer.py:125] 
+Iteration: 97
+2024-06-17 17:33:12,306 [INFO/base_optimizer.py:138] Cur. loss: 6.7317e+18, Cur. Config: {'x0': 4, 'x1': 12, 'x2': 24}
+2024-06-17 17:33:12,306 [INFO/base_optimizer.py:139] Best loss: 1.0983e-02, Best Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:33:12,306 [INFO/base_optimizer.py:125] 
+Iteration: 98
+2024-06-17 17:34:15,484 [INFO/base_optimizer.py:138] Cur. loss: 1.9009e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 24}
+2024-06-17 17:34:15,484 [INFO/base_optimizer.py:139] Best loss: 1.0983e-02, Best Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:34:15,484 [INFO/base_optimizer.py:125] 
+Iteration: 99
+2024-06-17 17:35:18,716 [INFO/base_optimizer.py:138] Cur. loss: 1.0469e+16, Cur. Config: {'x0': 12, 'x1': 11, 'x2': 6}
+2024-06-17 17:35:18,716 [INFO/base_optimizer.py:139] Best loss: 1.0983e-02, Best Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:35:18,716 [INFO/base_optimizer.py:125] 
+Iteration: 100
+2024-06-17 17:36:21,979 [INFO/base_optimizer.py:138] Cur. loss: 1.9009e+14, Cur. Config: {'x0': 11, 'x1': 12, 'x2': 24}
+2024-06-17 17:36:21,979 [INFO/base_optimizer.py:139] Best loss: 1.0983e-02, Best Config: {'x0': 12, 'x1': 12, 'x2': 24}
+2024-06-17 17:36:21,979 [INFO/base_optimizer.py:146] Best loss: 1.0983e-02
+2024-06-17 17:36:21,980 [INFO/utils.py:335] 
+The observations: {'x0': array([ 6,  5, 11,  1,  5,  2,  9,  2,  7,  9, 10, 11, 12, 12, 11, 11, 11,
+        9, 11, 11, 11, 11, 11, 11, 12, 12,  1, 10, 12, 12, 11,  1, 12, 12,
+       11,  1, 12, 12, 12, 10, 12, 10,  5, 11,  4, 11, 12, 11,  5, 12, 11,
+       12, 12,  8, 11, 11,  6, 12, 10,  0, 10, 11,  8, 12,  7, 12, 12, 12,
+       11, 12, 12, 12, 12, 12, 12, 12,  3, 10, 12, 12, 12, 12, 12, 12, 11,
+        8, 12, 12, 12, 12, 12, 12, 12, 12, 12, 10,  4, 11, 12, 11]), 'x1': array([ 7,  9,  5,  3,  4,  1,  9, 10,  7,  3, 10, 10,  9, 11, 11, 12,  1,
+       12, 12, 11, 12, 11, 11, 11, 12, 12, 10, 11, 11, 12, 12,  9, 12, 10,
+       12,  5, 11, 12,  0,  5, 12,  0, 11, 12, 12, 12, 12, 11,  3, 12, 12,
+       11, 12, 12, 12, 11,  2, 11, 12, 11,  7, 11,  9,  5, 12, 12, 11, 12,
+        3, 12, 12, 12, 12, 12, 11, 12,  8,  0, 12, 12, 12, 12, 12, 11, 11,
+        3, 12, 12,  6, 11, 12, 11, 12, 11, 12, 12, 12, 12, 11, 12]), 'x2': array([23, 12,  8,  3, 14, 19, 23, 13,  7,  6, 22, 21, 21, 22,  2, 20, 24,
+       20, 21, 20, 18, 17, 17, 17, 19, 16, 24, 15, 16, 12, 17,  5, 19, 19,
+       18, 19, 20, 19, 10, 19, 19, 17,  4, 20, 19, 19, 20, 20,  5, 20, 22,
+       21, 19,  7, 21, 20, 20, 24, 22, 18, 12, 21,  1, 24, 21, 18, 21, 20,
+        0, 20, 20, 19, 20, 19, 20, 21, 21,  3, 20, 20, 21, 21, 23, 23, 24,
+       23, 23, 23,  2, 24, 23, 24, 24, 23, 23, 24, 24, 24,  6, 24]), 'loss': array([5.59814825e+17, 1.21564619e+18, 9.95370964e+17, 1.69398289e+20,
+       7.08635727e+18, 2.33457310e+20, 1.62184460e+16, 6.73617976e+19,
+       1.95871782e+17, 1.23734995e+19, 3.46043117e+15, 1.78001695e+15,
+       5.95211933e+15, 1.84408506e+14, 1.43431930e+18, 1.71709833e+14,
+       3.63872193e+20, 5.74131231e+15, 1.78721656e+14, 4.70764335e+14,
+       1.58228762e+14, 4.18608130e+14, 4.18608130e+14, 4.18608130e+14,
+       2.43167672e+08, 1.68410171e+10, 3.33263426e+20, 1.42690789e+15,
+       1.46088589e+14, 3.61986075e+12, 1.52494024e+14, 1.53874202e+20,
+       2.43167672e+08, 1.16308981e+15, 1.58228762e+14, 2.18966907e+20,
+       1.72657093e+14, 2.43167672e+08, 7.63260532e+20, 1.54831080e+18,
+       2.43167672e+08, 1.10060356e+21, 1.09991040e+18, 1.71709833e+14,
+       5.82890064e+18, 1.66398278e+14, 5.18448201e+07, 4.70764335e+14,
+       1.55246422e+19, 5.18448201e+07, 1.83804428e+14, 1.79455978e+14,
+       2.43167672e+08, 2.25038466e+16, 1.78721656e+14, 4.70764335e+14,
+       6.82159267e+19, 1.90642644e+14, 1.25538475e+15, 1.14695291e+21,
+       8.40654630e+16, 4.89810225e+14, 5.04986988e+18, 1.74076166e+18,
+       1.03556826e+17, 1.03829532e+09, 1.79455978e+14, 5.18448201e+07,
+       3.12060447e+19, 5.18448201e+07, 5.18448201e+07, 2.43167672e+08,
+       5.18448201e+07, 2.43167672e+08, 1.72657093e+14, 9.55703953e+06,
+       2.00410531e+19, 4.29384259e+20, 5.18448201e+07, 5.18448201e+07,
+       9.55703953e+06, 9.55703953e+06, 5.41704659e+05, 1.88370715e+14,
+       4.97499269e+14, 2.00550477e+19, 5.41704659e+05, 5.41704659e+05,
+       2.04877473e+18, 1.90642644e+14, 5.41704659e+05, 1.90642644e+14,
+       1.09828147e-02, 1.88370715e+14, 5.41704659e+05, 1.30759230e+15,
+       6.73174543e+18, 1.90093194e+14, 1.04691131e+16, 1.90093194e+14]), 'iter_time': array([43.915077, 50.005074, 46.00335 , 32.672413, 45.661358, 37.481663,
+       46.12905 , 36.761463, 46.91674 , 31.836771, 48.0535  , 50.09636 ,
+       53.08296 , 58.106388, 29.007483, 47.304733, 55.0174  , 52.033962,
+       56.201202, 44.976204, 66.428276, 56.108047, 59.11064 , 59.169643,
+       54.31501 , 39.0867  , 42.788544, 60.01592 , 42.234005, 50.22033 ,
+       61.08516 , 38.77424 , 54.205452, 55.16227 , 67.32919 , 41.833923,
+       47.10555 , 54.18737 , 37.93767 , 42.011433, 56.06982 , 40.99985 ,
+       40.09673 , 50.24076 , 49.031387, 57.093548, 47.15234 , 48.16656 ,
+       50.891468, 49.045822, 61.253918, 59.29109 , 58.108906, 48.091984,
+       57.141975, 49.267803, 43.821762, 59.191917, 56.277027, 45.802784,
+       54.949493, 57.96729 , 32.088802, 51.04961 , 56.01788 , 69.210236,
+       59.130077, 48.139275, 29.919052, 47.297024, 50.093235, 57.315254,
+       50.17024 , 58.21946 , 50.14183 , 59.08832 , 62.9316  , 34.746925,
+       55.174835, 51.105747, 58.2612  , 59.31509 , 58.212105, 62.161285,
+       55.23835 , 63.79446 , 60.230507, 59.33482 , 34.117596, 62.033875,
+       57.198524, 62.394447, 57.239834, 59.02612 , 58.239635, 53.32029 ,
+       51.20381 , 63.174923, 63.229897, 63.260464], dtype=float32)}
