@@ -1,0 +1,14 @@
+# read design
+read -sv ./synth/quad_syn.sv
+hierarchy -top quad
+# the high-level stuff
+proc; fsm; opt; memory; opt
+# mapping to internal cell library
+techmap; opt
+# mapping flip-flops to mycells.lib
+dfflibmap -liberty ../library/sky130hd_tt.lib
+abc -liberty ../library/sky130hd_tt.lib
+# write netlist
+write_verilog -noattr ./synth/quad_syn.v
+# cleanup
+clean

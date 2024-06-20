@@ -4,7 +4,7 @@ class host:
     from abc import abstractmethod
     
     
-    def __init__(self, name, num_ite):
+    def __init__(self, name, num_ite, mode, algo):
         self.name = name
 
         self.num_ite = num_ite
@@ -13,6 +13,8 @@ class host:
         self.cur_prec = np.array([]) # precision: mse, etc. 
         self.cur_loss = np.array([])
         self.opt_time = 0
+        self.algo = algo
+        self.mode = mode
 
         self.record = {}
     
