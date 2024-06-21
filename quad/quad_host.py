@@ -3,8 +3,6 @@ sys.path.append('../algo')
 from host import *
 from optimizer import optimizer
 
-# sys.path.append('.')
-# from syn_power import *
 import paramiko
 import paramiko.client
 import serial
@@ -253,10 +251,9 @@ class quad_host(host):
             self.record['loss'] = self.record['loss'] + [loss_val]
 
 
-    def obj_func(self, config:dict[str, float])  -> tuple[dict[str, float], float]:
+    def obj_func(self, config):
         # get configurations
         if self.algo == "watanabe":
-            
             start_time = time.time() 
             self.cur_config = np.array([list(config.values())])
         elif self.algo == "newtpe":
@@ -305,7 +302,7 @@ class quad_host(host):
 
         # print information
         print(">>>>>>>>>>>>>>> Start optimization")
-        # self.ref_seq = self.read_ref_seq()
+
         time_start = time.time()
         # optimization 
         if self.algo == "watanabe":
@@ -324,5 +321,5 @@ class quad_host(host):
 
 
 if __name__ == "__main__":
-    obj = quad_host(name="quad-sim-newtpe-cadence", num_ite=100, mode="simulation", algo="newtpe", syn_mode="cadence")
+    obj = quad_host(name="quad-sim-newtpe-cadence", num_ite=100, mode="simulation", algo="watanabe", syn_mode="cadence")
     obj.run()
