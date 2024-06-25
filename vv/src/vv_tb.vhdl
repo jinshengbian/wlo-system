@@ -61,10 +61,10 @@ begin
               vv_avgSum_wl => vv_avgSum_wl);
 
   vv_magnitude_wl <= x"08";
-  vv_partitioned_wl <= x"03";
+  vv_partitioned_wl <= x"02";
   vv_4thPower_wl <= x"08";
-  vv_phase_wl <= x"06";
-  vv_avgSum_wl <= x"03";
+  vv_phase_wl <= x"04";
+  vv_avgSum_wl <= x"01";
 
   clk <= not clk after PERIOD/2;
   rst <= '1'     after PERIOD, '0' after 2*PERIOD;

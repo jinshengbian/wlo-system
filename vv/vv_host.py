@@ -82,7 +82,7 @@ class vv_host(host):
         output = self.ssh_send_command(command,2)
         command = f"shell rm genus.* fv -rf"
         output = self.ssh_send_command(command,2)
-        command = f"shell ./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]} {wl_config[3]} {wl_config[4]}"
+        command = f"shell source ./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]} {wl_config[3]} {wl_config[4]}"
         output = self.ssh_send_command(command,2)
         command = "source synthesis.tcl"
         output = self.ssh_send_command(command,2)
@@ -300,7 +300,7 @@ class vv_host(host):
         self.get_prec()
         self.calc_loss()
         print(f"Config: {self.cur_config}")
-        print(f"Power : {self.cur_cost} (nW)")
+        print(f"Area  : {self.cur_cost}")
         print(f"MSE   : {self.cur_prec} ")
         print(f"Loss  : {self.cur_loss}")
 
@@ -317,7 +317,6 @@ class vv_host(host):
         self.record['x3'] = self.record['x3'] + [self.cur_config[0][2].tolist()]
         self.record['x4'] = self.record['x4'] + [self.cur_config[0][3].tolist()]
         self.record['x5'] = self.record['x5'] + [self.cur_config[0][4].tolist()]
-
 
         return result
 
