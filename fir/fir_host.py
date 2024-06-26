@@ -28,6 +28,7 @@ class fir_host(host):
             self.gen_sim_input()
             self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
+            self.bsize = bsize
             self.uart_ob = serial.Serial("/dev/ttyUSB1",115200)
 
         if algo == "newtpe":
@@ -46,6 +47,7 @@ class fir_host(host):
         }
 
     ########################## self defined functions ##################
+
     
     # cadence synthesis
     def ssh_send_command(self,command,method=1):
@@ -82,8 +84,6 @@ class fir_host(host):
         output = self.ssh_send_command(command,2)
         command = f"shell ./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]} {wl_config[3]} {wl_config[4]} {wl_config[5]} {wl_config[6]} {wl_config[7]} {wl_config[8]} {wl_config[9]} {wl_config[10]} {wl_config[11]} {wl_config[12]} {wl_config[13]} {wl_config[14]}"
         output = self.ssh_send_command(command,2)
-        print(command)
-        print(output)
         command = "source synthesis.tcl"
         output = self.ssh_send_command(command,2)
         command = "shell cat ./report/gates.rpt"
@@ -101,6 +101,7 @@ class fir_host(host):
 
     # simulation
     def gen_sim_input(self):
+
         n_simulations = int(131072)
         # Open files outside the loop
         with open("simu/input.txt", "w") as input_file:
@@ -145,6 +146,7 @@ class fir_host(host):
         #wl_config = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         self.run_sim(wl_config)
         ref_seq = self.read_output()
+        ref_seq = ref_seq/2**8
         return ref_seq
     def read_output(self):
         seq = []
@@ -156,6 +158,7 @@ class fir_host(host):
                     except ValueError:
                         pass
         seq = np.array(seq)
+        seq = seq/2**8
         return seq
     # # hyp mode: UART communication
     def uart_send_config(self,config: np.array):
@@ -170,6 +173,37 @@ class fir_host(host):
     def uart_hw_reset(self):
         cmd = bytes([4])
         self.uart_ob.write(cmd)
+
+    # test
+    def test_sim_batch(self):
+        self.bsize = 1
+        self.gen_sim_input()
+        self.ref_seq = self.read_ref_seq()
+        #config = np.array([16,16,16,16,16,16,16,16,16,16,16,16,16,16,16])
+        #config = np.array([8,8,8,8,8,8,8,8,8,8,8,8,8,8,8])
+        #config = np.array([5,5,5,5,5,5,5,5,5,5,5,5,5,5,5])
+        #config = np.array([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+        config = np.array([12,12,12,12,12,12,12,12,12,12,12,12,12,12,12])
+        self.run_sim(config)
+        sim_seq = self.read_output()
+        sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
+        print("sim mse: ",sim_prec)
+
+        self.uart_send_config(config)
+        time.sleep(0.001)
+        self.uart_hw_start()
+        msg = []
+        while(1):
+            msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
+            if len(msg)==8*self.bsize:
+                break   
+        mse_val = 0
+        for j in range(8):
+            mse_val = mse_val + msg[0*8+j]*256**j
+        mse_val = mse_val/131072/2**16
+        print("hyb mse: ", mse_val)
+
+
 
     ####################################################################
     def get_cost(self): # cadence
@@ -186,7 +220,6 @@ class fir_host(host):
         self.cur_prec = np.array([])
         if self.mode == "simulation":
             cur_config = self.cur_config[0]
-            print(cur_config)
             self.run_sim(cur_config)
             cur_seq = self.read_output()
             self.cur_prec = np.append(self.cur_prec, np.mean((self.ref_seq-cur_seq)**2))
@@ -209,7 +242,9 @@ class fir_host(host):
                 mse_val = 0
                 for j in range(8):
                     mse_val = mse_val + msg[i*8+j]*256**j
-                mse_val = mse_val*2**13/131072
+                print(mse_val)
+                mse_val = mse_val/131072
+                
                 self.cur_prec = np.append(self.cur_prec, np.array([mse_val]))
                 # record mse
                 self.record['prec'] = self.record['prec'] + [mse_val]
@@ -219,7 +254,7 @@ class fir_host(host):
     def calc_loss(self):
         self.cur_loss = np.array([])
         for i in range(self.bsize):
-            loss_val = abs(self.cur_prec[i]-1e8) + (self.cur_cost[i])
+            loss_val = abs(self.cur_prec[i]-4) + (self.cur_cost[i])
             self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
             # record loss
             self.record['loss'] = self.record['loss'] + [loss_val]
@@ -289,5 +324,8 @@ class fir_host(host):
         self.dump_record()
   
 if __name__ == "__main__":
-    obj = fir_host()
+    obj = fir_host(name="hybrid_newtpe_100_batch1", num_ite=100, mode="hybrid", algo="newtpe", bsize=1)
     obj.run()
+    #obj.test_sim_batch()
+    # obj = fir_host(name="hybrid_watanabe_100_batch1", num_ite=100, mode="hybrid", algo="watanabe", bsize=1)
+    # obj.run()

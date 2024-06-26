@@ -10,7 +10,7 @@ localparam IN_FRAC_WL    = 8;
 localparam OUT_INTE_WL   = 4;
 localparam OUT_FRAC_WL   = 8;
 
-localparam int PRODUCT_FRAC_WL_ARRAY [0:14] = {15,6,11,15,10,2,5,2,6,6,14,1,5,2,16} ;
+localparam int PRODUCT_FRAC_WL_ARRAY [0:14] = {12,12,12,12,12,12,12,12,12,12,12,12,12,12,12} ;
 
 logic clk,rst,in_valid,out_valid;
 logic [IN_INTE_WL-1:-IN_FRAC_WL] data_in;

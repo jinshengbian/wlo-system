@@ -11,6 +11,10 @@ module FIR #(
 (
     input  logic clk,
     input  logic rst,
+    // wordlength
+    input logic [7:0] frac_wl [14:0],
+
+    //
     input  logic signed [IN_INTE_WL-1:-IN_FRAC_WL] data_in,
     input  logic in_valid,
     output logic signed [OUT_INTE_WL-1:-OUT_FRAC_WL] data_out,
@@ -81,14 +85,28 @@ end
 genvar i;
 generate
     for (i=0; i<n_taps; i=i+1) begin
-        if (PRODUCT_FRAC_WL>PRODUCT_FRAC_WL_ARRAY[i]) begin
-            assign product_new[i] = {product[i][PRODUCT_INTE_WL-1:-(PRODUCT_FRAC_WL_ARRAY[i])],(PRODUCT_FRAC_WL-PRODUCT_FRAC_WL_ARRAY[i])'(0)};
-        end
-        else begin
-            assign product_new[i] = product[i];
-        end
+        // if (PRODUCT_FRAC_WL>PRODUCT_FRAC_WL_ARRAY[i]) begin
+        //     assign product_new[i] = {product[i][PRODUCT_INTE_WL-1:-(PRODUCT_FRAC_WL_ARRAY[i])],(PRODUCT_FRAC_WL-PRODUCT_FRAC_WL_ARRAY[i])'(0)};
+        // end
+        // else begin ////////////////////////////
+        //     assign product_new[i] = product[i];
+        // end
+
+        bit_switch #(24,16) sw (
+            .num_int(8'd8),
+            .num_frac(frac_wl[i]),
+            .data_i(product[i]),
+            .data_o(product_new[i])
+        );
+
+
+
     end
 endgenerate
+
+
+
+
 
 assign data_out = sum_reg[0][OUT_INTE_WL-1:-OUT_FRAC_WL];
 assign out_valid = valid_reg[n_taps-1];
