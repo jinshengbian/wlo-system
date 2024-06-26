@@ -52,30 +52,23 @@ always @(posedge clk) begin
         valid_reg <= 1'b0;
     end
     else begin
-        if (in_valid == 1'b1) begin
-            sum_reg[n_taps-2] <= product_new[n_taps-2]+product_new[n_taps-1];
-            for (int i=0; i<n_taps-2; i=i+1) begin
-                sum_reg[i] <= product_new[i]+sum_reg[i+1];
-            end
-            valid_reg[0] <= in_valid;
-            for (integer i=1; i<n_taps; i=i+1) begin
-                valid_reg[i] <= valid_reg[i-1];
-            end
+        sum_reg[n_taps-2] <= product_new[n_taps-2]+product_new[n_taps-1];
+        for (int i=0; i<n_taps-2; i=i+1) begin
+            sum_reg[i] <= product_new[i]+sum_reg[i+1];
         end
+        valid_reg[0] <= in_valid;
+        for (integer i=1; i<n_taps; i=i+1) begin
+            valid_reg[i] <= valid_reg[i-1];
+        end
+    
     end
 end
 
 always @(*) begin
-    if (in_valid == 1'b1) begin
-        for (int i=0; i<n_taps; i=i+1) begin
-            product[i] <= coe_fir[i] * data_in;
-        end
+    for (int i=0; i<n_taps; i=i+1) begin
+        product[i] <= coe_fir[i] * data_in;
     end
-    else begin
-        for (int i=0; i<n_taps; i=i+1) begin
-            product[i] <= (PRODUCT_INTE_WL+PRODUCT_FRAC_WL)'(0);
-        end
-    end
+    
 end
 
 genvar i;

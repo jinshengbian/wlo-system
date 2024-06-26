@@ -189,19 +189,19 @@ class fir_host(host):
         sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
         print("sim mse: ",sim_prec)
 
-        self.uart_send_config(config)
-        time.sleep(0.001)
-        self.uart_hw_start()
-        msg = []
-        while(1):
-            msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
-            if len(msg)==8*self.bsize:
-                break   
-        mse_val = 0
-        for j in range(8):
-            mse_val = mse_val + msg[0*8+j]*256**j
-        mse_val = mse_val/131072/2**16
-        print("hyb mse: ", mse_val)
+        # self.uart_send_config(config)
+        # time.sleep(0.001)
+        # self.uart_hw_start()
+        # msg = []
+        # while(1):
+        #     msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
+        #     if len(msg)==8*self.bsize:
+        #         break   
+        # mse_val = 0
+        # for j in range(8):
+        #     mse_val = mse_val + msg[0*8+j]*256**j
+        # mse_val = mse_val/131072/2**16
+        # print("hyb mse: ", mse_val)
 
 
 
@@ -324,8 +324,8 @@ class fir_host(host):
         self.dump_record()
   
 if __name__ == "__main__":
-    obj = fir_host(name="hybrid_newtpe_100_batch1", num_ite=100, mode="hybrid", algo="newtpe", bsize=1)
-    obj.run()
-    #obj.test_sim_batch()
+    obj = fir_host(name="hybrid_newtpe_100_batch1", num_ite=100, mode="simulation", algo="newtpe", bsize=1)
+    # obj.run()
+    obj.test_sim_batch()
     # obj = fir_host(name="hybrid_watanabe_100_batch1", num_ite=100, mode="hybrid", algo="watanabe", bsize=1)
     # obj.run()

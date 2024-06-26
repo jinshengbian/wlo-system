@@ -1,7 +1,7 @@
-`timescale 1ns / 1ps
+`timescale 1ns/1ps
+module fir_tb (
+);
 
-module FIR_tb(
-    );
 
 localparam COE_INTE_WL   = 4;
 localparam COE_FRAC_WL   = 8;
@@ -9,35 +9,35 @@ localparam IN_INTE_WL    = 4;
 localparam IN_FRAC_WL    = 8;
 localparam OUT_INTE_WL   = 4;
 localparam OUT_FRAC_WL   = 8;
-
 localparam int PRODUCT_FRAC_WL_ARRAY [0:14] = {12,12,12,12,12,12,12,12,12,12,12,12,12,12,12} ;
 
 logic clk,rst,in_valid,out_valid;
-logic [IN_INTE_WL-1:-IN_FRAC_WL] data_in;
-logic [OUT_INTE_WL-1:-OUT_FRAC_WL] data_out;
+logic signed [IN_INTE_WL-1:-IN_FRAC_WL] data_in;
+logic signed [OUT_INTE_WL-1:-OUT_FRAC_WL] data_out;
+
+
+
+FIR #(
+   .COE_INTE_WL(COE_INTE_WL),
+   .COE_FRAC_WL(COE_FRAC_WL),
+   .IN_INTE_WL(IN_INTE_WL),
+   .IN_FRAC_WL(IN_FRAC_WL),
+   .OUT_INTE_WL(OUT_INTE_WL),
+   .OUT_FRAC_WL(OUT_FRAC_WL),
+   .PRODUCT_FRAC_WL_ARRAY(PRODUCT_FRAC_WL_ARRAY)
+) dut(
+   .clk(clk),
+   .rst(rst),
+   .data_in(data_in),
+   .in_valid(in_valid),
+   .data_out(data_out),
+   .out_valid(out_valid)
+);
 
 parameter int period = 10;
 parameter string data_path = "./simu/";
 parameter string in_data = {data_path,"input.txt"};
 parameter string out_data = {data_path,"output.txt"};
-
-FIR #(
-    .COE_INTE_WL(COE_INTE_WL),
-    .COE_FRAC_WL(COE_FRAC_WL),
-    .IN_INTE_WL(IN_INTE_WL),
-    .IN_FRAC_WL(IN_FRAC_WL),
-    .OUT_INTE_WL(OUT_INTE_WL),
-    .OUT_FRAC_WL(OUT_FRAC_WL),
-    .PRODUCT_FRAC_WL_ARRAY(PRODUCT_FRAC_WL_ARRAY)
-) dut(
-    .clk(clk),
-    .rst(rst),
-    .data_in(data_in),
-    .in_valid(in_valid),
-    .data_out(data_out),
-    .out_valid(out_valid)
-);
-
 
 
 always #(period/2) clk = ~clk;
@@ -56,37 +56,34 @@ initial begin
     in_valid = 0;
     #150
     rst = 0;
-    start = 1;
-    in_valid = 1;
     while (!$feof(input_file)) begin
-        #(period)
-	    
+	    start = 1;
+        in_valid = 1;
         $fscanf(input_file, "%d\n", input_data);
-        
-        data_in = 12'(input_data);
+        // $display("data:",input_data);
+        data_in = 16'(input_data);
+        #(period);
     end
-    
-    start = 0;
     in_valid = 0;
     $fclose(input_file);
-    $finish;
+    // $finish;
 end
 
 initial begin
     output_file=$fopen(out_data,"w");
-    $display("not start");
+    $display("No output");
     wait(out_valid == 1);
-    $display("start");
-    #(period*0.5)
+    $display("Output");
+    #(period/2)
     while(out_valid == 1) begin
-        #(period)
+        
         $fwrite(output_file,"%d\n",data_out);
+        #(period);
         
     end
     $fclose(output_file);
     $finish;
 	
 end
-
 
 endmodule
