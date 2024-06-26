@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-module fir_tb (
+module FIR_tb (
 );
 
 

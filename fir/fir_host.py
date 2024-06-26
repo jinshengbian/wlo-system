@@ -33,7 +33,7 @@ class fir_host(host):
 
         if algo == "newtpe":
             self.bsize = bsize
-            num_init = 6
+            num_init = 16
             if num_ite%2 != 0 or num_init%2 != 0:
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
@@ -112,7 +112,7 @@ class fir_host(host):
                 input_file.write(str(random_data) + "\n")
 
     def modify_sim_wl(self,config):
-        print(config)
+
         command = f'./simu/sim_wl.sh {config[0]} {config[1]} {config[2]} {config[3]} {config[4]} {config[5]} {config[6]} {config[7]} {config[8]} {config[9]} {config[10]} {config[11]} {config[12]} {config[13]} {config[14]}'
         
         
@@ -143,10 +143,8 @@ class fir_host(host):
             print(f"Error adding waveform in ModelSim: {e}")
     def read_ref_seq(self):
         wl_config = np.array([16,16,16,16,16,16,16,16,16,16,16,16,16,16,16])
-        #wl_config = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         self.run_sim(wl_config)
         ref_seq = self.read_output()
-        ref_seq = ref_seq/2**8
         return ref_seq
     def read_output(self):
         seq = []
@@ -179,29 +177,32 @@ class fir_host(host):
         self.bsize = 1
         self.gen_sim_input()
         self.ref_seq = self.read_ref_seq()
-        #config = np.array([16,16,16,16,16,16,16,16,16,16,16,16,16,16,16])
-        #config = np.array([8,8,8,8,8,8,8,8,8,8,8,8,8,8,8])
-        #config = np.array([5,5,5,5,5,5,5,5,5,5,5,5,5,5,5])
-        #config = np.array([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
-        config = np.array([12,12,12,12,12,12,12,12,12,12,12,12,12,12,12])
+
+        config = np.ones((15),dtype=int)*12
+
         self.run_sim(config)
         sim_seq = self.read_output()
         sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
         print("sim mse: ",sim_prec)
 
-        # self.uart_send_config(config)
-        # time.sleep(0.001)
-        # self.uart_hw_start()
-        # msg = []
-        # while(1):
-        #     msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
-        #     if len(msg)==8*self.bsize:
-        #         break   
-        # mse_val = 0
-        # for j in range(8):
-        #     mse_val = mse_val + msg[0*8+j]*256**j
-        # mse_val = mse_val/131072/2**16
-        # print("hyb mse: ", mse_val)
+        # syn_result = self.ssh_cad_run(config)
+        # syn_result = float(syn_result)
+
+        # print("syn area: ", syn_result)
+
+        self.uart_send_config(config)
+        time.sleep(0.001)
+        self.uart_hw_start()
+        msg = []
+        while(1):
+            msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
+            if len(msg)==8*self.bsize:
+                break   
+        mse_val = 0
+        for j in range(8):
+            mse_val = mse_val + msg[0*8+j]*256**j
+        mse_val = mse_val/131072/2**16
+        print("hyb mse: ", mse_val)
 
 
 
@@ -243,7 +244,7 @@ class fir_host(host):
                 for j in range(8):
                     mse_val = mse_val + msg[i*8+j]*256**j
                 print(mse_val)
-                mse_val = mse_val/131072
+                mse_val = mse_val/131072/2**16
                 
                 self.cur_prec = np.append(self.cur_prec, np.array([mse_val]))
                 # record mse
@@ -253,8 +254,16 @@ class fir_host(host):
 
     def calc_loss(self):
         self.cur_loss = np.array([])
+        ht = 0.00009
+        lt = 0.00001
+        tar = 0.00005
         for i in range(self.bsize):
-            loss_val = abs(self.cur_prec[i]-4) + (self.cur_cost[i])
+            if self.cur_prec[i] < lt:
+                loss_val = 1000*(lt-self.cur_prec[i]) + 4625
+            elif self.cur_prec[i] > ht:
+                loss_val = 1000*(self.cur_prec[i]-ht) + 4625
+            else :
+                loss_val = abs(self.cur_prec[i]-tar) + (self.cur_cost[i])
             self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
             # record loss
             self.record['loss'] = self.record['loss'] + [loss_val]
@@ -269,8 +278,10 @@ class fir_host(host):
         
         # evaluate the config
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        self.get_cost()
         self.get_prec()
+        if self.cur_prec[0] < 0.00009 and self.cur_prec[0] > 0.00001:
+            self.get_cost()
+        
         self.calc_loss()
         print(f"Config: {self.cur_config}")
         print(f"Area  : {self.cur_cost}")
@@ -324,8 +335,7 @@ class fir_host(host):
         self.dump_record()
   
 if __name__ == "__main__":
-    obj = fir_host(name="hybrid_newtpe_100_batch1", num_ite=100, mode="simulation", algo="newtpe", bsize=1)
-    # obj.run()
-    obj.test_sim_batch()
-    # obj = fir_host(name="hybrid_watanabe_100_batch1", num_ite=100, mode="hybrid", algo="watanabe", bsize=1)
-    # obj.run()
+    obj = fir_host(name="hybrid_watanabe_300_batch1", num_ite=300, mode="hybrid", algo="watanabe", bsize=1)
+    obj.run()
+    # obj.test_sim_batch()
+
