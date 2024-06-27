@@ -209,10 +209,11 @@ class fir_host(host):
 
 
     ####################################################################
+
     def get_cost(self): # cadence
         self.cur_cost = np.array([])
         for i in range(self.bsize):
-            if self.cur_prec[i] > 0.00001 or self.cur_prec[i] < 0.000001: 
+            if self.cur_prec[i] > 0.0001 or self.cur_prec[i] < 0.00001: 
                 self.cur_cost = np.append(self.cur_cost, np.array([-1]))
             else:
                 cur_config = self.cur_config[i]
@@ -259,16 +260,14 @@ class fir_host(host):
 
     def calc_loss(self):
         self.cur_loss = np.array([])
-        ht = 0.00001
-        lt = 0.000001
-        tar = 0.000005
+        ht = 0.0001
+        lt = 0.00001
+        tar = 0.00005
         for i in range(self.bsize):
-            if self.cur_prec[i] < lt:
-                loss_val = 1000*(lt-self.cur_prec[i]) + 4625
-            elif self.cur_prec[i] > ht:
-                loss_val = 1000*(self.cur_prec[i]-ht) + 4625
+            if self.cur_prec[i] < lt or self.cur_prec[i] > ht:
+                loss_val = abs(self.cur_prec[i]-tar)*4625
             else :
-                loss_val = abs(self.cur_prec[i]-tar) + (self.cur_cost[i])
+                loss_val = abs(self.cur_prec[i]-tar)*(self.cur_cost[i])
             self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
             # record loss
             self.record['loss'] = self.record['loss'] + [loss_val]
@@ -324,7 +323,7 @@ class fir_host(host):
         time_start = time.time()
         # optimization 
         if self.algo == "watanabe":
-            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite)
+            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=16)
             print(opt.optimize(logger_name="obj_func"))
         elif self.algo == "newtpe":
             opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize,if_uniform_start=False)
@@ -338,11 +337,10 @@ class fir_host(host):
         self.dump_record()
   
 if __name__ == "__main__":
-    # for i in range(20):
-        
-    #     obj = fir_host(name=f"simulation_watanabe_300_batch1_round{i}", num_ite=300, mode="simulation", algo="watanabe", bsize=1)
+    # for i in range(3):
+    #     obj = fir_host(name=f"simulation_watanabe_250_batch1_round{i}", num_ite=250, mode="simulation", algo="watanabe", bsize=1)
     #     obj.run()
     
-    for i in range(20):
-        obj = fir_host(name=f"simulation_newtpe_300_batch1_round{i}", num_ite=300, mode="simulation", algo="newtpe", bsize=1)
+    for i in range(3):
+        obj = fir_host(name=f"simulation_newtpe_250_batch1_round{i}", num_ite=250, mode="simulation", algo="newtpe", bsize=1)
         obj.run()
