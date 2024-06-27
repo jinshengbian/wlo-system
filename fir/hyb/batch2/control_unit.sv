@@ -41,8 +41,8 @@ logic [7:0] mse_data_reg [15:0];///////////////
 logic [7:0] mse_byte_count;
 
 // bit switch control register
-logic [7:0] sw_int_gen  [30-1:0];///////////////
-logic [7:0] sw_frac_gen [30-1:0];
+logic [7:0] sw_int_gen  [2*NUM_CHAN-1:0];///////////////
+logic [7:0] sw_frac_gen [2*NUM_CHAN-1:0];
 
 // channel index
 logic [7:0] chan_index;
@@ -154,9 +154,9 @@ always @(state or sw_frac_gen or sw_int_gen or mse_data_reg or mse_byte_count) b
     com_txdata  <= 0;
 
     for (i = 0; i < 2; i++) begin
-        for (j = 0; j < 3; j++) begin
-            sw_frac[i][j] <= sw_frac_gen[i*3+j];
-            sw_int[i][j]  <= sw_int_gen[i*3+j];
+        for (j = 0; j < 15; j++) begin
+            sw_frac[i][j] <= sw_frac_gen[i*15+j];
+            sw_int[i][j]  <= sw_int_gen[i*15+j];
         end
     end
 

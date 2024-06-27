@@ -29,7 +29,7 @@ def lower_trend(loss):
 
 with open("./fir/result/simulation_watanabe_250_batch1_round0.json", 'r') as file:
     ref_data = json.load(file)
-with open("./fir/result/simulation_newtpe_250_batch1_round0.json", 'r') as file:
+with open("./fir/result/hybrid_newtpe_250_batch1_round0.json", 'r') as file:
     new_data = json.load(file)
 max_value = min(ref_data['loss'])
 max_index = ref_data['loss'].index(max_value)

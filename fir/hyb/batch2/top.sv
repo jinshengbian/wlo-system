@@ -40,13 +40,24 @@ logic mse_valid[1:0];
 logic mse_valid_out;
 
 //////////////////////////////////////////////////////////////// connections
-//  ila_0 ila (
-//  .clk(clk),
-
-
-//  .probe0(uart_rx),
-//  .probe1(uart_tx)
-//  );
+  ila_0 ila (
+  .clk(clk),
+  .probe0(sw_frac[0][0]),
+  .probe1(sw_frac[0][1]),
+  .probe2(sw_frac[0][2]),
+  .probe3(sw_frac[0][3]),
+  .probe4(sw_frac[0][4]),
+  .probe5(sw_frac[0][5]),
+  .probe6(sw_frac[0][6]),
+  .probe7(sw_frac[0][7]),
+  .probe8(sw_frac[0][8]),
+  .probe9(sw_frac[0][9]),
+  .probe10(sw_frac[0][10]),
+  .probe11(sw_frac[0][11]),
+  .probe12(sw_frac[0][12]),
+  .probe13(sw_frac[0][13]),
+  .probe14(sw_frac[0][14])
+  );
 assign sys_rstn = soft_rstn & rstn;
 assign sys_rst  = ~sys_rstn;
 assign mse_valid_out = mse_valid[0] | mse_valid[1];
@@ -58,7 +69,8 @@ ung64 rng_inst (
     .data_out(urn64),
     .valid_out(valid_out)
 );
-assign input_data = urn64[11:0];
+
+assign input_data = {2'b00,urn64[INPUT_WL-3:0]};
 
 
 
@@ -99,7 +111,7 @@ control_unit #(15) control_unit_inst (
 FIR dut_sys0 (
     .clk(clk),
     .rst(sys_rst),
-    .frac_wl(sw_frac),
+    .frac_wl(sw_frac[0]),
     .data_in(input_data),
     .in_valid(1'b1),
     .data_out(output_data[0]),
@@ -109,7 +121,7 @@ FIR dut_sys0 (
 FIR dut_sys1 (
     .clk(clk),
     .rst(sys_rst),
-    .frac_wl(sw_frac),
+    .frac_wl(sw_frac[1]),
     .data_in(input_data),
     .in_valid(1'b1),
     .data_out(output_data[1]),
