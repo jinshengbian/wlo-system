@@ -27,22 +27,16 @@ def lower_trend(loss):
     return trend, index
 
 
-with open("./quad/result/quad-sim-newtpe-yosys.json", 'r') as file:
+with open("./fir/result/hybrid_watanabe_300_batch1.json", 'r') as file:
     ref_data = json.load(file)
-with open("./quad/result/quad-hybrid-newtpe-yosys.json", 'r') as file:
+with open("./fir/result/hybrid_newtpe_300_batch1_round2.json", 'r') as file:
     new_data = json.load(file)
 max_value = min(ref_data['loss'])
 max_index = ref_data['loss'].index(max_value)
-x1 = ref_data['x1'][max_index]
-x2 = ref_data['x2'][max_index]
-x3 = ref_data['x3'][max_index]
-print("best configuration: x1 = ", x1, " x2 = ", x2, " x3 = ", x3, " loss = ", max_value)
+
 max_value = min(new_data['loss'])
 max_index = new_data['loss'].index(max_value)
-x1 = new_data['x1'][max_index]
-x2 = new_data['x2'][max_index]
-x3 = new_data['x3'][max_index]
-print("best configuration: x1 = ", x1, " x2 = ", x2, " x3 = ", x3, " loss = ", max_value)
+
 
 trend_ref, idx_ref = lower_trend(ref_data["loss"])
 trend_new, idx_new = lower_trend(new_data["loss"])

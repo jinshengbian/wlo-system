@@ -37,6 +37,8 @@ class fir_host(host):
             if num_ite%2 != 0 or num_init%2 != 0:
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
+        
+ 
 
         self.record = {
             'conf': [],
@@ -210,12 +212,15 @@ class fir_host(host):
     def get_cost(self): # cadence
         self.cur_cost = np.array([])
         for i in range(self.bsize):
-            cur_config = self.cur_config[i]
-            syn_result = self.ssh_cad_run(cur_config)
-            syn_result = float(syn_result)
-            self.cur_cost = np.append(self.cur_cost, np.array([syn_result]))
+            if self.cur_prec[i] > 0.00001 or self.cur_prec[i] < 0.000001: 
+                self.cur_cost = np.append(self.cur_cost, np.array([-1]))
+            else:
+                cur_config = self.cur_config[i]
+                syn_result = self.ssh_cad_run(cur_config)
+                syn_result = float(syn_result)
+                self.cur_cost = np.append(self.cur_cost, np.array([syn_result]))
             # record cost
-            self.record['cost'] = self.record['cost'] + [syn_result]
+            self.record['cost'] = self.record['cost'] + [self.cur_cost[i]]
 
     def get_prec(self):
         self.cur_prec = np.array([])
@@ -254,9 +259,9 @@ class fir_host(host):
 
     def calc_loss(self):
         self.cur_loss = np.array([])
-        ht = 0.00009
-        lt = 0.00001
-        tar = 0.00005
+        ht = 0.00001
+        lt = 0.000001
+        tar = 0.000005
         for i in range(self.bsize):
             if self.cur_prec[i] < lt:
                 loss_val = 1000*(lt-self.cur_prec[i]) + 4625
@@ -279,9 +284,7 @@ class fir_host(host):
         # evaluate the config
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         self.get_prec()
-        if self.cur_prec[0] < 0.00009 and self.cur_prec[0] > 0.00001:
-            self.get_cost()
-        
+        self.get_cost()
         self.calc_loss()
         print(f"Config: {self.cur_config}")
         print(f"Area  : {self.cur_cost}")
@@ -324,7 +327,7 @@ class fir_host(host):
             opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite)
             print(opt.optimize(logger_name="obj_func"))
         elif self.algo == "newtpe":
-            opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize)
+            opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize,if_uniform_start=False)
             best_config = opt.optimization()
         time_end = time.time()
 
@@ -335,7 +338,11 @@ class fir_host(host):
         self.dump_record()
   
 if __name__ == "__main__":
-    obj = fir_host(name="hybrid_watanabe_300_batch1", num_ite=300, mode="hybrid", algo="watanabe", bsize=1)
-    obj.run()
-    # obj.test_sim_batch()
-
+    # for i in range(20):
+        
+    #     obj = fir_host(name=f"simulation_watanabe_300_batch1_round{i}", num_ite=300, mode="simulation", algo="watanabe", bsize=1)
+    #     obj.run()
+    
+    for i in range(20):
+        obj = fir_host(name=f"simulation_newtpe_300_batch1_round{i}", num_ite=300, mode="simulation", algo="newtpe", bsize=1)
+        obj.run()

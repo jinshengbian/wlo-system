@@ -5,7 +5,7 @@ import time
 import json
 
 class optimizer:
-    def __init__(self,objec_func,n_iterations,n_init_points,search_space,SGD_learn_rate,batch_size) -> None:
+    def __init__(self,objec_func,n_iterations,n_init_points,search_space,SGD_learn_rate,batch_size,if_uniform_start=False) -> None:
         self.object_func    = objec_func                            # set objective function
         self.n_init_points  = n_init_points                         # set the start points
         self.search_space   = search_space                          # set the search space
@@ -21,6 +21,7 @@ class optimizer:
         self.batch_size     = batch_size                            # set the batch size in the batch mode
         self.n_iterations   = round(n_iterations/batch_size)        # calculate the number of iterations in batch mode
         self.best           = np.array([])                          # collect best objective values during runtime
+        self.uniform_start  = if_uniform_start
     def set_sigma(self):
         # calculate the standard deviation by the maximum length in the search space
         difference_ss   = self.search_space[:,1]-self.search_space[:,0]
@@ -28,11 +29,29 @@ class optimizer:
 
     def init_point(self,n_points:int) -> np.array:
         # generate n start points randomly within the search space
-        init_points = np.zeros((n_points,len(self.search_space)),dtype=int)
-        for i in range(n_points):
-            init_points[i][:] = [random.randint(self.search_space[dim][0],self.search_space[dim][1]) for dim in range(len(self.search_space))]
+        if (self.uniform_start):
+            init_points = np.zeros((n_points,len(self.search_space)),dtype=int)
+            diff_search_space = self.search_space[:,1]-self.search_space[:,0]
+            for i in range(n_points):
+                init_points[i,:] = [self.search_space[dim,0]+(i+1)/n_points*diff_search_space[dim] for dim in range(len(self.search_space))]
+            
+        else:
+            init_points = np.zeros((n_points,len(self.search_space)),dtype=int)
+            for i in range(n_points):
+                init_points[i,:] = [random.randint(self.search_space[dim][0],self.search_space[dim][1]) for dim in range(len(self.search_space))]
+        # print("init_points is:", init_points)
         return init_points
     
+    def random_point(self,n_points:int) -> np.array:
+        # generate n start points randomly within the search space
+        
+        init_points = np.zeros((n_points,len(self.search_space)),dtype=int)
+        for i in range(n_points):
+            init_points[i,:] = [random.randint(self.search_space[dim][0],self.search_space[dim][1]) for dim in range(len(self.search_space))]
+    
+        return init_points
+
+
     def sort_observations(self):
         # sort the points according to the objective value and collect best objective value
         sorted_order    = sorted(range(len(self.observations)), key=lambda k: self.observations[k])
@@ -121,7 +140,7 @@ class optimizer:
 
         point_lx = np.array([self.lx[i,:]*weight_lx[i] for i in range(len_lx)])
         for i in range(20):
-            init_point = (1-w_best) * self.init_point(1) +  (w_best) * np.sum(point_lx,axis=0)
+            init_point = (1-w_best) * self.random_point(1) +  (w_best) * np.sum(point_lx,axis=0)
             af_new = self.acquisition_func(init_point)
             if i == 0:
                 candi = init_point.copy()
@@ -161,7 +180,7 @@ class optimizer:
             while(1):
                 if refresh_limit == 0:
                     if (self.detect_alias(current_point.astype(int),self.points) or self.detect_alias(current_point.astype(int),batch_point)):
-                        current_point = (1-w_best) * self.init_point(1) +  (w_best) * np.sum(point_lx,axis=0)
+                        current_point = (1-w_best) * self.random_point(1) +  (w_best) * np.sum(point_lx,axis=0)
                     else:
                         batch_point[batch_point_idx,:] = current_point
                         batch_point_idx += 1
@@ -193,15 +212,22 @@ class optimizer:
         #7# go to #3# if not exit
         #8# return the best observation
         '''
-        self.points = self.init_point(self.batch_size)
-        self.observations = self.object_func(self.points)
-        n_send = np.ceil(self.n_init_points/self.batch_size)-1
-        for i in range(int(n_send)):
+        
+        
+        n_send = np.floor(self.n_init_points/self.batch_size).astype(np.int32)
+        init_points_all = self.init_point(self.batch_size*n_send)
+        print(init_points_all)
+
+        for i in range((n_send)):
             #1# generate initial point
-            init_points         = self.init_point(self.batch_size)
+            init_points         = init_points_all[i*self.batch_size:(i+1)*self.batch_size,:]
             #2# get initial samples
             init_observations   = self.object_func(init_points)
-            self.update_points_observations(init_points,init_observations)
+            if (i==0):
+                self.points = init_points
+                self.observations = init_observations
+            else:
+                self.update_points_observations(init_points,init_observations)
         # print("init points: ")
         # print(self.points)
         # print("init values: ")
@@ -232,9 +258,9 @@ class optimizer:
             "best_observations": self.best.tolist(),
         }
         
-        # with open("./TPE_result.json",'w') as result_file:
-        #     json.dump(result, result_file,)
-        # return self.lx[0,:]
+        with open("./TPE_result.json",'w') as result_file:
+            json.dump(result, result_file,)
+        return self.lx[0,:]
 
 if __name__ == "__main__":
     def object_func_test(input_points:np.array) -> float:
@@ -272,7 +298,7 @@ if __name__ == "__main__":
         search_space_test = np.array([[-16,16] for _ in range(dim)])
         # print("best obj value is: -0.73529")
         print("best obj value is: -0.33")
-        opt = optimizer(objec_func=Rosenbrock_WLO,n_iterations=200,n_init_points=15,search_space=search_space_test,SGD_learn_rate=10,batch_size=2)
+        opt = optimizer(objec_func=Rosenbrock_WLO,n_iterations=200,n_init_points=15,search_space=search_space_test,SGD_learn_rate=10,batch_size=2,if_uniform_start=True)
 
     start_time  = time.time()
     temp=opt.optimization()
@@ -317,5 +343,6 @@ if __name__ == "__main__":
 
 #     plt.pause(1/20)
 # plt.show()
+
 
 
