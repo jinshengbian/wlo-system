@@ -6,7 +6,7 @@ module data_collector #(parameter INPUT_WL = 12) (
     input  logic signed [INPUT_WL-1:0] data_in,//28
     input  logic signed [INPUT_WL-1:0] data_ref,
 
-    output logic [63:0] data_out,
+    output logic signed [63:0] data_out,
     output logic        data_valid
 );
 
@@ -16,7 +16,7 @@ module data_collector #(parameter INPUT_WL = 12) (
 parameter SEQ_LEN = 131072;
 
 // intermediate signals
-logic signed [INPUT_WL+1:0]     data_sub;
+logic signed [INPUT_WL:0]     data_sub;
 logic signed [(2*INPUT_WL)+2:0] data_mul;
 
 // counter
@@ -24,18 +24,18 @@ logic [31:0] data_idx;
 logic accu_proc; // accumulation process
 
 // generated output
-logic [(2*INPUT_WL)+19:0] data_out_gen; //data_mul+17bit
+logic signed [(2*INPUT_WL)+19:0] data_out_gen; //data_mul+17bit
 
-logic [INPUT_WL:0] data_in_unsigned;
-logic [INPUT_WL:0] data_ref_unsigned;
-logic [INPUT_WL:0] data_in_signed;
-logic [INPUT_WL:0] data_ref_signed;
+logic signed [INPUT_WL:0] data_in_signed;
+logic signed [INPUT_WL:0] data_ref_signed;
 //////////////////////////////////////////////////////////////// logic
-assign data_in_unsigned  = {1'b0, data_in};
-assign data_ref_unsigned = {1'b0, data_ref};
+//assign data_in_unsigned  = {1'b0, data_in};
+//assign data_ref_unsigned = {1'b0, data_ref};
 
-assign data_in_signed  = signed'(data_in_unsigned);
-assign data_ref_signed = signed'(data_ref_unsigned);
+always @(data_in or data_ref) begin
+    data_in_signed  <= {data_in[INPUT_WL-1],data_in};
+    data_ref_signed  <= {data_ref[INPUT_WL-1],data_ref};
+end
 
 
 // calculate data_sub

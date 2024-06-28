@@ -39,15 +39,17 @@ logic [63:0] mse_data;
 logic mse_valid;
 
 //////////////////////////////////////////////////////////////// connections
-ila_0 ila (
-.clk(clk),
-.probe0(output_data),
-.probe1(output_ref),
-.probe2(input_data),
-.probe3(sw_frac[1])
-
-
-);
+//ila_0 ila (
+//.clk(clk),
+//.probe0(output_data),
+//.probe1(output_ref),
+//.probe2(input_data),
+//.probe3(sw_frac[1])
+//);
+//ila_0 ila (
+//.clk(clk),
+//.probe0(mse_data)
+//);
 
 assign sys_rstn = soft_rstn & rstn;
 assign sys_rst  = ~sys_rstn;

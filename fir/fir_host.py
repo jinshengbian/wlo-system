@@ -180,8 +180,8 @@ class fir_host(host):
         self.gen_sim_input()
         self.ref_seq = self.read_ref_seq()
 
-        config = np.ones((15),dtype=int)*12
-        config1 = np.ones((15),dtype=int)*16
+        config = np.ones((15),dtype=int)*0
+        config1 = np.ones((15),dtype=int)*1
         config = np.append(config,config1)
 
         # self.run_sim(config)
@@ -212,6 +212,7 @@ class fir_host(host):
             mse_val = mse_val + msg[1*8+j]*256**j
         mse_val = mse_val/131072/2**16
         print("hyb mse: ", mse_val)
+
 
 
 
@@ -357,7 +358,6 @@ if __name__ == "__main__":
     #     obj.run()
     
     # for i in range(1):
-    #     obj = fir_host(name=f"hybrid_newtpe_250_batch1_round{i}", num_ite=250, mode="hybrid", algo="newtpe", bsize=1)
-    #     obj.run()
-    obj = fir_host(name=f"hybrid_newtpe_250_batch1_roundxx", num_ite=250, mode="hybrid", algo="newtpe", bsize=2)
-    obj.test_sim_batch()
+    obj = fir_host(name=f"hybrid_newtpe_250_batch2_round1", num_ite=250, mode="hybrid", algo="newtpe", bsize=2)
+    obj.run()
+    # obj.test_sim_batch()

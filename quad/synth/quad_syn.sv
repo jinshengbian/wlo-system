@@ -15,8 +15,8 @@ logic [12-1:0] a_wl;
 logic [12-1:0] b_wl;
 logic [29-1:0] c_wl;
 
-assign a_wl = {a[12-1:12-FWL_A], (12-FWL_A){1'b0}};
-assign b_wl = {b[12-1:12-FWL_B], (12-FWL_B){1'b0}};
+assign a_wl = {a[12-1:FWL_A], (FWL_A){1'b0}};
+assign b_wl = {b[12-1:FWL_B], (FWL_B){1'b0}};
 
 logic [2*14-1:0] a_sq;
 logic [2*14-1:0] b_sq;
@@ -39,6 +39,6 @@ always @(posedge clk) begin
     end
 end
 
-assign c = {c_wl[29-1:29-FWL_C], (29-FWL_C){1'b0}};
+assign c = {c_wl[29-1:FWL_C], (FWL_C){1'b0}};
 
 endmodule
