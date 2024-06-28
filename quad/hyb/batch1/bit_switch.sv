@@ -6,8 +6,6 @@ module bit_switch #(
     parameter INT_POS = 16  // position of the integer part （index)
 
 )(
-     input clk,
-     input rstn,
     // control signals
     input  [7:0] num_int, // number of integer bits
     input  [7:0] num_frac, // number of fractional bits

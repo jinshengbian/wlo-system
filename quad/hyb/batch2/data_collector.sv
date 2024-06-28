@@ -16,7 +16,7 @@ module data_collector (
 parameter SEQ_LEN = 131072;
 
 // intermediate signals
-logic signed [30:0] data_sub;
+logic signed [29:0] data_sub;
 logic signed [60:0] data_mul;
 
 // counter
@@ -28,8 +28,7 @@ logic [77:0] data_out_gen;
 
 logic [29:0] data_in_unsigned;
 logic [29:0] data_ref_unsigned;
-logic [29:0] data_in_signed;
-logic [29:0] data_ref_signed;
+
 //////////////////////////////////////////////////////////////// logic
 assign data_in_unsigned  = {1'b0, data_in};
 assign data_ref_unsigned = {1'b0, data_ref};

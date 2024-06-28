@@ -27,90 +27,67 @@ def lower_trend(loss):
     return trend, index
 
 
+with open("./fir/result/simulation_watanabe_250_batch1_round0.json", 'r') as file:
+    refsim_data = json.load(file)
+with open("./fir/result/simulation_newtpe_250_batch1_round0.json", 'r') as file:
+    newsim_data = json.load(file)
 with open("./fir/result/hybrid_newtpe_250_batch1_round1.json", 'r') as file:
-    ref_data = json.load(file)
+    newhyb1_data = json.load(file)
 with open("./fir/result/hybrid_newtpe_250_batch2_round1.json", 'r') as file:
-    new_data = json.load(file)
-max_value = min(ref_data['loss'])
-max_index = ref_data['loss'].index(max_value)
-
-max_value = min(new_data['loss'])
-max_index = new_data['loss'].index(max_value)
+    newhyb2_data = json.load(file)
 
 
-trend_ref, idx_ref = lower_trend(ref_data["loss"])
-trend_new, idx_new = lower_trend(new_data["loss"])
 
 
-plt.plot(idx_ref,trend_ref,'b^--',label="ref")
-plt.plot(idx_new,trend_new,'ro--',label="new")
+
+
+
+
+
+
+
+
+trend_refsim, idx_refsim = lower_trend(refsim_data["loss"])
+trend_newsim, idx_newsim = lower_trend(newsim_data["loss"])
+trend_newhyb1, idx_newhyb1 = lower_trend(newhyb1_data["loss"])
+trend_newhyb2, idx_newhyb2 = lower_trend(newhyb2_data["loss"])
+
+
+plt.plot(idx_refsim,trend_refsim,'bo--',label="Simulation-Watanabe")
+plt.plot(idx_newsim,trend_newsim,'o--',color='orange',label="Simulation-newTPE")
+plt.plot(idx_newhyb1,trend_newhyb1,'g^--',label="Hybrid-newTPE (batch size = 1)")
+plt.plot(idx_newhyb2,trend_newhyb2,'r^--',label="Hybrid-newTPE (batch size = 2)")
 plt.legend()
 plt.grid()
 plt.xlabel("# of evaluations")
-plt.ylabel("log10( Objective value )")
+plt.ylabel("log10( Objective Function value )")
 plt.show()
 
 
-mse_ref = np.array(ref_data["prec"])
-mse_new = np.array(new_data["prec"])
+mse_refsim = np.array(refsim_data["prec"])
+mse_newsim = np.array(newsim_data["prec"])
+mse_newhyb1 = np.array(newhyb1_data["prec"])
+mse_newhyb2 = np.array(newhyb2_data["prec"])
 
 
-power_ref = np.array(ref_data["cost"])
-power_new = np.array(new_data["cost"])
+area_refsim = np.array(refsim_data["cost"])
+area_newsim = np.array(newsim_data["cost"])
+area_newhyb1 = np.array(newhyb1_data["cost"])
+area_newhyb2 = np.array(newhyb2_data["cost"])
 
 
+mse_refsim = np.log10(mse_refsim)
+mse_newsim = np.log10(mse_newsim)
+mse_newhyb1 = np.log10(mse_newhyb1)
+mse_newhyb2 = np.log10(mse_newhyb2)
 
-mse_ref = np.log10(mse_ref)
-mse_new = np.log10(mse_new)
-
-plt.scatter(mse_ref, power_ref,label="reference")
-plt.scatter(mse_new, power_new,label="new")
+plt.scatter(mse_refsim, area_refsim,label="Simulation-Watanabe")
+plt.scatter(mse_newsim, area_newsim,label="Simulation-newTPE")
+plt.scatter(mse_newhyb1, area_newhyb1,label="Hybrid-newTPE (batch size = 1)")
+plt.scatter(mse_newhyb2, area_newhyb2,label="Hybrid-newTPE (batch size = 2)")
 
 plt.legend()
 plt.grid()
 plt.xlabel("log10( MSE )")
-plt.ylabel("Power")
+plt.ylabel("Area / $\mu m^{2}$")
 plt.show()
-
-
-# # plt.scatter([i for i in range(1, 101)], mse_ref,label="mse-mult")
-
-# # plt.legend()
-# # plt.grid()
-# # plt.xlabel("ite")
-# # plt.ylabel("value")
-# # plt.show()
-
-
-# # plt.scatter([i for i in range(1, 101)], power_ref,label="power-mult")
-# # plt.legend()
-# # plt.grid()
-# # plt.xlabel("ite")
-# # plt.ylabel("value")
-# # plt.show()
-
-# plt.scatter([i for i in range(1, 101)], mse_b1,label="mse-plus")
-
-# plt.legend()
-# plt.grid()
-# plt.xlabel("ite")
-# plt.ylabel("value")
-# plt.show()
-
-
-# plt.scatter([i for i in range(1, 101)], power_b1,label="power-plus")
-# plt.legend()
-# plt.grid()
-# plt.xlabel("ite")
-# plt.ylabel("value")
-# plt.show()
-
-# # plt.scatter(idx_ref,trend_ref,label="reference")
-# # plt.scatter(idx_b1,trend_b1,label="batch-1")
-# plt.scatter(idx_b2,trend_b2,label="batch-2")
-# plt.legend()
-# plt.grid()
-# plt.xlabel("# of evaluations")
-# plt.ylabel("Objective value")
-# plt.show()
-

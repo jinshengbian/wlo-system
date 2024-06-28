@@ -3,6 +3,7 @@ sys.path.append('../algo')
 from host import *
 from optimizer import optimizer
 
+import random
 import paramiko
 import paramiko.client
 import serial
@@ -23,17 +24,18 @@ class quad_host(host):
     # simulation: name, num_ite, mode, algo, bsize=1, syn_mode, ref_seq
     # hybrid: name, num_ite, mode, algo, bsize, syn_mode, uart_ob, num_init
 
-    def __init__(self, name="test", num_ite=100, mode="simulation", algo="watanabe", bsize=1, syn_mode="yosys"):
+    def __init__(self, name="test", num_ite=100, mode="simulation", algo="watanabe", bsize=1):
         # setup the host
         
         super().__init__(name, num_ite, mode, algo)
-        self.syn_mode = syn_mode
 
         if mode == "simulation":
+            print("sim init")
             self.bsize = 1
+            self.gen_sim_input()
             self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
-            self.uart_ob = serial.Serial("/dev/ttyUSB1",115200)
+            self.uart_ob = serial.Serial("/dev/ttyUSB0",115200)
 
         if algo == "newtpe":
             self.bsize = bsize
@@ -41,15 +43,12 @@ class quad_host(host):
             if num_ite%2 != 0 or num_init%2 != 0:
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
-            
-            
-        
-        if syn_mode == "cadence":
-            self.ssh_ob = paramiko.client.SSHClient()
-            self.ssh_ob.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            self.ssh_ob.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
-            self.ssh_chan = self.ssh_ob.invoke_shell()
-            self.ssh_power_init()
+       
+        self.ssh_ob = paramiko.client.SSHClient()
+        self.ssh_ob.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.ssh_ob.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
+        self.ssh_chan = self.ssh_ob.invoke_shell()
+        self.ssh_power_init()
 
         self.record = {
             'x1': [],
@@ -60,7 +59,6 @@ class quad_host(host):
             'loss': [],
             'time': []
         }
-
 
 
             
@@ -88,40 +86,61 @@ class quad_host(host):
                     break
         return output
     def ssh_power_init(self):  
-        command = "cd Downloads/quad && ls"
+        command = "cd Downloads/quad/syn && ls"
         output = self.ssh_send_command(command)
         command = "source setup.sh"
         output = self.ssh_send_command(command)
-        command = "cd reference/tcl"
-        output = self.ssh_send_command(command)
-        command = "genus"
+        command = "genus -overwrite"
         output = self.ssh_send_command(command,2)
     def ssh_power_run(self,wl_config):
         command = f"delete_obj [get_db design:quad]"
         output = self.ssh_send_command(command,2)
         command = f"shell rm genus.* fv -rf"
         output = self.ssh_send_command(command,2)
-        command = f"shell ./run.sh {wl_config[0]} {wl_config[1]} {wl_config[2]}"
+        command = f"./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]}"
         output = self.ssh_send_command(command,2)
-        command = "source syn.tcl"
+        command = "source synthesis.tcl"
         output = self.ssh_send_command(command,2)
-        command = "shell cat ../rpt/power.rpt"
+        command = "shell cat ./report/gates.rpt"
         output = self.ssh_send_command(command,2)
         lines = output.split('\n')
-        result = lines[19].split()[4]
+        for line in lines:  
+            elements = line.split()  
+            if elements and elements[0] == "total":  
+                if len(elements) == 4:
+                    result = elements[2]
+                    break 
+        # print(output)
+        # print("area: ", result)
         return float(result)
     
     # run simulation
+    def gen_sim_input(self):
+        n_simulations = int(131072)
+        # Open files outside the loop
+        with open("simu/input1.txt", "w") as input_file:
+            for _ in range(n_simulations):
+                random_data = random.randint(0, 2**14) 
+                # Write data to files using the file objects
+                input_file.write(str(random_data) + "\n")
+        with open("simu/input2.txt", "w") as input_file:
+            for _ in range(n_simulations):
+                random_data = random.randint(0, 2**14) 
+                # Write data to files using the file objects
+                input_file.write(str(random_data) + "\n")
+    def modify_sim_wl(self,config):
+
+        command = f'./simu/sim_wl.sh {config[0]} {config[1]} {config[2]}'
+        
+        subprocess.run([command],  shell=True, capture_output=True,text=True)
     def run_sim(self,vals):
+        self.modify_sim_wl(vals)
         try:
             tcl_commands = f"""
             vlib work
             vmap work work
             vlog ./simu/*.sv
-            vsim top_tb -voptargs=+acc
-            force num_frac_a 8'd{vals[0]}
-            force num_frac_b 8'd{vals[1]}
-            force num_frac_c 8'd{vals[2]}
+            vsim quad_tb -voptargs=+acc
             run -all
             quit sim
             """
@@ -138,7 +157,7 @@ class quad_host(host):
             print(f"Error adding waveform in ModelSim: {e}")
 
     def read_ref_seq(self):
-        wl_config = np.array([30,30,30])
+        wl_config = np.array([12,12,24])
         self.run_sim(wl_config)
         ref_seq = self.read_output()
         return ref_seq
@@ -151,7 +170,7 @@ class quad_host(host):
                         seq.append(float(item))
                     except ValueError:
                         pass
-        seq = np.array(seq)
+        seq = np.array(seq)/2**24
         return seq
     
     # hyp mode: UART communication
@@ -168,41 +187,53 @@ class quad_host(host):
         cmd = bytes([4])
         self.uart_ob.write(cmd)
 
+    def test_sim_batch(self):
+        self.bsize = 1
+        
+        self.ref_seq = self.read_ref_seq()
+
+        config = np.array([5,5,5])
+        # config1 = np.ones((15),dtype=int)*1
+        # config = np.append(config,config1)
+
+        # self.run_sim(config)
+        # sim_seq = self.read_output()
+        # print(self.ref_seq)
+        # print(sim_seq)
+        # sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
+        # print("sim mse: ",sim_prec)
+
+        # syn_result = self.ssh_cad_run(config)
+        # syn_result = float(syn_result)
+
+        # print("syn area: ", syn_result)
+
+        # self.uart_send_config(config)
+        # self.uart_hw_start()
+        # msg = []
+        # while(1):
+        #     msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
+        #     if len(msg)==8*self.bsize:
+        #         break   
+        # mse_val = 0
+        # for j in range(8):
+        #     mse_val = mse_val + msg[0*8+j]*256**j
+        # mse_val = mse_val*2**14/131072/2**48
+        # print("hyb mse: ", mse_val)
+        # mse_val = 0
+        # for j in range(8):
+        #     mse_val = mse_val + msg[1*8+j]*256**j
+        # mse_val = mse_val/131072/2**16
+        # print("hyb mse: ", mse_val)
     ####################################################################
 
     def get_cost(self):
         self.cur_cost = np.array([])
         for i in range(self.bsize):
             cur_config = self.cur_config[i]
-            if self.syn_mode == "yosys":
-                # modify the wordlength of the design
-                with open("./synth/quad_syn.sv",'r') as dsp_design:
-                    content = dsp_design.readlines()
-                with open("./synth/quad_syn.sv",'w') as dsp_design:
-                    content[5] = f"    input  logic [{cur_config[0]-1}:0] a,\n"
-                    content[6] = f"    input  logic [{cur_config[1]-1}:0] b,\n"
-                    content[7] = f"    output logic [{cur_config[2]-1}:0] c\n"
-                    content[10] = f"logic [{2*cur_config[0]-1}:0] a_sq;\n"
-                    content[11] = f"logic [{2*cur_config[1]-1}:0] b_sq;\n"
-                    dsp_design.writelines(content)
-
-                # run the synthesis script
-                subprocess.run("python3 ./syn_power.py", shell=True, capture_output=True,text=True)
-        
-                # read power information
-                rpt_file = "./synth/power.rpt"
-                read_power_command = f"awk '/^Total/ {{print $5}}' {rpt_file}"
-                res = subprocess.run(read_power_command, shell=True, capture_output=True, text=True)
-
-                if res.returncode == 0:
-                    total_power = res.stdout.strip()
-                else:
-                    print("Failed to extract the power value.")   
-                total_power = float(total_power) * 1e9
-
-            elif self.syn_mode == "cadence":
-                total_power = self.ssh_power_run(cur_config)
-                total_power = float(total_power)
+            
+            total_power = self.ssh_power_run(cur_config)
+            total_power = float(total_power)
 
             self.cur_cost = np.append(self.cur_cost, np.array([total_power]))
             # record power
@@ -236,7 +267,7 @@ class quad_host(host):
                 mse_val = 0
                 for j in range(8):
                     mse_val = mse_val + msg[i*8+j]*256**j
-                mse_val = mse_val*2**13/131072
+                mse_val = mse_val*2**14/131072/2**48
                 self.cur_prec = np.append(self.cur_prec, np.array([mse_val]))
                 # record mse
                 self.record['prec'] = self.record['prec'] + [mse_val]
@@ -321,5 +352,6 @@ class quad_host(host):
 
 
 if __name__ == "__main__":
-    obj = quad_host(name="quad-sim-newtpe-cadence", num_ite=100, mode="simulation", algo="watanabe", syn_mode="cadence")
-    obj.run()
+    obj = quad_host(name="quad-sim-newtpe-cadence", num_ite=100, mode="hybrid", algo="watanabe")
+    # obj.run()
+    obj.test_sim_batch()

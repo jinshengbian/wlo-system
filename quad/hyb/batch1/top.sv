@@ -30,22 +30,26 @@ logic [13:0] input_data    [NUM_CHAN-2:0]; //rng
 logic [28:0] output_data;
 logic [28:0] output_ref;
 logic [13:0] input_dsp     [NUM_CHAN-2:0];
-logic [13:0] input_dspref  [NUM_CHAN-2:0];
 logic [28:0] output_dsp;
-logic [28:0] output_dspref;
 
 // mse result
 logic [63:0] mse_data;
 logic mse_valid;
 
 //////////////////////////////////////////////////////////////// connections
-// ila_0 ila (
-// .clk(clk),
+ ila_0 ila (
+ .clk(clk),
+.probe0(mse_data),
+.probe1(mse_valid)
 
-
-// .probe0(mse_data),
-// .probe1(mse_valid)
-// );
+//  .probe0(input_data[0]),
+//  .probe1(input_data[1]),
+//  .probe2(input_dsp[0]),
+//  .probe3(input_dsp[1]),
+//  .probe4(output_ref),
+//  .probe5(output_dsp),
+//  .probe6(output_data)
+ );
 assign sys_rstn = soft_rstn & rstn;
 
 //random number generator
@@ -94,12 +98,12 @@ control_unit #(3) control_unit_inst (
 quad dsp_ref (
     .clk(clk),
     .rstn(sys_rstn),
-    .a(input_dspref[0]), 
-    .b(input_dspref[1]),
-    .c(output_dspref)
+    .a(input_data[0]), 
+    .b(input_data[1]),
+    .c(output_ref)
 );
 
-quad dsp_system (
+quad dsp_sys (
     .clk(clk),
     .rstn(sys_rstn),
     .a(input_dsp[0]),
@@ -120,8 +124,6 @@ data_collector data_collector_inst (
 
 
 bit_switch #(14,12) sw1 (
-    .clk(clk),
-    .rstn(rstn),
     .num_int(8'd2),
     .num_frac(sw_frac[0]),
     .data_i(input_data[0]),
@@ -129,8 +131,6 @@ bit_switch #(14,12) sw1 (
 );
 
 bit_switch #(14,12) sw2 (
-    .clk(clk),
-    .rstn(rstn),
     .num_int(8'd2),
     .num_frac(sw_frac[1]),
     .data_i(input_data[1]),
@@ -138,40 +138,13 @@ bit_switch #(14,12) sw2 (
 );
 
 bit_switch #(29,24) sw3 (
-    .clk(clk),
-    .rstn(rstn),
     .num_int(8'd5),
     .num_frac(sw_frac[2]),
     .data_i(output_dsp),
     .data_o(output_data)
 );
 
-bit_switch #(14,12) sw1ref (
-    .clk(clk),
-    .rstn(rstn),
-    .num_int(8'd2),
-    .num_frac(8'd30),
-    .data_i(input_data[0]),
-    .data_o(input_dspref[0])
-);
 
-bit_switch #(14,12) sw2ref (
-    .clk(clk),
-    .rstn(rstn),
-    .num_int(8'd2),
-    .num_frac(8'd30),
-    .data_i(input_data[1]),
-    .data_o(input_dspref[1])
-);
-
-bit_switch #(29,24) sw3ref (
-    .clk(clk),
-    .rstn(rstn),
-    .num_int(8'd5),
-    .num_frac(8'd30),
-    .data_i(output_dspref),
-    .data_o(output_ref)
-);
 
 endmodule
 

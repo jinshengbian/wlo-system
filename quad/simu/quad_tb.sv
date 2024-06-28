@@ -1,15 +1,13 @@
 `timescale 1ns/1ns
-module top_tb (
+module quad_tb (
 );
 
-reg clk_tb;
+reg clk;
 logic rstn;
 logic [13:0] a;
 logic [13:0] b;
 logic [28:0] c;
-logic [7:0] num_frac_a;
-logic [7:0] num_frac_b;
-logic [7:0] num_frac_c;
+
 
 parameter int period = 10;
 parameter string data_path = "./simu/";
@@ -18,18 +16,15 @@ parameter string in_data2 = {data_path,"input2.txt"};
 parameter string out_data = {data_path,"output.txt"};
 
 
-top top_inst (
-    .clk(clk_tb),
+quad quad_inst (
+    .clk(clk),
     .rstn(rstn),
-    .num_frac_a(num_frac_a),
-    .num_frac_b(num_frac_b),
-    .num_frac_c(num_frac_c),
     .a(a),
     .b(b),
     .c(c)
 );
 
-always #(period/2) clk_tb = ~clk_tb;
+always #(period/2) clk = ~clk;
 
 int input_file1,input_file2,output_file;
 int input_data1, input_data2;
@@ -42,7 +37,7 @@ initial begin
     
     start = 0;
     rstn = 0;
-    clk_tb = 1;
+    clk = 1;
     #150
     rstn = 1;
     while (!$feof(input_file1) && !$feof(input_file2)) begin
