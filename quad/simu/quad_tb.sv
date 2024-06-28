@@ -49,8 +49,8 @@ initial begin
         b = 14'(input_data2);
         //$fwrite(output_file,"%d\n",c);
     end
-    #(period*5)
-    start = 1;
+    #(period*2)
+    start = 0;
     $fclose(input_file1);
     $fclose(input_file2);
     $finish;
@@ -59,7 +59,7 @@ end
 initial begin
     output_file=$fopen(out_data,"w");
     wait(start == 1);
-    #(period*3.5)
+    #(period/2)
     while(start == 1) begin
         #(period)
         $fwrite(output_file,"%d\n",c);

@@ -1,5 +1,3 @@
-// simple DSP module that computes the sum of the squares of two inputs
- 
 module quad (
     input  logic clk,
     input  logic rstn,

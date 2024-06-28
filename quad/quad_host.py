@@ -2,7 +2,7 @@ import sys
 sys.path.append('../algo')
 from host import *
 from optimizer import optimizer
-
+import os
 import random
 import paramiko
 import paramiko.client
@@ -195,13 +195,12 @@ class quad_host(host):
         config = np.array([5,5,5])
         # config1 = np.ones((15),dtype=int)*1
         # config = np.append(config,config1)
-
-        # self.run_sim(config)
-        # sim_seq = self.read_output()
-        # print(self.ref_seq)
-        # print(sim_seq)
-        # sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
-        # print("sim mse: ",sim_prec)
+        self.run_sim(config)
+        sim_seq = self.read_output()
+        print(self.ref_seq)
+        print(sim_seq)
+        sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
+        print("sim mse: ",sim_prec)
 
         # syn_result = self.ssh_cad_run(config)
         # syn_result = float(syn_result)
@@ -352,6 +351,6 @@ class quad_host(host):
 
 
 if __name__ == "__main__":
-    obj = quad_host(name="quad-sim-newtpe-cadence", num_ite=100, mode="hybrid", algo="watanabe")
+    obj = quad_host()
     # obj.run()
     obj.test_sim_batch()

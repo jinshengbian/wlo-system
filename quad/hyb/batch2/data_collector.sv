@@ -3,11 +3,11 @@ module data_collector (
     input  logic rstn,
     input  logic start,
 
-    input  logic signed [28:0] data_in,
-    input  logic signed [28:0] data_ref,
+    input  logic unsigned [28:0] data_in,
+    input  logic unsigned [28:0] data_ref,
 
-    output logic [63:0] data_out,
-    output logic        data_valid
+    output logic unsigned [63:0] data_out,
+    output logic       data_valid
 );
 
 //////////////////////////////////////////////////////////////// signals & param
@@ -16,25 +16,24 @@ module data_collector (
 parameter SEQ_LEN = 131072;
 
 // intermediate signals
-logic signed [29:0] data_sub;
-logic signed [60:0] data_mul;
+logic unsigned [29:0] data_sub;
+logic unsigned [60:0] data_mul;
 
 // counter
 logic [31:0] data_idx;
 logic accu_proc; // accumulation process
 
 // generated output
-logic [77:0] data_out_gen;
+logic unsigned [77:0] data_out_gen;
 
-logic [29:0] data_in_unsigned;
-logic [29:0] data_ref_unsigned;
 
+logic unsigned [29:0] data_in_unsigned;
+logic unsigned [29:0] data_ref_unsigned;
 //////////////////////////////////////////////////////////////// logic
-assign data_in_unsigned  = {1'b0, data_in};
-assign data_ref_unsigned = {1'b0, data_ref};
 
-assign data_in_signed  = signed'(data_in_unsigned);
-assign data_ref_signed = signed'(data_ref_unsigned);
+
+assign data_in_unsigned  = {1'b0,data_in};
+assign data_ref_unsigned = {1'b0,data_ref};
 
 
 // calculate data_sub
@@ -43,7 +42,7 @@ always @(posedge clk) begin
         data_sub <= 0;
     end
     else begin
-        data_sub <= data_ref_signed - data_in_signed;
+        data_sub <= data_ref_unsigned - data_in_unsigned;
     end
 end 
 
@@ -96,7 +95,7 @@ always @(posedge clk) begin
         end
 
         if (data_idx == SEQ_LEN+1) begin
-            data_out   <= data_out_gen[76:13];
+            data_out   <= data_out_gen[77:14];
             data_valid <= 1;
         end
         else begin
