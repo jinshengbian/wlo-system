@@ -35,11 +35,11 @@ class quad_host(host):
             self.gen_sim_input()
             self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
-            self.uart_ob = serial.Serial("/dev/ttyUSB0",115200)
+            self.uart_ob = serial.Serial("/dev/ttyUSB1",115200)
 
         if algo == "newtpe":
             self.bsize = bsize
-            num_init = 6
+            num_init = 16
             if num_ite%2 != 0 or num_init%2 != 0:
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
@@ -51,14 +51,18 @@ class quad_host(host):
         self.ssh_power_init()
 
         self.record = {
-            'x1': [],
-            'x2': [],
-            'x3': [],
+            'conf': [],
             'prec': [],
             'cost': [],
             'loss': [],
             'time': []
         }
+
+        self.ht= 6e-5;
+        self.tar = 4e-5;
+        self.lt = 5e-6;
+
+
 
 
             
@@ -97,8 +101,9 @@ class quad_host(host):
         output = self.ssh_send_command(command,2)
         command = f"shell rm genus.* fv -rf"
         output = self.ssh_send_command(command,2)
-        command = f"./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]}"
+        command = f"shell ./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]}"
         output = self.ssh_send_command(command,2)
+        # print(output)
         command = "source synthesis.tcl"
         output = self.ssh_send_command(command,2)
         command = "shell cat ./report/gates.rpt"
@@ -192,7 +197,7 @@ class quad_host(host):
         
         self.ref_seq = self.read_ref_seq()
 
-        config = np.array([5,5,5])
+        config = np.array([9,9,15])
         # config1 = np.ones((15),dtype=int)*1
         # config = np.append(config,config1)
         self.run_sim(config)
@@ -202,23 +207,23 @@ class quad_host(host):
         sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
         print("sim mse: ",sim_prec)
 
-        # syn_result = self.ssh_cad_run(config)
-        # syn_result = float(syn_result)
+        syn_result = self.ssh_power_run(config)
+        syn_result = float(syn_result)
 
-        # print("syn area: ", syn_result)
+        print("syn area: ", syn_result)
 
-        # self.uart_send_config(config)
-        # self.uart_hw_start()
-        # msg = []
-        # while(1):
-        #     msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
-        #     if len(msg)==8*self.bsize:
-        #         break   
-        # mse_val = 0
-        # for j in range(8):
-        #     mse_val = mse_val + msg[0*8+j]*256**j
-        # mse_val = mse_val*2**14/131072/2**48
-        # print("hyb mse: ", mse_val)
+        self.uart_send_config(config)
+        self.uart_hw_start()
+        msg = []
+        while(1):
+            msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
+            if len(msg)==8*self.bsize:
+                break   
+        mse_val = 0
+        for j in range(8):
+            mse_val = mse_val + msg[0*8+j]*256**j
+        mse_val = mse_val*2**14/131072/2**48
+        print("hyb mse: ", mse_val)
         # mse_val = 0
         # for j in range(8):
         #     mse_val = mse_val + msg[1*8+j]*256**j
@@ -229,15 +234,18 @@ class quad_host(host):
     def get_cost(self):
         self.cur_cost = np.array([])
         for i in range(self.bsize):
-            cur_config = self.cur_config[i]
-            
-            total_power = self.ssh_power_run(cur_config)
-            total_power = float(total_power)
+            if self.cur_prec[i] > self.ht or self.cur_prec[i] < self.lt: 
+                self.cur_cost = np.append(self.cur_cost, np.array([-1]))
+            else:
+                cur_config = self.cur_config[i]
+                
+                syn_result = self.ssh_power_run(cur_config)
+                # syn_result = np.sum(cur_config)
+                syn_result = float(syn_result)
 
-            self.cur_cost = np.append(self.cur_cost, np.array([total_power]))
+                self.cur_cost = np.append(self.cur_cost, np.array([syn_result]))
             # record power
-            self.record['cost'] = self.record['cost'] + [total_power]
-
+            self.record['cost'] = self.record['cost'] + [self.cur_cost[i]]
     def get_prec(self):
         self.cur_prec = np.array([])
         if self.mode == "simulation":
@@ -274,12 +282,15 @@ class quad_host(host):
 
     def calc_loss(self):
         self.cur_loss = np.array([])
+
         for i in range(self.bsize):
-            loss_val = abs(self.cur_prec[i]-1e8) + (self.cur_cost[i])
+            if self.cur_prec[i] < self.lt or self.cur_prec[i] > self.ht:
+                loss_val = abs(self.cur_prec[i]-self.tar)*1970
+            else :
+                loss_val = abs(self.cur_prec[i]-self.tar)*(self.cur_cost[i])
             self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
             # record loss
             self.record['loss'] = self.record['loss'] + [loss_val]
-
 
     def obj_func(self, config):
         # get configurations
@@ -291,8 +302,8 @@ class quad_host(host):
 
         # evaluate the config
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        self.get_cost()
         self.get_prec()
+        self.get_cost()
         self.calc_loss()
         print(f"Config: {self.cur_config}")
         print(f"Power : {self.cur_cost} (nW)")
@@ -308,12 +319,9 @@ class quad_host(host):
 
         # record configurations
         for i in range(self.bsize):
-            self.record['x1'] = self.record['x1'] + [self.cur_config[i][0].tolist()]
-            self.record['x2'] = self.record['x2'] + [self.cur_config[i][1].tolist()]
-            self.record['x3'] = self.record['x3'] + [self.cur_config[i][2].tolist()]
-
+            self.record['conf'] = self.record['conf'] + [self.cur_config[i].tolist()]
         return result
-        
+
     
     def run(self):
         # define search space
@@ -336,10 +344,10 @@ class quad_host(host):
         time_start = time.time()
         # optimization 
         if self.algo == "watanabe":
-            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite)
+            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=16)
             print(opt.optimize(logger_name="obj_func"))
         elif self.algo == "newtpe":
-            opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize)
+            opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize,if_uniform_start=True)
             best_config = opt.optimization()
         time_end = time.time()
 
@@ -351,6 +359,15 @@ class quad_host(host):
 
 
 if __name__ == "__main__":
-    obj = quad_host()
-    # obj.run()
-    obj.test_sim_batch()
+    for i in range(1):
+        obj = quad_host(name=f"simulation_watanabe_70_batch1_round{i}_uni", num_ite=70, mode="simulation", algo="watanabe", bsize=1)
+        obj.run()
+
+        obj = quad_host(name=f"simulation_newtpe_70_batch1_round{i}_uni", num_ite=70, mode="simulation", algo="newtpe", bsize=1)
+        obj.run()
+
+        # obj = quad_host(name=f"hybrid_newtpe_70_batch1_round{i}", num_ite=70, mode="hybrid", algo="newtpe", bsize=1)
+        # obj.run()
+    # obj.test_sim_batch()
+
+

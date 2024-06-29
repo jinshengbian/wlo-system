@@ -5,9 +5,9 @@ module quad (
     input  logic unsigned [14-1:0] b,//2+12
     output logic unsigned [29-1:0] c //5+24
 );
-parameter FWL_A = 5 ;
-parameter FWL_B = 5 ;
-parameter FWL_C = 5 ;
+parameter FWL_A = 10 ;
+parameter FWL_B = 9 ;
+parameter FWL_C = 13 ;
 
 logic unsigned [14-1:0] a_wl;
 logic unsigned [14-1:0] b_wl;

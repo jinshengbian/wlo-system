@@ -38,13 +38,13 @@ logic mse_valid[1:0];
 logic mse_valid_out;
 
 //////////////////////////////////////////////////////////////// connections
- ila_0 ila (
- .clk(clk),
+// ila_0 ila (
+// .clk(clk),
 
 
- .probe0(uart_rx),
- .probe1(uart_tx)
- );
+// .probe0(uart_rx),
+// .probe1(uart_tx)
+// );
 assign sys_rstn = soft_rstn & rstn;
 assign mse_valid_out = mse_valid[0] | mse_valid[1];
 //random number generator

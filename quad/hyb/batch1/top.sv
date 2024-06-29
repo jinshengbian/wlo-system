@@ -37,10 +37,10 @@ logic [63:0] mse_data;
 logic mse_valid;
 
 //////////////////////////////////////////////////////////////// connections
- ila_0 ila (
- .clk(clk),
-.probe0(mse_data),
-.probe1(mse_valid)
+// ila_0 ila (
+// .clk(clk),
+//.probe0(mse_data),
+//.probe1(mse_valid)
 
 //  .probe0(input_data[0]),
 //  .probe1(input_data[1]),
@@ -49,7 +49,7 @@ logic mse_valid;
 //  .probe4(output_ref),
 //  .probe5(output_dsp),
 //  .probe6(output_data)
- );
+// );
 assign sys_rstn = soft_rstn & rstn;
 
 //random number generator
