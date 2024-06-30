@@ -40,24 +40,24 @@ logic mse_valid[1:0];
 logic mse_valid_out;
 
 //////////////////////////////////////////////////////////////// connections
-  ila_0 ila (
-  .clk(clk),
-  .probe0(sw_frac[0][0]),
-  .probe1(sw_frac[0][1]),
-  .probe2(sw_frac[0][2]),
-  .probe3(sw_frac[0][3]),
-  .probe4(sw_frac[0][4]),
-  .probe5(sw_frac[0][5]),
-  .probe6(sw_frac[0][6]),
-  .probe7(sw_frac[0][7]),
-  .probe8(sw_frac[0][8]),
-  .probe9(sw_frac[0][9]),
-  .probe10(sw_frac[0][10]),
-  .probe11(sw_frac[0][11]),
-  .probe12(sw_frac[0][12]),
-  .probe13(sw_frac[0][13]),
-  .probe14(sw_frac[0][14])
-  );
+//  ila_0 ila (
+//  .clk(clk),
+//  .probe0(sw_frac[0][0]),
+//  .probe1(sw_frac[0][1]),
+//  .probe2(sw_frac[0][2]),
+//  .probe3(sw_frac[0][3]),
+//  .probe4(sw_frac[0][4]),
+//  .probe5(sw_frac[0][5]),
+//  .probe6(sw_frac[0][6]),
+//  .probe7(sw_frac[0][7]),
+//  .probe8(sw_frac[0][8]),
+//  .probe9(sw_frac[0][9]),
+//  .probe10(sw_frac[0][10]),
+//  .probe11(sw_frac[0][11]),
+//  .probe12(sw_frac[0][12]),
+//  .probe13(sw_frac[0][13]),
+//  .probe14(sw_frac[0][14])
+//  );
 assign sys_rstn = soft_rstn & rstn;
 assign sys_rst  = ~sys_rstn;
 assign mse_valid_out = mse_valid[0] | mse_valid[1];
