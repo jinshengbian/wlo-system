@@ -27,9 +27,9 @@ def lower_trend(loss):
     return trend, index
 
 
-with open("./result_29/simulation_watanabe_70_batch1_round0.json", 'r') as file:
+with open("./result/simulation_watanabe_250_batch1_round0.json", 'r') as file:
     refsim_data = json.load(file)
-with open("./result/simulation_newtpe_70_batch1_round0_uni.json", 'r') as file:
+with open("./result/simulation_newtpe_250_batch1_round0_uni.json", 'r') as file:
     newsim_data = json.load(file)
 # with open("./result/hybrid_newtpe_70_batch2_round1.json", 'r') as file:
 #     newhyb1_data = json.load(file)
@@ -101,8 +101,8 @@ plt.scatter(mse_newsim, area_newsim,marker='+',label="Simulation-newTPE")
 
 plt.legend()
 plt.grid()
-plt.xlabel("( MSE )")
+plt.xlabel("log10( MSE )")
 plt.ylabel("Area / $\mu m^{2}$")
-plt.xlim(5e-6,6e-5)
+plt.xlim(1e-4,1e-5)
 # plt.ylim(0,50)
 plt.show()

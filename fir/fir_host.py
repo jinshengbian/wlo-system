@@ -29,7 +29,7 @@ class fir_host(host):
             self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
             self.bsize = bsize
-            self.uart_ob = serial.Serial("/dev/ttyUSB0",115200)
+            self.uart_ob = serial.Serial("/dev/ttyUSB1",115200)
 
         if algo == "newtpe":
             self.bsize = bsize
@@ -47,6 +47,10 @@ class fir_host(host):
             'loss': [],
             'time': []
         }
+        self.ht = 0.0001
+        self.tar = 0.00005
+        self.lt = 0.00001
+        
 
     ########################## self defined functions ##################
 
@@ -176,23 +180,23 @@ class fir_host(host):
 
     # test
     def test_sim_batch(self):
-        self.bsize = 2
+        self.bsize = 1
         self.gen_sim_input()
         self.ref_seq = self.read_ref_seq()
 
         config = np.ones((15),dtype=int)*0
-        config1 = np.ones((15),dtype=int)*1
-        config = np.append(config,config1)
+        # config1 = np.ones((15),dtype=int)*1
+        # config = np.append(config,config1)
 
-        # self.run_sim(config)
-        # sim_seq = self.read_output()
-        # sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
-        # print("sim mse: ",sim_prec)
+        self.run_sim(config)
+        sim_seq = self.read_output()
+        sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
+        print("sim mse: ",sim_prec)
 
-        # syn_result = self.ssh_cad_run(config)
-        # syn_result = float(syn_result)
+        syn_result = self.ssh_cad_run(config)
+        syn_result = float(syn_result)
 
-        # print("syn area: ", syn_result)
+        print("syn area: ", syn_result)
 
         self.uart_send_config(config)
         time.sleep(0.001)
@@ -207,11 +211,11 @@ class fir_host(host):
             mse_val = mse_val + msg[0*8+j]*256**j
         mse_val = mse_val/131072/2**16
         print("hyb mse: ", mse_val)
-        mse_val = 0
-        for j in range(8):
-            mse_val = mse_val + msg[1*8+j]*256**j
-        mse_val = mse_val/131072/2**16
-        print("hyb mse: ", mse_val)
+        # mse_val = 0
+        # for j in range(8):
+        #     mse_val = mse_val + msg[1*8+j]*256**j
+        # mse_val = mse_val/131072/2**16
+        # print("hyb mse: ", mse_val)
 
 
 
@@ -221,11 +225,12 @@ class fir_host(host):
     def get_cost(self): # cadence
         self.cur_cost = np.array([])
         for i in range(self.bsize):
-            if self.cur_prec[i] > 0.0001 or self.cur_prec[i] < 0.00001: 
+            if self.cur_prec[i] > self.ht or self.cur_prec[i] < self.lt: 
                 self.cur_cost = np.append(self.cur_cost, np.array([-1]))
             else:
                 cur_config = self.cur_config[i]
                 syn_result = self.ssh_cad_run(cur_config)
+                # syn_result = np.sum(cur_config)
                 syn_result = float(syn_result)
                 self.cur_cost = np.append(self.cur_cost, np.array([syn_result]))
             # record cost
@@ -268,14 +273,12 @@ class fir_host(host):
 
     def calc_loss(self):
         self.cur_loss = np.array([])
-        ht = 0.0001
-        lt = 0.00001
-        tar = 0.00005
+
         for i in range(self.bsize):
-            if self.cur_prec[i] < lt or self.cur_prec[i] > ht:
-                loss_val = abs(self.cur_prec[i]-tar)*4625
+            if self.cur_prec[i] < self.lt or self.cur_prec[i] > self.ht:
+                loss_val = abs(self.cur_prec[i]-self.tar)*4625
             else :
-                loss_val = abs(self.cur_prec[i]-tar)*(self.cur_cost[i])
+                loss_val = abs(self.cur_prec[i]-self.tar)*(self.cur_cost[i])
             self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
             # record loss
             self.record['loss'] = self.record['loss'] + [loss_val]
@@ -345,19 +348,19 @@ class fir_host(host):
         self.dump_record()
   
 if __name__ == "__main__":
-    # for i in range(3):
-    #     obj = fir_host(name=f"simulation_watanabe_250_batch1_round{i}", num_ite=250, mode="simulation", algo="watanabe", bsize=1)
-    #     obj.run()
+    for i in range(1):
+        obj = fir_host(name=f"simulation_watanabe_250_batch1_round{i}", num_ite=250, mode="simulation", algo="watanabe", bsize=1)
+        obj.run()
     
-    # for i in range(3):
-    #     obj = fir_host(name=f"simulation_newtpe_250_batch1_round{i}", num_ite=250, mode="simulation", algo="newtpe", bsize=1)
-    #     obj.run()
+    for i in range(1):
+        obj = fir_host(name=f"simulation_newtpe_250_batch1_round{i}", num_ite=250, mode="simulation", algo="newtpe", bsize=1)
+        obj.run()
 
     # for i in range(1):
     #     obj = fir_host(name=f"hybrid_watanabe_250_batch1_round{i}", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
     #     obj.run()
     
     # for i in range(1):
-    obj = fir_host(name=f"hybrid_newtpe_250_batch2_round1", num_ite=250, mode="hybrid", algo="newtpe", bsize=2)
-    obj.run()
+    # obj = fir_host(name=f"hybrid_newtpe_250_batch1_round0_uni", num_ite=250, mode="hybrid", algo="newtpe", bsize=1)
+    # obj.run()
     # obj.test_sim_batch()
