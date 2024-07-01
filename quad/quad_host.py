@@ -35,7 +35,8 @@ class quad_host(host):
             self.gen_sim_input()
             self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
-            self.uart_ob = serial.Serial("/dev/ttyUSB1",115200)
+            self.bsize = bsize
+            self.uart_ob = serial.Serial("/dev/ttyUSB3",115200)
 
         if algo == "newtpe":
             self.bsize = bsize
@@ -347,7 +348,7 @@ class quad_host(host):
             opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=16)
             print(opt.optimize(logger_name="obj_func"))
         elif self.algo == "newtpe":
-            opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize,if_uniform_start=True)
+            opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize,if_uniform_start=False)
             best_config = opt.optimization()
         time_end = time.time()
 
@@ -360,10 +361,10 @@ class quad_host(host):
 
 if __name__ == "__main__":
     for i in range(1):
-        obj = quad_host(name=f"simulation_watanabe_70_batch1_round{i}_uni", num_ite=70, mode="simulation", algo="watanabe", bsize=1)
-        obj.run()
+        # obj = quad_host(name=f"simulation_watanabe_70_batch1_round{i}", num_ite=70, mode="simulation", algo="watanabe", bsize=1)
+        # obj.run()
 
-        obj = quad_host(name=f"simulation_newtpe_70_batch1_round{i}_uni", num_ite=70, mode="simulation", algo="newtpe", bsize=1)
+        obj = quad_host(name=f"hybrid_newtpe_70_batch1_round{i}", num_ite=70, mode="hybrid", algo="newtpe", bsize=1)
         obj.run()
 
         # obj = quad_host(name=f"hybrid_newtpe_70_batch1_round{i}", num_ite=70, mode="hybrid", algo="newtpe", bsize=1)

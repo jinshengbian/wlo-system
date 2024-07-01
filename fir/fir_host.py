@@ -29,7 +29,7 @@ class fir_host(host):
             self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
             self.bsize = bsize
-            self.uart_ob = serial.Serial("/dev/ttyUSB2",115200)
+            self.uart_ob = serial.Serial("/dev/ttyUSB3",115200)
 
         if algo == "newtpe":
             self.bsize = bsize
@@ -361,6 +361,8 @@ if __name__ == "__main__":
     #     obj.run()
     
     for i in range(1):
+        # obj = fir_host(name=f"hybrid_watanabe_250_batch1_round0", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
+        # obj.run()
         obj = fir_host(name=f"hybrid_newtpe_250_batch2_round0", num_ite=250, mode="hybrid", algo="newtpe", bsize=2)
         obj.run()
         # obj.test_sim_batch()
