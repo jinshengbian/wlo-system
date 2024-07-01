@@ -16,13 +16,6 @@ import ConfigSpace.hyperparameters as CSH
 from tpe.optimizer import TPEOptimizer
 
 class quad_host(host):
-    # mode: simulation or hybrid
-    # algo: watanabe or newtpe
-    # syn_mode: "cadence" or "yosys"
-
-    # parameters
-    # simulation: name, num_ite, mode, algo, bsize=1, syn_mode, ref_seq
-    # hybrid: name, num_ite, mode, algo, bsize, syn_mode, uart_ob, num_init
 
     def __init__(self, name="test", num_ite=100, mode="simulation", algo="watanabe", bsize=1):
         # setup the host
@@ -36,7 +29,7 @@ class quad_host(host):
             self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
             self.bsize = bsize
-            self.uart_ob = serial.Serial("/dev/ttyUSB3",115200)
+            self.uart_ob = serial.Serial("/dev/ttyUSB0",115200)
 
         if algo == "newtpe":
             self.bsize = bsize
@@ -51,17 +44,17 @@ class quad_host(host):
         self.ssh_chan = self.ssh_ob.invoke_shell()
         self.ssh_power_init()
 
-        self.record = {
-            'conf': [],
-            'prec': [],
-            'cost': [],
-            'loss': [],
-            'time': []
-        }
-
-        self.ht= 6e-5;
-        self.tar = 4e-5;
-        self.lt = 5e-6;
+        self.ht=  6e-5;
+        self.lt = 2e-5;
+        self.tar = (self.ht+self.lt)/2
+    
+        # record
+        self.index = 0
+        self.conf = np.array([[None for _ in range(3)]])
+        self.prec = np.array([None])
+        self.cost = np.array([None])
+        self.loss = np.array([None])
+        self.opt_time = 0
 
 
 
@@ -233,34 +226,36 @@ class quad_host(host):
     ####################################################################
 
     def get_cost(self):
-        self.cur_cost = np.array([])
         for i in range(self.bsize):
-            if self.cur_prec[i] > self.ht or self.cur_prec[i] < self.lt: 
-                self.cur_cost = np.append(self.cur_cost, np.array([-1]))
+            cur_index = self.index-(self.bsize-i-1)
+            if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
+                self.cost = np.append(self.cost, np.array([-1]))
             else:
-                cur_config = self.cur_config[i]
+                for i in range(1,cur_index):
+                    if np.all(self.conf[cur_index] == self.conf[i]):
+                        self.cost = np.append(self.cost, self.cost[i])
+                        return
+                    
+                cur_config = self.conf[cur_index]
                 
-                syn_result = self.ssh_power_run(cur_config)
-                # syn_result = np.sum(cur_config)
+                # syn_result = self.ssh_power_run(cur_config)
+                syn_result = np.sum(cur_config)
                 syn_result = float(syn_result)
+                self.cost = np.append(self.cost, np.array([syn_result]))
 
-                self.cur_cost = np.append(self.cur_cost, np.array([syn_result]))
-            # record power
-            self.record['cost'] = self.record['cost'] + [self.cur_cost[i]]
     def get_prec(self):
         self.cur_prec = np.array([])
         if self.mode == "simulation":
-            cur_config = self.cur_config[0]
-            print(cur_config)
+            cur_config = self.conf[self.index]
             self.run_sim(cur_config)
             cur_seq = self.read_output()
-            self.cur_prec = np.append(self.cur_prec, np.mean((self.ref_seq-cur_seq)**2))
-            # record mse
-            self.record['prec'] = self.record['prec'] + self.cur_prec.tolist()
+            self.prec = np.append(self.prec, np.mean((self.ref_seq-cur_seq)**2))
+
         elif self.mode == "hybrid":
             cur_config = np.array([])
-            for config in self.cur_config:
-                cur_config = np.append(cur_config, config, axis=0)
+            for i in range(self.bsize):
+                cur_index = self.index-(self.bsize-i-1)
+                cur_config = np.append(cur_config, self.conf[cur_index])
             self.uart_send_config(cur_config)
             self.uart_hw_start()
 
@@ -276,51 +271,44 @@ class quad_host(host):
                 for j in range(8):
                     mse_val = mse_val + msg[i*8+j]*256**j
                 mse_val = mse_val*2**14/131072/2**48
-                self.cur_prec = np.append(self.cur_prec, np.array([mse_val]))
-                # record mse
-                self.record['prec'] = self.record['prec'] + [mse_val]
-
+                self.prec = np.append(self.prec, np.array([mse_val]))
 
     def calc_loss(self):
-        self.cur_loss = np.array([])
-
         for i in range(self.bsize):
-            if self.cur_prec[i] < self.lt or self.cur_prec[i] > self.ht:
-                loss_val = abs(self.cur_prec[i]-self.tar)*1970
+            cur_index = self.index-(self.bsize-i-1)
+            if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
+                loss_val = abs(self.prec[cur_index]-self.tar)*4625
             else :
-                loss_val = abs(self.cur_prec[i]-self.tar)*(self.cur_cost[i])
-            self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
-            # record loss
-            self.record['loss'] = self.record['loss'] + [loss_val]
+                loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
+            self.loss = np.append(self.loss, np.array([loss_val]))
 
     def obj_func(self, config):
+        self.index = self.index + self.bsize
         # get configurations
         if self.algo == "watanabe":
             start_time = time.time() 
-            self.cur_config = np.array([list(config.values())])
+            self.conf = np.append(self.conf, [np.array(list(config.values()))],axis=0)
         elif self.algo == "newtpe":
-            self.cur_config = config
+            self.conf = np.append(self.conf, config, axis=0)
 
         # evaluate the config
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ite: {int(self.index/self.bsize)}")
         self.get_prec()
         self.get_cost()
         self.calc_loss()
-        print(f"Config: {self.cur_config}")
-        print(f"Power : {self.cur_cost} (nW)")
-        print(f"MSE   : {self.cur_prec} ")
-        print(f"Loss  : {self.cur_loss}")
+
+        print(f"Config: {self.conf[self.index-self.bsize+1:self.index+1]}")
+        print(f"Area  : {self.cost[self.index-self.bsize+1:self.index+1]}")
+        print(f"MSE   : {self.prec[self.index-self.bsize+1:self.index+1]}")
+        print(f"Loss  : {self.loss[self.index-self.bsize+1:self.index+1]}")
 
         # results
         if self.algo == "watanabe":
             result: tuple[dict[str, float], float]
-            result = {"loss": self.cur_loss[0]}, time.time() - start_time
+            result = {"loss": self.loss[self.index]}, time.time() - start_time
         elif self.algo == "newtpe":
-            result = self.cur_loss
+            result = self.loss[self.index-self.bsize+1:self.index]
 
-        # record configurations
-        for i in range(self.bsize):
-            self.record['conf'] = self.record['conf'] + [self.cur_config[i].tolist()]
         return result
 
     
@@ -354,7 +342,7 @@ class quad_host(host):
 
         # results
         self.opt_time = time_end - time_start
-        self.record['time'] = self.opt_time
+
         print(">> Time in total  : ", self.opt_time, " s")
         self.dump_record()
 
@@ -364,7 +352,7 @@ if __name__ == "__main__":
         # obj = quad_host(name=f"simulation_watanabe_70_batch1_round{i}", num_ite=70, mode="simulation", algo="watanabe", bsize=1)
         # obj.run()
 
-        obj = quad_host(name=f"hybrid_newtpe_70_batch1_round{i}", num_ite=70, mode="hybrid", algo="newtpe", bsize=1)
+        obj = quad_host(name=f"hybrid_watanabe_70_batch1_round{i}", num_ite=70, mode="hybrid", algo="watanabe", bsize=1)
         obj.run()
 
         # obj = quad_host(name=f"hybrid_newtpe_70_batch1_round{i}", num_ite=70, mode="hybrid", algo="newtpe", bsize=1)
