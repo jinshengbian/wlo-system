@@ -47,7 +47,7 @@ class vv_host(host):
             'loss': [],
             'time': []
         }
-        self.ht = 0.03
+        self.ht = 999
         self.tar = 0.02
         self.lt = 0.01
         
@@ -177,6 +177,7 @@ class vv_host(host):
         imag_part = np.array(q_int32)
         output = np.array(real_part + 1j*imag_part,dtype=complex)
         return output
+    
     def export_vectors(self,symbols):
         with open("sim/run/i_in.vec","wb",) as i_in, open("sim/run/q_in.vec","wb") as q_in:
             imag_int = np.floor(symbols.imag)
@@ -212,13 +213,14 @@ class vv_host(host):
         symb_expo = symb_awgn*(2**(input_wl-1)-1)
 
         self.export_vectors(symb_expo)
-        BER = np.zeros(len(configs),dtype=float)
-        BER_ref = np.zeros(len(configs),dtype=float)
+        BER = 0.0
+        BER_ref = 0.0
 
         self.update_tb(configs)
-        os.system("./sim/sim.sh > sim_log.log")
+        os.system("source ./sim/sim.sh > sim_log.log")
 
         out_vhdl = self.import_vectors()
+        print(len(out_vhdl))
         out_rescal = out_vhdl/(2**(input_wl-1)-1)*scaling_AMP
             # sym_rescal = symb_expo/(2**(input_wl-1)-1)*scaling_AMP
         out_demod = self.DEMOD_16QAM(out_rescal)
@@ -251,7 +253,7 @@ class vv_host(host):
     ####################################################################
     def get_cost(self):
         self.cur_cost = np.array([])
-        if self.cur_prec[i] > self.ht or self.cur_prec[i] < self.lt: 
+        if self.cur_prec[0] > self.ht or self.cur_prec[0] < self.lt: 
             self.cur_cost = np.append(self.cur_cost, np.array([-1]))
         else:
             cur_config = self.cur_config[0]
@@ -294,8 +296,8 @@ class vv_host(host):
 
         # evaluate the config
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        self.get_cost()
         self.get_prec()
+        self.get_cost()
         self.calc_loss()
         print(f"Config: {self.cur_config}")
         print(f"Area  : {self.cur_cost}")
@@ -326,18 +328,18 @@ class vv_host(host):
         if self.algo == "watanabe":
             cs = CS.ConfigurationSpace()
             # for d in range(dim):
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x0", lower=7, upper=8))
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x1", lower=1, upper=8))
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x2", lower=1, upper=11))
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x3", lower=1, upper=7))
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x4", lower=1, upper=8))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x0", lower=2, upper=16))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x1", lower=2, upper=8))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x2", lower=2, upper=16))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x3", lower=2, upper=16))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x4", lower=2, upper=16))
         elif self.algo == "newtpe":
             search_space = np.array([
-                [7,8],
-                [1,8],
-                [1,11],
-                [1,7],
-                [1,8]
+                [2,16],
+                [2,8],
+                [2,16],
+                [2,16],
+                [2,16]
             ])
         # print information
         print(">>>>>>>>>>>>>>> Start optimization")
