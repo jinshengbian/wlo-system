@@ -5,13 +5,13 @@ use ieee.numeric_std.all;
 use work.vv_support.all;
 
 entity vv_average is
-  port (fourth_power : in  par_fourth_power_type;
+  port (fourth_power : in  par_fourth_type;
         average      : out average_type);
 end entity vv_average;
 
 architecture arch of vv_average is
 
-  function block_average(input : par_fourth_power_type) return average_type is
+  function block_average(input : par_fourth_type) return average_type is
     variable sum_re, sum_im : signed(input(0).re'length+PARALLELISM-2 downto 0);
     variable msb            : integer range AVERAGE_WL-1 to sum_re'left;
     variable result         : average_type;

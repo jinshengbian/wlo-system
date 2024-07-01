@@ -47,6 +47,9 @@ class vv_host(host):
             'loss': [],
             'time': []
         }
+        self.ht = 0.03
+        self.tar = 0.02
+        self.lt = 0.01
         
     
     ########################## self defined functions ##################
@@ -182,21 +185,9 @@ class vv_host(host):
                 i_in.write(real_int[i].astype(np.int32).tobytes())
                 q_in.write(imag_int[i].astype(np.int32).tobytes())
     def update_tb(self,config):
-        # Read the content of the file
-        file_path = "src/vv_tb.vhdl"
-        with open(file_path, 'r') as file:
-            lines = file.readlines()
-
-        # Modify the specified line
-        lines[63 - 1] = "  vv_magnitude_wl <= x\"" + format(config[0],"02x") + "\";\n"
-        lines[64 - 1] = "  vv_partitioned_wl <= x\"" + format(config[1],"02x") + "\";\n"
-        lines[65 - 1] = "  vv_4thPower_wl <= x\"" + format(config[2],"02x") + "\";\n"
-        lines[66 - 1] = "  vv_phase_wl <= x\"" + format(config[3],"02x") + "\";\n"
-        lines[67 - 1] = "  vv_avgSum_wl <= x\"" + format(config[4],"02x") + "\";\n"
-
-        # Write the modified content back to the file
-        with open(file_path, 'w') as file:
-            file.writelines(lines)
+        command = f'./simu/sim_wl.sh {config[0]} {config[1]} {config[2]} {config[3]} {config[4]}'
+        subprocess.run([command],  shell=True, capture_output=True,text=True)
+        
     def simu_vv(self):
         configs = self.cur_config[0]
         # Number of symbols
@@ -260,12 +251,16 @@ class vv_host(host):
     ####################################################################
     def get_cost(self):
         self.cur_cost = np.array([])
-        cur_config = self.cur_config[0]
-        total_power = self.ssh_cad_run(cur_config)
-        total_power = float(total_power)
-        self.cur_cost = np.append(self.cur_cost, np.array([total_power]))
+        if self.cur_prec[i] > self.ht or self.cur_prec[i] < self.lt: 
+            self.cur_cost = np.append(self.cur_cost, np.array([-1]))
+        else:
+            cur_config = self.cur_config[0]
+            # syn_result = self.ssh_cad_run(cur_config)
+            syn_result = np.sum(cur_config)
+            syn_result = float(syn_result)
+            self.cur_cost = np.append(self.cur_cost, np.array([syn_result]))
         # record cost
-        self.record['cost'] = self.record['cost'] + [total_power]
+        self.record['cost'] = self.record['cost'] + [self.cur_cost[0]]
 
     def get_prec(self):
         self.cur_prec = np.array([])
@@ -280,7 +275,10 @@ class vv_host(host):
 
     def calc_loss(self):
         self.cur_loss = np.array([])
-        loss_val = abs(self.cur_prec[0]-1e8) + (self.cur_cost[0])
+        if self.cur_prec[0] < self.lt or self.cur_prec[0] > self.ht:
+            loss_val = abs(self.cur_prec[0]-self.tar)*1970
+        else :
+            loss_val = abs(self.cur_prec[0]-self.tar)*(self.cur_cost[0])
         self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
         # record loss
         self.record['loss'] = self.record['loss'] + [loss_val]

@@ -4,7 +4,7 @@ then
     echo "ERROR: Please source setup script first."
     return
 fi
-rm -rf $CPR_BASE_PATH/sim/run/work
+
 # Save old path and current directory
 OLD_PATH=$PATH;
 CURR_DIR=${PWD}
@@ -14,12 +14,12 @@ CURR_DIR=${PWD}
 
 # Enter run directory
 cd $CPR_BASE_PATH/sim/run
-
+rm -rf $CPR_BASE_PATH/sim/run/work
 # vsim -c
 vlib work
 vmap work work
 
-vcom -2008 $CPR_BASE_PATH/src/wlo_bit_switch.vhdl
+
 vcom $CPR_BASE_PATH/src/vv_support.vhdl
 vcom $CPR_BASE_PATH/src/ip/cordic.vhdl
 vcom $CPR_BASE_PATH/src/vv_magnitude.vhdl
@@ -38,6 +38,7 @@ vcom $CPR_BASE_PATH/src/vv_tb.vhdl
 vsim -c vv_tb -voptargs=+acc -do "run -all; quit"
 
 
+rm -rf $CPR_BASE_PATH/sim/run/work
 # Restore path and unset license variables
 cd $CURR_DIR
 PATH=$OLD_PATH

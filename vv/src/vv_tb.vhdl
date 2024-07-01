@@ -16,14 +16,7 @@ architecture arch of vv_tb is
           i_in  : in  std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
           q_in  : in  std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
           i_out : out std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
-          q_out : out std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
-        
-          --io for WL
-          vv_magnitude_wl     : in std_logic_vector(7 downto 0);
-          vv_partitioned_wl   : in std_logic_vector(7 downto 0);
-          vv_4thPower_wl      : in std_logic_vector(7 downto 0);
-          vv_phase_wl         : in std_logic_vector(7 downto 0);
-          vv_avgSum_wl         : in std_logic_vector(7 downto 0));
+          q_out : out std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0));
   end component vv_wrapper;
 
   -- Signal declarations
@@ -33,7 +26,6 @@ architecture arch of vv_tb is
   signal q_in  : std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
   signal i_out : std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
   signal q_out : std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
-  signal vv_magnitude_wl,vv_partitioned_wl,vv_4thPower_wl,vv_phase_wl,vv_avgSum_wl : std_logic_vector(7 downto 0);
 
   -- Status flags
   signal output_save : boolean := false;
@@ -53,18 +45,8 @@ begin
               i_in  => i_in,
               q_in  => q_in,
               i_out => i_out,
-              q_out => q_out,
-              vv_magnitude_wl => vv_magnitude_wl,
-              vv_partitioned_wl => vv_partitioned_wl,
-              vv_4thPower_wl => vv_4thPower_wl,
-              vv_phase_wl => vv_phase_wl,
-              vv_avgSum_wl => vv_avgSum_wl);
+              q_out => q_out);
 
-  vv_magnitude_wl <= x"08";
-  vv_partitioned_wl <= x"06";
-  vv_4thPower_wl <= x"0b";
-  vv_phase_wl <= x"05";
-  vv_avgSum_wl <= x"01";
 
   clk <= not clk after PERIOD/2;
   rst <= '1'     after PERIOD, '0' after 2*PERIOD;

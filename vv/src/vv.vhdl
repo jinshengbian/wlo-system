@@ -10,26 +10,13 @@ entity vv is
        i_in  : in  std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
        q_in  : in  std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
        i_out : out std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
-       q_out : out std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0);
-        
-      --io for WL
-      vv_magnitude_wl     : in std_logic_vector(7 downto 0);
-      vv_partitioned_wl   : in std_logic_vector(7 downto 0);
-      vv_4thPower_wl      : in std_logic_vector(7 downto 0);
-      vv_phase_wl         : in std_logic_vector(7 downto 0);
-      vv_avgSum_wl         : in std_logic_vector(7 downto 0));
+       q_out : out std_logic_vector(INPUT_WL*PARALLELISM-1 downto 0));
 end entity vv;
+
 
 architecture arch of vv is
 
   -- Component declarations
-  component bit_switch is
-    generic (MAX_LEN : natural);
-    port (num_bit  : in  std_logic_vector(7 downto 0);
-          data_i   : in  std_logic_vector(MAX_LEN-1 downto 0);
-          data_o   : out std_logic_vector(MAX_LEN-1 downto 0));
-  end component bit_switch;
-  
   component vv_par_magnitude is
     generic (ITERATIONS : natural;
              COMPENSATE : boolean);
@@ -40,16 +27,16 @@ architecture arch of vv is
   component vv_partitioning is
     port (input     : in  par_symbol_type;
           magnitude : in  par_magnitude_type;
-          output    : out par_symbol_type);
+          output    : out par_partitioned_type);
   end component vv_partitioning;
 
   component vv_fourth_power is
-    port (input        : in  par_symbol_type;
-          fourth_power : out par_fourth_power_type);
+    port (input        : in  par_partitioned_type;
+          fourth_power : out par_fourth_type);
   end component vv_fourth_power;
 
   component vv_average is
-    port (fourth_power : in  par_fourth_power_type;
+    port (fourth_power : in  par_fourth_type;
           average      : out average_type);
   end component vv_average;
 
@@ -101,33 +88,15 @@ architecture arch of vv is
 
   signal magnitude        : par_magnitude_type;
   signal magnitude_reg    : par_magnitude_type;
-  signal magnitude_reg_sw : par_magnitude_type;
-  signal magnitude_reg_sw_0: std_logic_vector(MAGNITUDE_WL-1 downto 0);
-  signal magnitude_reg_sw_1: std_logic_vector(MAGNITUDE_WL-1 downto 0);
-  signal partitioned      : par_symbol_type;
-  signal partitioned_sw   : par_symbol_type;
-  signal partitioned_sw_0re:std_logic_vector(INPUT_WL-1 downto 0);
-  signal partitioned_sw_0im:std_logic_vector(INPUT_WL-1 downto 0);
-  signal partitioned_sw_1re:std_logic_vector(INPUT_WL-1 downto 0);
-  signal partitioned_sw_1im:std_logic_vector(INPUT_WL-1 downto 0);
-  signal fourth_power     : par_fourth_power_type;
-  signal fourth_power_reg : par_fourth_power_type;
-  signal fourth_power_reg_sw : par_fourth_power_type;
-  signal fourth_power_reg_sw_0re :std_logic_vector(INPUT_WL+3-1 downto 0);
-  signal fourth_power_reg_sw_0im :std_logic_vector(INPUT_WL+3-1 downto 0);
-  signal fourth_power_reg_sw_1re :std_logic_vector(INPUT_WL+3-1 downto 0);
-  signal fourth_power_reg_sw_1im :std_logic_vector(INPUT_WL+3-1 downto 0);
+  signal partitioned      : par_partitioned_type;
+  signal fourth_power     : par_fourth_type;
+  signal fourth_power_reg : par_fourth_type;
   signal average          : average_type;
   signal average_sum      : average_type;
-  signal average_sum_sw      : average_type;
-  signal average_sum_sw_re:std_logic_vector(AVERAGE_WL-1 downto 0);
-  signal average_sum_sw_im:std_logic_vector(AVERAGE_WL-1 downto 0);
   signal input_delayed    : par_symbol_type;
 
   signal phase           : phase_type;
   signal phase_reg       : phase_type;
-  signal phase_reg_sw    : phase_type;
-  signal phase_reg_sw_self    : std_logic_vector(PHASE_WL-1 downto 0);
   signal phase_unwrapped : phase_type;
   signal quadrant        : quadrant_type;
 
@@ -200,81 +169,16 @@ begin
                  COMPENSATE => false)
     port map (input     => input,
               magnitude => magnitude);
-              
-  bit_switch_mag_0 : bit_switch
-    generic map (MAX_LEN => MAGNITUDE_WL)
-    port map (  num_bit => vv_magnitude_wl,
-                data_i  => std_logic_vector(magnitude_reg(0)),
-                data_o  => magnitude_reg_sw_0);
-  bit_switch_mag_1 : bit_switch
-    generic map (MAX_LEN => MAGNITUDE_WL)
-    port map (  num_bit => vv_magnitude_wl,
-                data_i  => std_logic_vector(magnitude_reg(1)),
-                data_o  => magnitude_reg_sw_1);
-                
-  magnitude_reg_sw(0) <= magnitude_type(magnitude_reg_sw_0);    
-  magnitude_reg_sw(1) <= magnitude_type(magnitude_reg_sw_1);   
-  
+
   vv_partitioning_inst : vv_partitioning
     port map(input     => input_reg,
-             magnitude => magnitude_reg_sw,
+             magnitude => magnitude_reg,
              output    => partitioned);
-             
-  bit_switch_pa_0re :bit_switch
-    generic map (MAX_LEN => INPUT_WL)
-    port map (  num_bit => vv_partitioned_wl,
-                data_i  => std_logic_vector(partitioned(0).re),
-                data_o  => partitioned_sw_0re);
-  bit_switch_pa_0im :bit_switch
-    generic map (MAX_LEN => INPUT_WL)
-    port map (  num_bit => vv_partitioned_wl,
-                data_i  => std_logic_vector(partitioned(0).im),
-                data_o  => partitioned_sw_0im);
-  bit_switch_pa_1re :bit_switch
-    generic map (MAX_LEN => INPUT_WL)
-    port map (  num_bit => vv_partitioned_wl,
-                data_i  => std_logic_vector(partitioned(1).re),
-                data_o  => partitioned_sw_1re);
-  bit_switch_pa_1im :bit_switch
-    generic map (MAX_LEN => INPUT_WL)
-    port map (  num_bit => vv_partitioned_wl,
-                data_i  => std_logic_vector(partitioned(1).im),
-                data_o  => partitioned_sw_1im);
-  partitioned_sw(0).re    <= signed(partitioned_sw_0re);
-  partitioned_sw(0).im    <= signed(partitioned_sw_0im);
-  partitioned_sw(1).re    <= signed(partitioned_sw_1re);
-  partitioned_sw(1).im    <= signed(partitioned_sw_1im);
-  
-  
+
   vv_fourth_power_inst : vv_fourth_power
-    port map(input        => partitioned_sw,
+    port map(input        => partitioned,
              fourth_power => fourth_power);
-             
-  bit_switch_fp_0re :bit_switch
-    generic map (MAX_LEN => 11)
-    port map (  num_bit => vv_4thPower_wl,
-                data_i  => std_logic_vector(fourth_power_reg(0).re),
-                data_o  => fourth_power_reg_sw_0re);
-  bit_switch_fp_0im :bit_switch
-    generic map (MAX_LEN => 11)
-    port map (  num_bit => vv_4thPower_wl,
-                data_i  => std_logic_vector(fourth_power_reg(0).im),
-                data_o  => fourth_power_reg_sw_0im);
-  bit_switch_fp_1re :bit_switch
-    generic map (MAX_LEN => 11)
-    port map (  num_bit => vv_4thPower_wl,
-                data_i  => std_logic_vector(fourth_power_reg(1).re),
-                data_o  => fourth_power_reg_sw_1re);
-  bit_switch_fp_1im :bit_switch
-    generic map (MAX_LEN => 11)
-    port map (  num_bit => vv_4thPower_wl,
-                data_i  => std_logic_vector(fourth_power_reg(1).im),
-                data_o  => fourth_power_reg_sw_1im);
-  fourth_power_reg_sw(0).re <= signed(fourth_power_reg_sw_0re);
-  fourth_power_reg_sw(0).im <= signed(fourth_power_reg_sw_0im);
-  fourth_power_reg_sw(1).re <= signed(fourth_power_reg_sw_1re);
-  fourth_power_reg_sw(1).im <= signed(fourth_power_reg_sw_1im);
-  
+
   simple_averaging_gen : if AVERAGE_LENGTH = 1 generate
     vv_average_inst : vv_average
       port map (fourth_power => fourth_power_reg,
@@ -289,7 +193,7 @@ begin
 
   sum_averaging_gen : if AVERAGE_LENGTH > 1 generate
     vv_average_inst : vv_average
-      port map (fourth_power => fourth_power_reg_sw,
+      port map (fourth_power => fourth_power_reg,
                 average      => average);
 
     vv_sum_average_inst : vv_sum_average
@@ -298,36 +202,18 @@ begin
                 en          => en_sum,
                 average     => average,
                 average_sum => average_sum);
-    bit_switch_ave_re: bit_switch
-        generic map (MAX_LEN => AVERAGE_WL)
-        port map (num_bit => vv_avgSum_wl,
-                  data_i  => std_logic_vector(average_sum.re),
-                  data_o  => average_sum_sw_re);
-    bit_switch_ave_im: bit_switch
-        generic map (MAX_LEN => AVERAGE_WL)
-        port map (num_bit => vv_avgSum_wl,
-                  data_i  => std_logic_vector(average_sum.im),
-                  data_o  => average_sum_sw_im);
-    average_sum_sw.im <= signed(average_sum_sw_im);
-    average_sum_sw.re <= signed(average_sum_sw_re);
-    
+
     vv_phase_inst : vv_phase
       generic map (ITERATIONS => PHASE_ITERATIONS)
-      port map (average => average_sum_sw,
+      port map (average => average_sum,
                 phase   => phase);
   end generate sum_averaging_gen;
-    
-    bit_switch_phase: bit_switch
-        generic map (MAX_LEN => PHASE_WL)
-        port map (num_bit => vv_phase_wl,
-                  data_i  => std_logic_vector(phase_reg),
-                  data_o  => phase_reg_sw_self);
-    phase_reg_sw <= unsigned(phase_reg_sw_self);
+
   vv_unwrapping_inst : vv_unwrapping
     port map (clk       => clk,
               rst       => rst,
               en        => en_unwrapping,
-              phase_in  => phase_reg_sw,
+              phase_in  => phase_reg,
               phase_out => phase_unwrapped,
               quadrant  => quadrant);
 

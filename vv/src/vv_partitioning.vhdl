@@ -8,7 +8,7 @@ use work.vv_support.all;
 entity vv_partitioning is
   port (input     : in  par_symbol_type;
         magnitude : in  par_magnitude_type;
-        output    : out par_symbol_type);
+        output    : out par_partitioned_type);
 end entity vv_partitioning;
 
 architecture arch of vv_partitioning is
@@ -108,16 +108,19 @@ begin
       for sel_ring_idx in 0 to N_SEL_RINGS-1 loop
         if SEL_RINGS(sel_ring_idx) = 0 then
           if magnitude(par_idx) < MAGNITUDE_LIMITS(0) then
-            output(par_idx) <= input(par_idx);
+            output(par_idx).re <= resize(input(par_idx).re,output(par_idx).re'length);
+            output(par_idx).im <= resize(input(par_idx).im,output(par_idx).im'length);
           end if;
         elsif SEL_RINGS(sel_ring_idx) = N_RINGS-1 then
           if magnitude(par_idx) > MAGNITUDE_LIMITS(N_RINGS-2) then
-            output(par_idx) <= input(par_idx);
+            output(par_idx).re <= resize(input(par_idx).re,output(par_idx).re'length);
+            output(par_idx).im <= resize(input(par_idx).im,output(par_idx).im'length);
           end if;
         else
           if magnitude(par_idx) > MAGNITUDE_LIMITS(SEL_RINGS(sel_ring_idx)-1) and
             magnitude(par_idx) < MAGNITUDE_LIMITS(SEL_RINGS(sel_ring_idx)) then
-            output(par_idx) <= input(par_idx);
+            output(par_idx).re <= resize(input(par_idx).re,output(par_idx).re'length);
+            output(par_idx).im <= resize(input(par_idx).im,output(par_idx).im'length);
           end if;
         end if;
       end loop;
