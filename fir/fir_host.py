@@ -222,14 +222,23 @@ class fir_host(host):
     ####################################################################
 
     def get_cost(self): # cadence
+        global force_set
         for i in range(self.bsize):
             cur_index = self.index-(self.bsize-i-1)
             if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
                 self.cost = np.append(self.cost, np.array([-1]))
             else:
+                # test if skip
+                for i in range(1,cur_index):
+                    if self.prec[cur_index] == self.prec[i]:
+                        if np.all(self.conf[cur_index] >= self.conf[i]):
+                            self.cost = np.append(self.cost, self.cost[i])
+                            force_set = force_set + 1
+                            return
+                
                 cur_config = self.conf[cur_index]
-                # syn_result = self.ssh_cad_run(cur_config)
-                syn_result = np.sum(cur_config)
+                syn_result = self.ssh_cad_run(cur_config)
+                # syn_result = np.sum(cur_config)
                 syn_result = float(syn_result)
                 self.cost = np.append(self.cost, np.array([syn_result]))
 
@@ -347,10 +356,12 @@ if __name__ == "__main__":
     # for i in range(1):
     #     obj = fir_host(name=f"hybrid_watanabe_250_batch1_round{i}", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
     #     obj.run()
-    
+    global force_set
+    force_set = 0
     for i in range(1):
         # obj = fir_host(name=f"hybrid_watanabe_250_batch1_round0", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
         # obj.run()
         obj = fir_host(name=f"hybrid_watanabe_250_batch1_round0", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
         obj.run()
         # obj.test_sim_batch()
+    print("forcec:" ,force_set)
