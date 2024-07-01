@@ -38,9 +38,10 @@ class fir_host(host):
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
 
-        self.ht = 0.0001
-        self.tar = 0.00005
-        self.lt = 0.00001
+        self.ht = 0.00006
+        self.lt = 0.00003
+        self.tar = (self.ht+self.lt)/2
+        
         
         # record
         self.index = 0
@@ -222,7 +223,7 @@ class fir_host(host):
     ####################################################################
 
     def get_cost(self): # cadence
-        global force_set
+        global force_a
         for i in range(self.bsize):
             cur_index = self.index-(self.bsize-i-1)
             if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
@@ -230,11 +231,15 @@ class fir_host(host):
             else:
                 # test if skip
                 for i in range(1,cur_index):
-                    if self.prec[cur_index] == self.prec[i]:
-                        if np.all(self.conf[cur_index] >= self.conf[i]):
+                    if np.all(self.conf[cur_index] == self.conf[i]):
                             self.cost = np.append(self.cost, self.cost[i])
-                            force_set = force_set + 1
+                            force_a = force_a + 1
                             return
+                    # if self.prec[cur_index]-self.prec[cur_index]%1e-5 == self.prec[i]-self.prec[i]%1e-5:
+                    #     if np.all(self.conf[cur_index] >= self.conf[i]):
+                    #         self.cost = np.append(self.cost, self.cost[i])
+                    #         force_b = force_b + 1
+                    #         return
                 
                 cur_config = self.conf[cur_index]
                 syn_result = self.ssh_cad_run(cur_config)
@@ -356,12 +361,13 @@ if __name__ == "__main__":
     # for i in range(1):
     #     obj = fir_host(name=f"hybrid_watanabe_250_batch1_round{i}", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
     #     obj.run()
-    global force_set
-    force_set = 0
-    for i in range(1):
-        # obj = fir_host(name=f"hybrid_watanabe_250_batch1_round0", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
-        # obj.run()
-        obj = fir_host(name=f"hybrid_watanabe_250_batch1_round0", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
-        obj.run()
-        # obj.test_sim_batch()
-    print("forcec:" ,force_set)
+    global force_a,force_b
+    force_a = 0
+
+    obj = fir_host(name=f"simulation_watanabe_250_batch1_round0", num_ite=250, mode="simulation", algo="watanabe", bsize=1)
+    obj.run()
+
+
+    force_a = 0
+    obj = fir_host(name=f"hybrid_watanabe_250_batch1_round0", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
+    obj.run()
