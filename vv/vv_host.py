@@ -19,7 +19,7 @@ from tpe.optimizer import TPEOptimizer
 
 
 class vv_host(host):
-    def __init__(self, name="test", num_ite=100, mode="simulation", algo="watanabe"):
+    def __init__(self, name="test", num_ite=100, mode="hybrid", algo="watanabe"):
         super().__init__(name, num_ite, mode, algo)
 
         self.ssh_cad = paramiko.client.SSHClient()
@@ -33,23 +33,26 @@ class vv_host(host):
         elif mode == "hybrid":
             self.ssh_emu = paramiko.client.SSHClient()
             self.ssh_emu.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            self.ssh_emu.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
-            self.ssh_emu_chan = self.ssh_emu.invoke_shell()
-            self.ssh_emu_init()
+            self.ssh_emu.connect("twix.mc2.chalmers.se", username="bianj", password="ah669824")
+            # self.ssh_emu_chan = self.ssh_emu.invoke_shell()
+            # self.ssh_emu_init()
+        
+        if algo == "newtpe":
+            num_init = 16
+            if num_ite%2 != 0 or num_init%2 != 0:
+                raise ValueError("num_ite and num_init should be even numbers.")
+            self.num_init = num_init
+
         self.record = {
-            'x1': [],
-            'x2': [],
-            'x3': [],
-            'x4': [],
-            'x5': [],
+            'conf': [],
             'prec': [],
             'cost': [],
             'loss': [],
             'time': []
         }
-        self.ht = 999
-        self.tar = 0.02
-        self.lt = 0.01
+        self.ht  = 0.014
+        self.tar = 0.012
+        self.lt  = 0
         
     
     ########################## self defined functions ##################
@@ -232,24 +235,15 @@ class vv_host(host):
 
         return float(BER)
     # remote BER
-    def remote_BER(configs):
-        global ssh_cli
-        global num_ite,x,y
-        BER = np.zeros((len(configs),1),dtype=float)
-        for i in range(len(configs)):
-            command = "python3 test.py ttyUSB4 " + " ".join(map(str,configs[i].astype(int)))
-            # print(command)
-            _stdin, _stdout,_stderr = ssh_cli.exec_command(command)
-            # BER[i] = float(_stdout.read().decode()) * 1000 + np.sum(configs[i],dtype=float)
-            BER[i] = float(_stdout.read().decode())
-            num_ite += 1
-            x = np.append(x,num_ite)
-            y = np.append(y,BER[i])
-        if num_ite % 20 == 0: print(num_ite) 
+    def remote_BER(self,configs):
 
-        ber = BER.tolist()
+        command = "python3 test.py ttyUSB8 " + " ".join(map(str,configs.astype(int)))
+        # print(command)
+        _stdin, _stdout,_stderr = self.ssh_emu.exec_command(command)
+        
+        ber = float(_stdout.read().decode())
 
-        return BER
+        return ber
     ####################################################################
     def get_cost(self):
         self.cur_cost = np.array([])
@@ -271,14 +265,15 @@ class vv_host(host):
             prec = self.simu_vv()
             self.cur_prec = np.append(self.cur_prec, np.array([prec]))
         elif self.mode == "hybrid":
-            pass
+            prec = self.remote_BER(cur_config)
+            self.cur_prec = np.append(self.cur_prec, np.array([prec]))
         # record mse
         self.record['prec'] = self.record['prec'] + self.cur_prec.tolist()
 
     def calc_loss(self):
         self.cur_loss = np.array([])
         if self.cur_prec[0] < self.lt or self.cur_prec[0] > self.ht:
-            loss_val = abs(self.cur_prec[0]-self.tar)*1970
+            loss_val = abs(self.cur_prec[0]-self.tar)*40000
         else :
             loss_val = abs(self.cur_prec[0]-self.tar)*(self.cur_cost[0])
         self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
@@ -312,11 +307,7 @@ class vv_host(host):
             result = self.cur_loss
 
         # record configurations
-        self.record['x1'] = self.record['x1'] + [self.cur_config[0][0].tolist()]
-        self.record['x2'] = self.record['x2'] + [self.cur_config[0][1].tolist()]
-        self.record['x3'] = self.record['x3'] + [self.cur_config[0][2].tolist()]
-        self.record['x4'] = self.record['x4'] + [self.cur_config[0][3].tolist()]
-        self.record['x5'] = self.record['x5'] + [self.cur_config[0][4].tolist()]
+        self.record['conf'] = self.record['conf'] + [self.cur_config[0].tolist()]
 
         return result
 
@@ -328,18 +319,18 @@ class vv_host(host):
         if self.algo == "watanabe":
             cs = CS.ConfigurationSpace()
             # for d in range(dim):
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x0", lower=2, upper=16))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x0", lower=2, upper=8))
             cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x1", lower=2, upper=8))
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x2", lower=2, upper=16))
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x3", lower=2, upper=16))
-            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x4", lower=2, upper=16))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x2", lower=2, upper=12))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x3", lower=2, upper=12))
+            cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x4", lower=2, upper=10))
         elif self.algo == "newtpe":
             search_space = np.array([
-                [2,16],
                 [2,8],
-                [2,16],
-                [2,16],
-                [2,16]
+                [2,8],
+                [2,12],
+                [2,12],
+                [2,10]
             ])
         # print information
         print(">>>>>>>>>>>>>>> Start optimization")
@@ -347,10 +338,10 @@ class vv_host(host):
         time_start = time.time()
         # optimization 
         if self.algo == "watanabe":
-            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite)
+            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=16)
             print(opt.optimize(logger_name="obj_func"))
         elif self.algo == "newtpe":
-            opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize)
+            opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=1,if_uniform_start=False)
             best_config = opt.optimization()
         time_end = time.time()
 
@@ -361,5 +352,7 @@ class vv_host(host):
         self.dump_record()
 
 if __name__ == "__main__":
-    obj = vv_host()
+    obj = vv_host(name = "watanabe", num_ite=100, mode="hybrid", algo="watanabe")
+    obj.run()
+    obj = vv_host(name = "newtpe", num_ite=100, mode="hybrid", algo="newtpe")
     obj.run()

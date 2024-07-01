@@ -118,14 +118,7 @@ class optimizer:
                     current_point[0,j] = self.search_space[j,1]  
                 else:
                     current_point[0,j]
-            # collect the intermidiate points that will be used when the point is detected alias
-            if i==0:
-                self.previous_point_buffer = np.array(current_point,dtype=int)
-            elif not(self.detect_alias(np.array(current_point,dtype=int),self.points)):
-                repeat = not(np.array_equal(np.array(current_point.flatten(),dtype=int),self.previous_point_buffer[-1]))
-                if repeat:
-                    self.previous_point_buffer = np.append(self.previous_point_buffer,np.array(current_point,dtype=int),axis=0)
-
+            
             if np.array_equal(np.round(previous_update,4),np.round(update,4)):
                 break
 
@@ -210,8 +203,10 @@ class optimizer:
         # compare the threshold
         if max_lx < threshold:
             # print("Debug: exploit")
-            w_best = 0
-            for i in self.previous_point_buffer:
+            w_best = 0.5 if len(self.observations) > self.n_init_points/3 else w_best
+            current_point = (1-w_best)*current_point + (w_best)*self.lx[0,:]
+
+            for i in range(10):
                 if self.detect_alias(current_point.astype(int),self.points):
                     random_move = np.array([random.randint(-1,1) for _ in range(self.dim)])
                     current_point = current_point + random_move
@@ -393,11 +388,11 @@ if __name__ == "__main__":
         return object_value
 
 
-    dim = 5
+    dim = 30
 
 
     search_space_test = np.array([[-16,16] for _ in range(dim)])
-    opt = optimizer(objec_func=Styblinski_Tang_WLO,n_iterations=200,n_init_points=15,search_space=search_space_test,SGD_learn_rate=10,batch_size=1)
+    opt = optimizer(objec_func=Styblinski_Tang_WLO,n_iterations=400,n_init_points=15,search_space=search_space_test,SGD_learn_rate=10,batch_size=1)
 
     start_time  = time.time()
     temp=opt.optimization()

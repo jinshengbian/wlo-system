@@ -5,7 +5,7 @@ use ieee.math_real.all;
 
 package vv_support is
   -- Testbench settings
-  constant PERIOD : time := 1000 ps;
+  constant PERIOD : time := 10 ns;
 
   -- Design settings
   constant PARALLELISM   : natural := 2;
