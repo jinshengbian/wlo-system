@@ -1,3 +1,4 @@
+# optimizer 3
 import numpy as np
 import random
 import matplotlib.pyplot as plt
@@ -138,30 +139,31 @@ class optimizer:
                 next_point[j]
         return next_point,out
     def exploration(self,batch_point):
-        n = self.dim * 4 if self.dim < 10 else 40
+        n = self.dim * 2 if self.dim < 5 else 10
         x = self.lx[0:n,:] if len(self.lx)>n else self.lx
         var = np.std(x[:,:],axis=0)
         # print(var)
         var_order = sorted(range(len(var)), key=lambda k: var[k])
         point_selection = 0
+        var_order = var_order[::-1]
         for i in var_order:
             dim = len(x[0,:])
             move = np.zeros(dim)
 
-            sorted_order    = sorted(range(len(x)), key=lambda k: x[k,i])
-            # print(sorted_order)
-
-            move[i] = -1
+            mean_i = np.mean(x[0:4,i]) if len(x) > 4 else np.mean(x[:,i])
+            move[i] = -1 if mean_i > x[0,i] else 1
             next_point = x[0,:] +move
             point_selection = 1
             next_point,out = self.check_bound(next_point)
             if self.detect_alias(next_point,x) or self.detect_alias(next_point,batch_point) or out == 1:
-                move[i] = 1
-                next_point = x[0,:] +move
-                next_point,out = self.check_bound(next_point)
-                if self.detect_alias(next_point,x) or self.detect_alias(next_point,batch_point) or out == 1:
-                    point_selection = 0
-                    continue
+                point_selection = 0
+                continue
+                # move[i] = 1 if mean_i < x[0,i] else 1
+                # next_point = x[0,:] +move
+                # next_point,out = self.check_bound(next_point)
+                # if self.detect_alias(next_point,x) or self.detect_alias(next_point,batch_point) or out == 1:
+                #     point_selection = 0
+                #     continue
         if point_selection == 0:
             random_move = np.array([random.randint(-1,1) for _ in range(dim)])
             next_point = x[0,:] + random_move
