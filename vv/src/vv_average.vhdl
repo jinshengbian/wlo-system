@@ -12,7 +12,7 @@ end entity vv_average;
 architecture arch of vv_average is
 
   function block_average(input : par_fourth_type) return average_type is
-    variable sum_re, sum_im : signed(input(0).re'length+PARALLELISM-2 downto 0);
+    variable sum_re, sum_im : signed(12+PARALLELISM-2 downto 0);
     variable msb            : integer range AVERAGE_WL-1 to sum_re'left;
     variable result         : average_type;
   begin
@@ -30,8 +30,10 @@ architecture arch of vv_average is
         exit;
       end if;
     end loop;
-    result.re := resize(shift_left(sum_re,sum_re'left-msb),result.re'length);
-    result.im := resize(shift_left(sum_im,sum_im'left-msb),result.im'length);
+    -- result.re := resize(shift_left(sum_re,sum_re'left-msb),result.re'length);
+    -- result.im := resize(shift_left(sum_im,sum_im'left-msb),result.im'length);
+    result.re := sum_re(msb downto msb - result.re'length+1);
+    result.im := sum_im(msb downto msb - result.im'length+1);
     return result;
   end function block_average;
 

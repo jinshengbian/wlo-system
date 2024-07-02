@@ -355,7 +355,7 @@ if __name__ == "__main__":
     # obj.run()
     # obj = vv_host(name = "hybrid_newtpe_100_batch1_round0", num_ite=100, mode="hybrid", algo="newtpe")
     # obj.run()
-    conf = [7,7,7,7,7]
+    conf = [8,8,8,8,8]
     result = obj.simu_vv(conf)
     print(conf)
     print(result)
