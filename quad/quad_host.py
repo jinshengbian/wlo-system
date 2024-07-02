@@ -238,8 +238,8 @@ class quad_host(host):
                     
                 cur_config = self.conf[cur_index]
                 
-                # syn_result = self.ssh_power_run(cur_config)
-                syn_result = np.sum(cur_config)
+                syn_result = self.ssh_power_run(cur_config)
+                # syn_result = np.sum(cur_config)
                 syn_result = float(syn_result)
                 self.cost = np.append(self.cost, np.array([syn_result]))
 
@@ -349,8 +349,8 @@ class quad_host(host):
 
 if __name__ == "__main__":
     for i in range(1):
-        # obj = quad_host(name=f"simulation_watanabe_70_batch1_round{i}", num_ite=70, mode="simulation", algo="watanabe", bsize=1)
-        # obj.run()
+        obj = quad_host(name=f"simulation_watanabe_70_batch1_round{i}", num_ite=70, mode="simulation", algo="watanabe", bsize=1)
+        obj.run()
 
         obj = quad_host(name=f"hybrid_watanabe_70_batch1_round{i}", num_ite=70, mode="hybrid", algo="watanabe", bsize=1)
         obj.run()
