@@ -244,7 +244,6 @@ class quad_host(host):
                 self.cost = np.append(self.cost, np.array([syn_result]))
 
     def get_prec(self):
-        self.cur_prec = np.array([])
         if self.mode == "simulation":
             cur_config = self.conf[self.index]
             self.run_sim(cur_config)
@@ -307,7 +306,7 @@ class quad_host(host):
             result: tuple[dict[str, float], float]
             result = {"loss": self.loss[self.index]}, time.time() - start_time
         elif self.algo == "newtpe":
-            result = self.loss[self.index-self.bsize+1:self.index]
+            result = self.loss[self.index-self.bsize+1:self.index+1]
 
         return result
 

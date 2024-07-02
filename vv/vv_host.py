@@ -43,18 +43,19 @@ class vv_host(host):
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
 
-        self.record = {
-            'conf': [],
-            'prec': [],
-            'cost': [],
-            'loss': [],
-            'time': []
-        }
-        self.ht  = 0.014
-        self.tar = 0.012
-        self.lt  = 0
+        self.ht=  0.014;
+        self.lt = 0;
+        self.tar = (self.ht+self.lt)/2
         
-    
+        # record
+        self.index = 0
+        self.conf = np.array([[None for _ in range(5)]])
+        self.prec = np.array([None])
+        self.cost = np.array([None])
+        self.loss = np.array([None])
+        self.opt_time = 0
+
+
     ########################## self defined functions ##################
     def ssh_send_command(self,command,method=1):
         self.ssh_cad_chan.send(command + "\n")
@@ -193,7 +194,7 @@ class vv_host(host):
         subprocess.run([command],  shell=True, capture_output=True,text=True)
         
     def simu_vv(self):
-        configs = self.cur_config[0]
+        cur_config = self.conf[self.index]
         # Number of symbols
         num_symbols = 32000*4
         
@@ -246,68 +247,65 @@ class vv_host(host):
         return ber
     ####################################################################
     def get_cost(self):
-        self.cur_cost = np.array([])
-        if self.cur_prec[0] > self.ht or self.cur_prec[0] < self.lt: 
-            self.cur_cost = np.append(self.cur_cost, np.array([-1]))
+        cur_index = self.index
+        if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
+            self.cost = np.append(self.cost, np.array([-1]))
         else:
-            cur_config = self.cur_config[0]
+            for i in range(1,cur_index):
+                if np.all(self.conf[cur_index] == self.conf[i]):
+                    self.cost = np.append(self.cost, self.cost[i])
+                    return
+            cur_config = self.conf[cur_index]
             # syn_result = self.ssh_cad_run(cur_config)
             syn_result = np.sum(cur_config)
             syn_result = float(syn_result)
-            self.cur_cost = np.append(self.cur_cost, np.array([syn_result]))
-        # record cost
-        self.record['cost'] = self.record['cost'] + [self.cur_cost[0]]
+            self.cost = np.append(self.cost, np.array([syn_result]))
+
 
     def get_prec(self):
-        self.cur_prec = np.array([])
-        cur_config = self.cur_config[0]
+        cur_config = self.conf[self.index]
         if self.mode == "simulation":
             prec = self.simu_vv()
-            self.cur_prec = np.append(self.cur_prec, np.array([prec]))
+            self.prec = np.append(self.prec, np.array([prec]))
         elif self.mode == "hybrid":
             prec = self.remote_BER(cur_config)
-            self.cur_prec = np.append(self.cur_prec, np.array([prec]))
-        # record mse
-        self.record['prec'] = self.record['prec'] + self.cur_prec.tolist()
+            self.prec = np.append(self.prec, np.array([prec]))
+
 
     def calc_loss(self):
-        self.cur_loss = np.array([])
-        if self.cur_prec[0] < self.lt or self.cur_prec[0] > self.ht:
-            loss_val = abs(self.cur_prec[0]-self.tar)*40000
+        cur_index = self.index
+        if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
+            loss_val = abs(self.prec[cur_index]-self.tar)*35000
         else :
-            loss_val = abs(self.cur_prec[0]-self.tar)*(self.cur_cost[0])
-        self.cur_loss = np.append(self.cur_loss, np.array([loss_val]))
-        # record loss
-        self.record['loss'] = self.record['loss'] + [loss_val]
+            loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
+        self.loss = np.append(self.loss, np.array([loss_val]))
 
 
     def obj_func(self, config):
+        self.index = self.index + 1
         # get configurations
         if self.algo == "watanabe":
             start_time = time.time() 
-            self.cur_config = np.array([list(config.values())])
+            self.conf = np.append(self.conf, [np.array(list(config.values()))],axis=0)
         elif self.algo == "newtpe":
-            self.cur_config = config
+            self.conf = np.append(self.conf, config, axis=0)
 
         # evaluate the config
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ite: {int(self.index)}")
         self.get_prec()
         self.get_cost()
         self.calc_loss()
-        print(f"Config: {self.cur_config}")
-        print(f"Area  : {self.cur_cost}")
-        print(f"MSE   : {self.cur_prec} ")
-        print(f"Loss  : {self.cur_loss}")
+        print(f"Config: {self.conf[self.index:self.index+1]}")
+        print(f"Area  : {self.cost[self.index:self.index+1]}")
+        print(f"MSE   : {self.prec[self.index:self.index+1]}")
+        print(f"Loss  : {self.loss[self.index:self.index+1]}")
 
         # results
         if self.algo == "watanabe":
             result: tuple[dict[str, float], float]
-            result = {"loss": self.cur_loss[0]}, time.time() - start_time
+            result = {"loss": self.loss[self.index]}, time.time() - start_time
         elif self.algo == "newtpe":
-            result = self.cur_loss
-
-        # record configurations
-        self.record['conf'] = self.record['conf'] + [self.cur_config[0].tolist()]
+            result = self.loss[self.index-self.bsize+1:self.index+1]
 
         return result
 
@@ -347,12 +345,11 @@ class vv_host(host):
 
         # results
         self.opt_time = time_end - time_start
-        self.record['time'] = self.opt_time
         print(">> Time in total  : ", self.opt_time, " s")
         self.dump_record()
 
 if __name__ == "__main__":
-    obj = vv_host(name = "watanabe", num_ite=100, mode="hybrid", algo="watanabe")
-    obj.run()
-    obj = vv_host(name = "newtpe", num_ite=100, mode="hybrid", algo="newtpe")
+    # obj = vv_host(name = "simulation_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
+    # obj.run()
+    obj = vv_host(name = "hybrid_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
     obj.run()
