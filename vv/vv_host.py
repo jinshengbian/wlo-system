@@ -192,8 +192,8 @@ class vv_host(host):
                 i_in.write(real_int[i].astype(np.int32).tobytes())
                 q_in.write(imag_int[i].astype(np.int32).tobytes())
     def update_tb(self,config):
-        command = f'./simu/sim_wl.sh {config[0]} {config[1]} {config[2]} {config[3]} {config[4]}'
-        subprocess.run([command],  shell=True, capture_output=True,text=True)
+        command = f'./sim/sim_wl.sh {config[0]} {config[1]} {config[2]} {config[3]} {config[4]}'
+        os.system(command)
         
     def simu_vv(self,config):
         # Number of symbols
@@ -222,7 +222,7 @@ class vv_host(host):
         BER_ref = 0.0
 
         self.update_tb(config)
-        os.system("./sim/sim.sh > sim_log.log")
+        os.system(" ./sim/sim.sh > sim_log.log")
         out_vhdl = self.import_vectors()
         out_rescal = out_vhdl/(2**(input_wl-1)-1)*scaling_AMP
             # sym_rescal = symb_expo/(2**(input_wl-1)-1)*scaling_AMP
@@ -351,8 +351,12 @@ if __name__ == "__main__":
     # obj.run()
     # obj = vv_host(name = "hybrid_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
     # obj.run()
-    # area = obj.ssh_cad_run([4,4,11,10,7])
-    # print(area)
-    # obj.simu_init()
-    result = obj.simu_vv([8,8,8,8,8])
+    # obj = vv_host(name = "simulation_newtpe_100_batch1_round0", num_ite=100, mode="simulation", algo="newtpe")
+    # obj.run()
+    # obj = vv_host(name = "hybrid_newtpe_100_batch1_round0", num_ite=100, mode="hybrid", algo="newtpe")
+    # obj.run()
+    conf = [7,7,7,7,7]
+    result = obj.simu_vv(conf)
+    print(conf)
     print(result)
+

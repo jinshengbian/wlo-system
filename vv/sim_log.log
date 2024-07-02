@@ -1,0 +1,257 @@
+Model Technology ModelSim - Intel FPGA Edition vmap 2020.1 Lib Mapping Utility 2020.02 Feb 28 2020
+vmap work work 
+Modifying /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/../modelsim.ini
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_support.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling package vv_support
+-- Compiling package body vv_support
+-- Loading package vv_support
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/ip/cordic.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity cordic
+-- Compiling architecture arch of cordic
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_magnitude.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_magnitude
+-- Compiling architecture arch of vv_magnitude
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_par_magnitude.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_par_magnitude
+-- Compiling architecture arch of vv_par_magnitude
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_partitioning.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_partitioning
+-- Compiling architecture arch of vv_partitioning
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_fourth_power.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_fourth_power
+-- Compiling architecture power_of_four_arch of vv_fourth_power
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_average.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_average
+-- Compiling architecture arch of vv_average
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_sum_average.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_sum_average
+-- Compiling architecture arch of vv_sum_average
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_phase.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_phase
+-- Compiling architecture arch of vv_phase
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_unwrapping.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_unwrapping
+-- Compiling architecture arch of vv_unwrapping
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_delay_buffer.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_delay_buffer
+-- Compiling architecture arch of vv_delay_buffer
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_compensation.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_compensation
+-- Compiling architecture arch of vv_compensation
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv
+-- Compiling architecture arch of vv
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_wrapper.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_wrapper
+-- Compiling architecture arch of vv_wrapper
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:27:36 on Jul 02,2024
+vcom /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_tb.vhdl 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package vv_support
+-- Compiling entity vv_tb
+-- Compiling architecture arch of vv_tb
+End time: 22:27:36 on Jul 02,2024, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Reading pref.tcl
+
+# 2020.1
+
+# vsim -c vv_tb -voptargs="+acc" -do "run -all; quit" 
+# Start time: 22:27:36 on Jul 02,2024
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.vv_support(body)
+# Loading work.vv_tb(arch)
+# Loading work.vv_wrapper(arch)
+# Loading work.vv(arch)
+# Loading work.vv_par_magnitude(arch)
+# Loading work.vv_magnitude(arch)
+# Loading work.cordic(arch)
+# Loading work.vv_partitioning(arch)
+# Loading work.vv_fourth_power(power_of_four_arch)
+# Loading work.vv_average(arch)
+# Loading work.vv_sum_average(arch)
+# Loading work.vv_phase(arch)
+# Loading work.vv_unwrapping(arch)
+# Loading work.vv_delay_buffer(arch)
+# Loading work.vv_compensation(arch)
+# run -all
+# ** Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_partitioning_inst
+# ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_partitioning_inst
+# ** Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_partitioning_inst
+# ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_partitioning_inst
+# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
+#    Time: 5 ns  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_compensation_inst
+# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
+#    Time: 5 ns  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_compensation_inst
+# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
+#    Time: 5 ns  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_compensation_inst
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_compensation_inst
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 0  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_compensation_inst
+# ** Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+#    Time: 5 ns  Iteration: 1  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_partitioning_inst
+# ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
+#    Time: 5 ns  Iteration: 1  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_partitioning_inst
+# ** Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+#    Time: 5 ns  Iteration: 1  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_partitioning_inst
+# ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
+#    Time: 5 ns  Iteration: 1  Instance: /vv_tb/vv_wrapper_inst/vv_inst/vv_partitioning_inst
+# ** Failure: Testbench Done!
+#    Time: 1875745 ns  Iteration: 0  Process: /vv_tb/output_proc File: /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_tb.vhdl
+# Break in Process output_proc at /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_tb.vhdl line 110
+# Stopped at /home/jinsheng/Documents/Github/wlo-system/vv/src/vv_tb.vhdl line 110
+#  quit
+# End time: 22:27:44 on Jul 02,2024, Elapsed time: 0:00:08
+# Errors: 1, Warnings: 13

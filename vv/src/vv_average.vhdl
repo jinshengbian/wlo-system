@@ -30,8 +30,8 @@ architecture arch of vv_average is
         exit;
       end if;
     end loop;
-    result.re := sum_re(msb downto msb - result.re'length+1);
-    result.im := sum_im(msb downto msb - result.im'length+1);
+    result.re := resize(shift_left(sum_re,sum_re'left-msb),result.re'length);
+    result.im := resize(shift_left(sum_im,sum_im'left-msb),result.im'length);
     return result;
   end function block_average;
 

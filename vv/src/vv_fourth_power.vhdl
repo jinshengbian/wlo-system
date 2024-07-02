@@ -22,12 +22,12 @@ architecture power_of_four_arch of vv_fourth_power is
     re := resize(a.re*a.re, re'length) - resize(a.im*a.im, re'length);
     im := shift_left(resize(a.re*a.im, im'length), 1);
     -- Resize with rounding
-    if (2*PARTITIONED_WL-2) - (SQUARE_WL-2) > 0 then
-      z.re := resize(shift_right(shift_right(re, (2*PARTITIONED_WL-2) - (SQUARE_WL-2) - 1) + 1, 1), z.re'length);
-      z.im := resize(shift_right(shift_right(im, (2*PARTITIONED_WL-2) - (SQUARE_WL-2) - 1) + 1, 1), z.im'length);
-    elsif (2*PARTITIONED_WL-2) - (SQUARE_WL-2) < 0 then
-      z.re := shift_left(resize(re, z.re'length), (SQUARE_WL-2) - (2*PARTITIONED_WL-2) -1);
-      z.im := shift_left(resize(im, z.im'length), (SQUARE_WL-2) - (2*PARTITIONED_WL-2) -1);
+    if (2*PARTITIONED_WL-2) - (SQUARE_WL-1) > 0 then
+      z.re := resize(shift_right(shift_right(re, (2*PARTITIONED_WL-2) - (SQUARE_WL-1) - 1) + 1, 1), z.re'length);
+      z.im := resize(shift_right(shift_right(im, (2*PARTITIONED_WL-2) - (SQUARE_WL-1) - 1) + 1, 1), z.im'length);
+    elsif (2*PARTITIONED_WL-2) - (SQUARE_WL-1) < 0 then
+      z.re := shift_left(resize(re, z.re'length), (SQUARE_WL-1) - (2*PARTITIONED_WL-2));
+      z.im := shift_left(resize(im, z.im'length), (SQUARE_WL-1) - (2*PARTITIONED_WL-2));
     else -- (2*PARTITIONED_WL-2) - (SQUARE_WL-3) = 0
       z.re := resize(re, z.re'length);
       z.im := resize(im, z.im'length);
@@ -43,15 +43,15 @@ architecture power_of_four_arch of vv_fourth_power is
     re := resize(a.re*a.re, re'length) - resize(a.im*a.im, re'length);
     im := shift_left(resize(a.re*a.im, im'length), 1);
     -- Resize with rounding
-    if (2*SQUARE_WL-4) - (FOURTH_WL-3) > 0 then
-      z.re := resize(shift_right(shift_right(re, (2*SQUARE_WL-4) - (FOURTH_WL-3) - 1) + 1, 1), z.re'length);
-      z.im := resize(shift_right(shift_right(im, (2*SQUARE_WL-4) - (FOURTH_WL-3) - 1) + 1, 1), z.im'length);
-    elsif (2*SQUARE_WL-4) - (FOURTH_WL-3) < 0 then
-      z.re := shift_left(resize(re, z.re'length), (FOURTH_WL-3) - (2*SQUARE_WL-4));
-      z.im := shift_left(resize(im, z.im'length), (FOURTH_WL-3) - (2*SQUARE_WL-4));
+    if (2*SQUARE_WL-2) - (FOURTH_WL-1) > 0 then
+      z.re := resize(shift_right(shift_right(re, (2*SQUARE_WL-2) - (FOURTH_WL-1) - 1) + 1, 1), z.re'length);
+      z.im := resize(shift_right(shift_right(im, (2*SQUARE_WL-2) - (FOURTH_WL-1) - 1) + 1, 1), z.im'length);
+    elsif (2*SQUARE_WL-2) - (FOURTH_WL-1) < 0 then
+      z.re := shift_left(resize(re, z.re'length), (FOURTH_WL-1) - (2*SQUARE_WL-2));
+      z.im := shift_left(resize(im, z.im'length), (FOURTH_WL-1) - (2*SQUARE_WL-2));
     else -- (2*SQUARE_WL-6) - (FOURTH_WL-4) = 0
-      z.re := resize(re(2*SQUARE_WL-1 downto 0), z.re'length);
-      z.im := resize(im(2*SQUARE_WL-1 downto 0), z.im'length);
+      z.re := resize(re, z.re'length);
+      z.im := resize(im, z.im'length);
     end if;
     return z;
   end function square;
