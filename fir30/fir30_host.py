@@ -1,0 +1,105 @@
+
+import sys
+sys.path.append('../algo')
+from host import *
+from optimizer import optimizer
+
+sys.path.append('../fir')
+from fir_host import *
+
+import os
+import random
+import paramiko
+import paramiko.client
+import serial
+import time
+import subprocess
+import numpy as np
+import matplotlib.pyplot as plt
+import ConfigSpace as CS
+import ConfigSpace.hyperparameters as CSH
+from tpe.optimizer import TPEOptimizer
+
+class fir30_host(fir_host):
+
+    
+    def __init__(self, name="test", num_ite=100, mode="simulation", algo="watanabe", bsize=1):
+        super().__init__(name, num_ite, mode, algo)
+        self.dimension = 30
+
+        self.ht = 0.00006
+        self.lt = 0.00003
+        self.tar = (self.ht+self.lt)/2
+        
+    ########################## self defined functions ##################
+
+    # cadence synthesis
+    
+    def ssh_cad_init(self):  
+        command = "cd Downloads/fir30/syn && ls"
+        output = self.ssh_send_command(command)
+        command = "source setup.sh"
+        output = self.ssh_send_command(command)
+        command = "genus -overwrite"
+        output = self.ssh_send_command(command,2)
+    
+    # test
+    def test_sim_batch(self):
+        self.bsize = 2
+        self.gen_sim_input()
+        self.ref_seq = self.read_ref_seq()
+
+        config = np.ones((15),dtype=int)*0
+        config1 = np.ones((15),dtype=int)*1
+       
+
+        self.run_sim(config)
+        sim_seq = self.read_output()
+        sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
+        print("sim mse: ",sim_prec)
+        config = np.append(config,config1)
+        # syn_result = self.ssh_cad_run(config)
+        # syn_result = float(syn_result)
+
+        # print("syn area: ", syn_result)
+
+        self.uart_send_config(config)
+        time.sleep(0.001)
+        self.uart_hw_start()
+        msg = []
+        while(1):
+            msg.append(int.from_bytes(self.uart_ob.read(1), byteorder='big'))
+            if len(msg)==8*self.bsize:
+                break   
+        mse_val = 0
+        for j in range(8):
+            mse_val = mse_val + msg[0*8+j]*256**j
+        mse_val = mse_val/131072/2**16
+        print("hyb mse: ", mse_val)
+        mse_val = 0
+        for j in range(8):
+            mse_val = mse_val + msg[1*8+j]*256**j
+        mse_val = mse_val/131072/2**16
+        print("hyb mse: ", mse_val)
+
+    ####################################################################
+
+    def calc_loss(self):
+        for i in range(self.bsize):
+            cur_index = self.index-(self.bsize-i-1)
+            if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
+                loss_val = abs(self.prec[cur_index]-self.tar)*4625
+            else :
+                loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
+            self.loss = np.append(self.loss, np.array([loss_val]))
+    
+if __name__ == "__main__":
+    
+
+    obj = fir30_host(name=f"simulation_watanabe_400_batch1_round0", num_ite=400, mode="simulation", algo="watanabe", bsize=1)
+    obj.run()
+
+
+    force_a = 0
+    obj = fir30_host(name=f"hybrid_watanabe_400_batch1_round0", num_ite=400, mode="hybrid", algo="watanabe", bsize=1)
+    obj.run()

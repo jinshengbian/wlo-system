@@ -18,6 +18,8 @@ from tpe.optimizer import TPEOptimizer
 class fir_host(host):
     def __init__(self, name="test", num_ite=100, mode="simulation", algo="watanabe", bsize=1):
         super().__init__(name, num_ite, mode, algo)
+        self.dimension = 15
+
         self.ssh_cad = paramiko.client.SSHClient()
         self.ssh_cad.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.ssh_cad.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
@@ -45,7 +47,7 @@ class fir_host(host):
         
         # record
         self.index = 0
-        self.conf = np.array([[None for _ in range(15)]])
+        self.conf = np.array([[None for _ in range(self.dimension)]])
         self.prec = np.array([None])
         self.cost = np.array([None])
         self.loss = np.array([None])
@@ -118,11 +120,10 @@ class fir_host(host):
                 input_file.write(str(random_data) + "\n")
 
     def modify_sim_wl(self,config):
-
-        command = f'./simu/sim_wl.sh {config[0]} {config[1]} {config[2]} {config[3]} {config[4]} {config[5]} {config[6]} {config[7]} {config[8]} {config[9]} {config[10]} {config[11]} {config[12]} {config[13]} {config[14]}'
-        
-        
-        subprocess.run([command],  shell=True, capture_output=True,text=True)
+        command = './simu/sim_wl.sh'
+        for i in range(self.dimension):
+            command = command + f" {config[i]}"
+        os.system(command)
 
     def run_sim(self,vals):
         self.modify_sim_wl(vals)
@@ -147,11 +148,13 @@ class fir_host(host):
                 print(stderr)       
         except Exception as e:
             print(f"Error adding waveform in ModelSim: {e}")
+    
     def read_ref_seq(self):
-        wl_config = np.array([16,16,16,16,16,16,16,16,16,16,16,16,16,16,16])
+        wl_config = np.ones(self.dimension)*16
         self.run_sim(wl_config)
         ref_seq = self.read_output()
         return ref_seq
+    
     def read_output(self):
         seq = []
         with open('simu/output.txt', 'r') as file:
@@ -320,16 +323,12 @@ class fir_host(host):
         # define search space
         if self.algo == "watanabe":
             cs = CS.ConfigurationSpace()
-            dim = 15
+            dim = self.dimension
             for d in range(dim):
                 cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x{d}", lower=0, upper=16))
 
         elif self.algo == "newtpe":
-            search_space = np.array([
-                [0, 16],[0, 16],[0, 16],[0, 16],[0, 16],
-                [0, 16],[0, 16],[0, 16],[0, 16],[0, 16],
-                [0, 16],[0, 16],[0, 16],[0, 16],[0, 16]
-            ])
+            search_space = np.tile(np.array([0,16]),(self.dimension,1))
 
         # print information
         print(">>>>>>>>>>>>>>> Start optimization")
