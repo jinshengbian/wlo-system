@@ -1,4 +1,4 @@
-input_file="../src/vv_support.vhdl"
+input_file="./src/vv_support.vhdl"
 
 awk -v c1="$1" -v c2="$2" -v c3="$3" -v c4="$4" -v c5="$5" '
 {

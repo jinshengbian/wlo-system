@@ -44,7 +44,7 @@ class vv_host(host):
             self.num_init = num_init
 
         self.ht=  0.014;
-        self.lt = 0;
+        self.lt = 0.013;
         self.tar = (self.ht+self.lt)/2
         
         # record
@@ -80,6 +80,7 @@ class vv_host(host):
     def ssh_cad_init(self):  
         command = "cd Downloads/vv/syn && ls"
         output = self.ssh_send_command(command)
+        
         command = "source setup.sh"
         output = self.ssh_send_command(command)
         command = "genus -overwrite"
@@ -89,10 +90,11 @@ class vv_host(host):
         output = self.ssh_send_command(command,2)
         command = f"shell rm genus.* fv -rf"
         output = self.ssh_send_command(command,2)
-        command = f"shell source ./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]} {wl_config[3]} {wl_config[4]}"
+        command = f"shell bash ./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]} {wl_config[3]} {wl_config[4]}"
         output = self.ssh_send_command(command,2)
         command = "source synthesis.tcl"
         output = self.ssh_send_command(command,2)
+
         command = "shell cat ./report/gates.rpt"
         output = self.ssh_send_command(command,2)
         lines = output.split('\n')
@@ -193,8 +195,7 @@ class vv_host(host):
         command = f'./simu/sim_wl.sh {config[0]} {config[1]} {config[2]} {config[3]} {config[4]}'
         subprocess.run([command],  shell=True, capture_output=True,text=True)
         
-    def simu_vv(self):
-        cur_config = self.conf[self.index]
+    def simu_vv(self,config):
         # Number of symbols
         num_symbols = 32000*4
         
@@ -220,17 +221,13 @@ class vv_host(host):
         BER = 0.0
         BER_ref = 0.0
 
-        self.update_tb(configs)
-        os.system("source ./sim/sim.sh > sim_log.log")
-
+        self.update_tb(config)
+        os.system("./sim/sim.sh > sim_log.log")
         out_vhdl = self.import_vectors()
-        print(len(out_vhdl))
         out_rescal = out_vhdl/(2**(input_wl-1)-1)*scaling_AMP
             # sym_rescal = symb_expo/(2**(input_wl-1)-1)*scaling_AMP
         out_demod = self.DEMOD_16QAM(out_rescal)
             # ref_demod = DEMOD_16QAM(sym_rescal)
-        print("out_demod: ", len(out_rescal))
-        print("symbols: ", len(symbols))
         BER = np.sum(symbols != out_demod)/len(symbols)
             # BER_ref[i] = np.sum(symbols != ref_demod)/len(symbols)
 
@@ -256,8 +253,8 @@ class vv_host(host):
                     self.cost = np.append(self.cost, self.cost[i])
                     return
             cur_config = self.conf[cur_index]
-            # syn_result = self.ssh_cad_run(cur_config)
-            syn_result = np.sum(cur_config)
+            syn_result = self.ssh_cad_run(cur_config)
+            # syn_result = np.sum(cur_config)
             syn_result = float(syn_result)
             self.cost = np.append(self.cost, np.array([syn_result]))
 
@@ -265,7 +262,7 @@ class vv_host(host):
     def get_prec(self):
         cur_config = self.conf[self.index]
         if self.mode == "simulation":
-            prec = self.simu_vv()
+            prec = self.simu_vv(cur_config)
             self.prec = np.append(self.prec, np.array([prec]))
         elif self.mode == "hybrid":
             prec = self.remote_BER(cur_config)
@@ -292,10 +289,11 @@ class vv_host(host):
 
         # evaluate the config
         print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ite: {int(self.index)}")
+        print(f"Config: {self.conf[self.index:self.index+1]}")
         self.get_prec()
         self.get_cost()
         self.calc_loss()
-        print(f"Config: {self.conf[self.index:self.index+1]}")
+        
         print(f"Area  : {self.cost[self.index:self.index+1]}")
         print(f"MSE   : {self.prec[self.index:self.index+1]}")
         print(f"Loss  : {self.loss[self.index:self.index+1]}")
@@ -349,7 +347,12 @@ class vv_host(host):
         self.dump_record()
 
 if __name__ == "__main__":
-    # obj = vv_host(name = "simulation_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
+    obj = vv_host(name = "simulation_watanabe_100_batch1_round0", num_ite=100, mode="simulation", algo="watanabe")
     # obj.run()
-    obj = vv_host(name = "hybrid_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
-    obj.run()
+    # obj = vv_host(name = "hybrid_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
+    # obj.run()
+    # area = obj.ssh_cad_run([4,4,11,10,7])
+    # print(area)
+    # obj.simu_init()
+    result = obj.simu_vv([8,8,8,8,8])
+    print(result)

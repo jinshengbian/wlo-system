@@ -17,18 +17,18 @@ package vv_support is
   type selected_rings_type is array (0 to N_SEL_RINGS-1) of natural;
   constant SEL_RINGS   : selected_rings_type := (0, 2);
 
-  constant MAGNITUDE_WL         : natural := 16; --for optimization
+constant MAGNITUDE_WL : natural := 8 ; --for optimization
   constant MAGNITUDE_ITERATIONS : natural := INPUT_WL-6;
 
-  constant PARTITIONED_WL   : natural := 8; --for optimization
+constant PARTITIONED_WL : natural := 8 ; --for optimization
 
-  constant SQUARE_WL : natural := 7; --for optimization
-  constant FOURTH_WL : natural := 8; --for optimization
+constant SQUARE_WL : natural := 8 ; --for optimization
+constant FOURTH_WL : natural := 8 ; --for optimization
 
   constant AVERAGE_WL     : natural := FOURTH_WL+PARALLELISM-2; --fixed
   constant AVERAGE_LENGTH : natural := 64;  -- In multiples of the parallelism.
 
-  constant PHASE_WL         : natural := 9; --for optimization
+constant PHASE_WL : natural := 8 ; --for optimization
   constant PHASE_ITERATIONS : natural := INPUT_WL;
 
   -- Constants
