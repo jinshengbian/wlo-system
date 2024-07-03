@@ -3,6 +3,7 @@ import sys
 sys.path.append('../algo')
 from host import *
 from optimizer import optimizer
+from TPEOptimizer_batch import TPEOptimizer_batch
 import random
 import paramiko
 import paramiko.client
@@ -308,20 +309,20 @@ class fir_host(host):
         
         # evaluate the config
         print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ite: {int(self.index/self.bsize)}")
+        print(f"Config: {self.conf[self.index-self.bsize+1:self.index+1]}")
         self.get_prec()
+        print(f"MSE   : {self.prec[self.index-self.bsize+1:self.index+1]}")
         self.get_cost()
         self.calc_loss()
-
-        
-        print(f"Config: {self.conf[self.index-self.bsize+1:self.index+1]}")
-        print(f"Area  : {self.cost[self.index-self.bsize+1:self.index+1]}")
-        print(f"MSE   : {self.prec[self.index-self.bsize+1:self.index+1]}")
+        print(f"Area  : {self.cost[self.index-self.bsize+1:self.index+1]}") 
         print(f"Loss  : {self.loss[self.index-self.bsize+1:self.index+1]}")
 
         # results
         if self.algo == "watanabe":
             result: tuple[dict[str, float], float]
             result = {"loss": self.loss[self.index]}, time.time() - start_time
+        elif self.algo == "watabatch":
+            result = self.loss[self.index-self.bsize+1:self.index+1], time.time()-start_time
         elif self.algo == "newtpe":
             result = self.loss[self.index-self.bsize+1:self.index]
 
@@ -329,7 +330,7 @@ class fir_host(host):
     
     def run(self):
         # define search space
-        if self.algo == "watanabe":
+        if self.algo == "watanabe" or self.algo == "watabatch":
             cs = CS.ConfigurationSpace()
             dim = self.dimension
             for d in range(dim):
@@ -346,6 +347,9 @@ class fir_host(host):
         if self.algo == "watanabe":
             opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=16)
             print(opt.optimize(logger_name="obj_func"))
+        elif self.algo == "watabatch":
+            opt = TPEOptimizer_batch(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="result_TPE",n_ei_candidates=50,max_evals=self.num_ite,n_init=16,batch_size=self.bsize)
+            best_config,best_loss = opt.optimize(logger_name="sphere")
         elif self.algo == "newtpe":
             opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=self.bsize,if_uniform_start=False)
             best_config = opt.optimization()
