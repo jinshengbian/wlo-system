@@ -27,9 +27,9 @@ def lower_trend(loss):
     return trend, index
 
 
-with open("./watanabe.json", 'r') as file:
+with open("./hybrid_watanabe_100_batch1_round0.json", 'r') as file:
     refsim_data = json.load(file)
-with open("./newtpe.json", 'r') as file:
+with open("./simulation_watanabe_100_batch1_round0.json", 'r') as file:
     newsim_data = json.load(file)
 # with open("./hybrid_newtpe_250_batch1_round0.json", 'r') as file:
 #     newhyb1_data = json.load(file)

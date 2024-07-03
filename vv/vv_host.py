@@ -43,8 +43,8 @@ class vv_host(host):
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
 
-        self.ht=  0.014;
-        self.lt = 0.013;
+        self.ht=  0.0122;
+        self.lt = 0.0118;
         self.tar = (self.ht+self.lt)/2
         
         # record
@@ -272,7 +272,7 @@ class vv_host(host):
     def calc_loss(self):
         cur_index = self.index
         if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
-            loss_val = abs(self.prec[cur_index]-self.tar)*35000
+            loss_val = abs(self.prec[cur_index]-self.tar)*40000
         else :
             loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
         self.loss = np.append(self.loss, np.array([loss_val]))
@@ -347,16 +347,19 @@ class vv_host(host):
         self.dump_record()
 
 if __name__ == "__main__":
-    obj = vv_host(name = "simulation_watanabe_100_batch1_round0", num_ite=100, mode="simulation", algo="watanabe")
-    # obj.run()
     # obj = vv_host(name = "hybrid_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
     # obj.run()
+    obj = vv_host(name = "simulation_watanabe_100_batch1_round1", num_ite=100, mode="simulation", algo="watanabe")
+    obj.run()
+    
+    
     # obj = vv_host(name = "simulation_newtpe_100_batch1_round0", num_ite=100, mode="simulation", algo="newtpe")
     # obj.run()
     # obj = vv_host(name = "hybrid_newtpe_100_batch1_round0", num_ite=100, mode="hybrid", algo="newtpe")
     # obj.run()
-    conf = [8,8,8,8,8]
-    result = obj.simu_vv(conf)
-    print(conf)
-    print(result)
+
+    # conf = [7,2,5,12,8]
+    # result = obj.simu_vv(conf)
+    # print(conf)
+    # print(result)
 
