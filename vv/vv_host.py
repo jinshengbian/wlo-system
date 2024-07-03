@@ -2,6 +2,7 @@ import sys
 sys.path.append('../algo')
 from host import *
 from optimizer import optimizer
+from TPEOptimizer_batch import TPEOptimizer_batch
 import os
 import paramiko
 import paramiko.client
@@ -21,6 +22,7 @@ from tpe.optimizer import TPEOptimizer
 class vv_host(host):
     def __init__(self, name="test", num_ite=100, mode="hybrid", algo="watanabe"):
         super().__init__(name, num_ite, mode, algo)
+        self.bsize = 1
 
         self.ssh_cad = paramiko.client.SSHClient()
         self.ssh_cad.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -29,14 +31,17 @@ class vv_host(host):
         self.ssh_cad_init()
 
         if mode == "simulation":
+            
             self.simu_init()
         elif mode == "hybrid":
+
             self.ssh_emu = paramiko.client.SSHClient()
             self.ssh_emu.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             self.ssh_emu.connect("twix.mc2.chalmers.se", username="bianj", password="ah669824")
             # self.ssh_emu_chan = self.ssh_emu.invoke_shell()
             # self.ssh_emu_init()
         
+
         if algo == "newtpe":
             num_init = 16
             if num_ite%2 != 0 or num_init%2 != 0:
@@ -244,64 +249,78 @@ class vv_host(host):
         return ber
     ####################################################################
     def get_cost(self):
-        cur_index = self.index
-        if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
-            self.cost = np.append(self.cost, np.array([-1]))
-        else:
-            for i in range(1,cur_index):
-                if np.all(self.conf[cur_index] == self.conf[i]):
-                    self.cost = np.append(self.cost, self.cost[i])
-                    return
-            cur_config = self.conf[cur_index]
-            syn_result = self.ssh_cad_run(cur_config)
-            # syn_result = np.sum(cur_config)
-            syn_result = float(syn_result)
-            self.cost = np.append(self.cost, np.array([syn_result]))
+        for i in range(self.bsize):
+            cur_index = self.index-(self.bsize-i-1)
+            if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
+                self.cost = np.append(self.cost, np.array([-1]))
+            else:
+                for i in range(1,cur_index):
+                    if np.all(self.conf[cur_index] == self.conf[i]):
+                        self.cost = np.append(self.cost, self.cost[i])
+                        return
+                cur_config = self.conf[cur_index]
+                syn_result = self.ssh_cad_run(cur_config)
+                # syn_result = np.sum(cur_config)
+                syn_result = float(syn_result)
+                self.cost = np.append(self.cost, np.array([syn_result]))
 
 
     def get_prec(self):
-        cur_config = self.conf[self.index]
+        
         if self.mode == "simulation":
+            cur_config = self.conf[self.index]
             prec = self.simu_vv(cur_config)
             self.prec = np.append(self.prec, np.array([prec]))
         elif self.mode == "hybrid":
+            cur_config = np.array([])  
+            for i in range(self.bsize):
+                cur_index = self.index-(self.bsize-i-1)
+                cur_config = np.append(cur_config, self.conf[cur_index])
             prec = self.remote_BER(cur_config)
             self.prec = np.append(self.prec, np.array([prec]))
 
 
     def calc_loss(self):
-        cur_index = self.index
-        if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
-            loss_val = abs(self.prec[cur_index]-self.tar)*40000
-        else :
-            loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
-        self.loss = np.append(self.loss, np.array([loss_val]))
+        for i in range(self.bsize):
+            cur_index = self.index-(self.bsize-i-1)
+            if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
+                loss_val = abs(self.prec[cur_index]-self.tar)*40000
+            else :
+                loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
+            self.loss = np.append(self.loss, np.array([loss_val]))
 
 
     def obj_func(self, config):
-        self.index = self.index + 1
+        self.index = self.index + self.bsize
         # get configurations
         if self.algo == "watanabe":
             start_time = time.time() 
             self.conf = np.append(self.conf, [np.array(list(config.values()))],axis=0)
+        elif self.algo == "watabatch":
+            start_time = time.time() 
+            self.conf = np.append(self.conf, config, axis=0)
         elif self.algo == "newtpe":
             self.conf = np.append(self.conf, config, axis=0)
 
         # evaluate the config
-        print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ite: {int(self.index)}")
-        print(f"Config: {self.conf[self.index:self.index+1]}")
+        print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ite: {int(self.index/self.bsize)}")
+        print(f"Config: {self.conf[self.index-self.bsize+1:self.index+1]}")
         self.get_prec()
+        print(f"MSE   : {self.prec[self.index-self.bsize+1:self.index+1]}")
         self.get_cost()
         self.calc_loss()
         
-        print(f"Area  : {self.cost[self.index:self.index+1]}")
-        print(f"MSE   : {self.prec[self.index:self.index+1]}")
-        print(f"Loss  : {self.loss[self.index:self.index+1]}")
-
+        
+        print(f"Area  : {self.cost[self.index-self.bsize+1:self.index+1]}")
+        
+        print(f"Loss  : {self.loss[self.index-self.bsize+1:self.index+1]}")
         # results
         if self.algo == "watanabe":
             result: tuple[dict[str, float], float]
             result = {"loss": self.loss[self.index]}, time.time() - start_time
+        elif self.algo == "watabatch":
+            result = self.loss[self.index-self.bsize+1:self.index+1], time.time()-start_time
+
         elif self.algo == "newtpe":
             result = self.loss[self.index-self.bsize+1:self.index+1]
 
@@ -312,7 +331,7 @@ class vv_host(host):
 
     def run(self):
         # define search space
-        if self.algo == "watanabe":
+        if self.algo == "watanabe" or self.algo == "watabatch":
             cs = CS.ConfigurationSpace()
             # for d in range(dim):
             cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x0", lower=2, upper=8))
@@ -320,6 +339,7 @@ class vv_host(host):
             cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x2", lower=2, upper=12))
             cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x3", lower=2, upper=12))
             cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x4", lower=2, upper=10))
+        
         elif self.algo == "newtpe":
             search_space = np.array([
                 [2,8],
@@ -336,6 +356,9 @@ class vv_host(host):
         if self.algo == "watanabe":
             opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=16)
             print(opt.optimize(logger_name="obj_func"))
+        elif self.algo == "watabatch":
+            opt = TPEOptimizer_batch(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="result_TPE",n_ei_candidates=50,max_evals=self.num_ite,n_init=16,batch_size=self.bsize)
+            best_config,best_loss = opt.optimize(logger_name="sphere")
         elif self.algo == "newtpe":
             opt = optimizer(objec_func=self.obj_func,n_iterations=(self.num_ite-self.num_init),n_init_points=self.num_init,search_space=search_space,SGD_learn_rate=10,batch_size=1,if_uniform_start=False)
             best_config = opt.optimization()
@@ -349,7 +372,7 @@ class vv_host(host):
 if __name__ == "__main__":
     # obj = vv_host(name = "hybrid_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
     # obj.run()
-    obj = vv_host(name = "simulation_watanabe_100_batch1_round1", num_ite=100, mode="simulation", algo="watanabe")
+    obj = vv_host(name = "hybrid_watabatch_100_batch1_round1", num_ite=100, mode="hybrid", algo="watabatch")
     obj.run()
     
     

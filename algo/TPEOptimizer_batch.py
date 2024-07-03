@@ -14,7 +14,7 @@ from tpe.utils.constants import default_percentile_maker
 from tpe.utils.utils import get_logger, get_random_sample, revert_eval_config, store_results
 
 
-class new_tpe(TPEOptimizer):
+class TPEOptimizer_batch(TPEOptimizer):
     def __init__(
         self,  
         batch_size: int,
