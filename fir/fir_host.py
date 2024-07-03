@@ -24,12 +24,13 @@ class fir_host(host):
         self.dimension = 15
         self.search_space = 16 # 0-16
         self.max_cost = 4625
+        self.frac_wl = 8
 
-        # self.ssh_cad = paramiko.client.SSHClient()
-        # self.ssh_cad.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        # self.ssh_cad.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
-        # self.ssh_cad_chan = self.ssh_cad.invoke_shell()
-        # self.ssh_cad_init()
+        self.ssh_cad = paramiko.client.SSHClient()
+        self.ssh_cad.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.ssh_cad.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
+        self.ssh_cad_chan = self.ssh_cad.invoke_shell()
+        self.ssh_cad_init()
 
 
         if mode == "simulation":
@@ -43,7 +44,7 @@ class fir_host(host):
 
         if algo == "newtpe":
             self.bsize = bsize
-            num_init = 16
+            num_init = 40
             if num_ite%2 != 0 or num_init%2 != 0:
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
@@ -98,7 +99,9 @@ class fir_host(host):
         output = self.ssh_send_command(command,2)
         command = f"shell rm genus.* fv -rf"
         output = self.ssh_send_command(command,2)
-        command = f"shell ./change_wl.sh {wl_config[0]} {wl_config[1]} {wl_config[2]} {wl_config[3]} {wl_config[4]} {wl_config[5]} {wl_config[6]} {wl_config[7]} {wl_config[8]} {wl_config[9]} {wl_config[10]} {wl_config[11]} {wl_config[12]} {wl_config[13]} {wl_config[14]}"
+        command = f"shell ./change_wl.sh"
+        for i in range(self.dimension):
+            command = command + f" {int(wl_config[i])}"
         output = self.ssh_send_command(command,2)
         command = "source synthesis.tcl"
         output = self.ssh_send_command(command,2)
@@ -180,7 +183,7 @@ class fir_host(host):
                     except ValueError:
                         pass
         seq = np.array(seq)
-        seq = seq/2**(self.search_space/2)
+        seq = seq/(2**self.frac_wl)
         return seq
     # # hyp mode: UART communication
     def uart_send_config(self,config: np.array):
@@ -290,19 +293,20 @@ class fir_host(host):
                 mse_val = 0
                 for j in range(8):
                     mse_val = mse_val + msg[i*8+j]*256**j
-                mse_val = mse_val/131072/2**16
+                mse_val = mse_val/131072/(2**(2*self.frac_wl))
                 
                 self.prec = np.append(self.prec, np.array([mse_val]))
-
 
     def calc_loss(self):
         for i in range(self.bsize):
             cur_index = self.index-(self.bsize-i-1)
             if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
-                loss_val = abs(self.prec[cur_index]-self.tar)*self.max_cost
+                loss_val = abs(self.prec[cur_index]*10-self.tar)*self.max_cost
             else :
                 loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
             self.loss = np.append(self.loss, np.array([loss_val]))
+    
+
     
     def obj_func(self, config):
         self.index = self.index + self.bsize
@@ -330,7 +334,7 @@ class fir_host(host):
         elif self.algo == "watabatch":
             result = self.loss[self.index-self.bsize+1:self.index+1], time.time()-start_time
         elif self.algo == "newtpe":
-            result = self.loss[self.index-self.bsize+1:self.index]
+            result = self.loss[self.index-self.bsize+1:self.index+1]
 
         return result
     
@@ -351,7 +355,7 @@ class fir_host(host):
         time_start = time.time()
         # optimization 
         if self.algo == "watanabe":
-            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=16)
+            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=40)
             print(opt.optimize(logger_name="obj_func"))
         elif self.algo == "watabatch":
             opt = TPEOptimizer_batch(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="result_TPE",n_ei_candidates=50,max_evals=self.num_ite,n_init=16,batch_size=self.bsize)

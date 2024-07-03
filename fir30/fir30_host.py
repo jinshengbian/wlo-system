@@ -27,15 +27,17 @@ class fir30_host(fir_host):
         super().__init__(name, num_ite, mode, algo)
         self.dimension = 30
         self.search_space = 24 # 0-24
-        self.max_cost = 4625
+        self.max_cost = 20000
+        self.frac_wl = 12
 
         if mode == "simulation":
             self.gen_sim_input()
             self.ref_seq = self.read_ref_seq()
 
-        self.ht = 0.00006
-        self.lt = 0.00003
-        self.tar = (self.ht+self.lt)/2
+        self.ht = 5e-9
+        self.lt = 5e-10
+        self.tar = 1e-9
+        # self.tar = (self.ht+self.lt)/2
 
         self.conf = np.array([[None for _ in range(self.dimension)]])
         
@@ -57,8 +59,8 @@ class fir30_host(fir_host):
         self.gen_sim_input()
         self.ref_seq = self.read_ref_seq()
 
-        config = np.ones((30),dtype=int)*10
-
+        # config = np.ones((30),dtype=int)*22
+        config = np.array([23,23,22,23,23,23,22,22,23,22,23,22,23,23,22,23,23,23,23,23,23,23,23,23,23,23,22,22,23,23])
         self.run_sim(config)
         sim_seq = self.read_output()
         sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
@@ -80,7 +82,7 @@ class fir30_host(fir_host):
         mse_val = 0
         for j in range(8):
             mse_val = mse_val + msg[0*8+j]*256**j
-        mse_val = mse_val/131072/2**24
+        mse_val = mse_val/131072/(2**(2*self.frac_wl))
         print("hyb mse: ", mse_val)
         # mse_val = 0
         # for j in range(8):
@@ -94,18 +96,15 @@ class fir30_host(fir_host):
 if __name__ == "__main__":
     
 
-    obj = fir30_host(name=f"simulation_watanabe_400_batch1_round0", num_ite=400, mode="hybrid", algo="watanabe", bsize=1)
-    # obj.run()
-    obj.test_sim_batch()
-    obj.test_sim_batch()
-    obj.test_sim_batch()
-    obj.test_sim_batch()
-
-
-    # obj = fir30_host(name=f"hybrid_watanabe_400_batch1_round0", num_ite=400, mode="hybrid", algo="watanabe", bsize=1)
+    # obj = fir30_host(name=f"simulation_watanabe_400_batch1_round0", num_ite=400, mode="simulation", algo="watanabe", bsize=1)
     # obj.run()
 
 
+
+    obj = fir30_host(name=f"hybrid_watanabe_400_batch1_round0", num_ite=1000, mode="hybrid", algo="watanabe", bsize=1)
+    obj.run()
+
+    # obj.test_sim_batch()
 
 
 
