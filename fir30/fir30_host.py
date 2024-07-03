@@ -55,12 +55,12 @@ class fir30_host(fir_host):
     
     # test
     def test_sim_batch(self):
-        self.bsize = 2
+        self.bsize = 1
         self.gen_sim_input()
         self.ref_seq = self.read_ref_seq()
 
-        config = np.ones((30),dtype=int)*24
-        config1 = np.ones((30),dtype=int)*23
+        config = np.ones((30),dtype=int)*23
+        config1 = np.ones((30),dtype=int)*20
         self.run_sim(config)
         sim_seq = self.read_output()
         sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
@@ -70,7 +70,7 @@ class fir30_host(fir_host):
         # syn_result = float(syn_result)
 
         # print("syn area: ", syn_result)
-        config = np.append(config,config1)
+        # config = np.append(config,config1)
         print(config)
         self.uart_send_config(config)
         time.sleep(0.001)
@@ -85,11 +85,11 @@ class fir30_host(fir_host):
             mse_val = mse_val + msg[0*8+j]*256**j
         mse_val = mse_val/131072/(2**(2*self.frac_wl))
         print("hyb mse: ", mse_val)
-        mse_val = 0
-        for j in range(8):
-            mse_val = mse_val + msg[1*8+j]*256**j
-        mse_val = mse_val/131072/(2**(2*self.frac_wl))
-        print("hyb mse: ", mse_val)
+        # mse_val = 0
+        # for j in range(8):
+        #     mse_val = mse_val + msg[1*8+j]*256**j
+        # mse_val = mse_val/131072/(2**(2*self.frac_wl))
+        # print("hyb mse: ", mse_val)
 
     ####################################################################
 
@@ -100,10 +100,11 @@ if __name__ == "__main__":
     # obj = fir30_host(name=f"simulation_watanabe_400_batch1_round0", num_ite=400, mode="simulation", algo="watanabe", bsize=1)
     # obj.run()
 
+    # obj = fir30_host(name=f"hybrid_newtpe_400_batch2_round2", num_ite=400, mode="hybrid", algo="newtpe", bsize=2)
+    # obj.run()
 
-
-    obj = fir30_host(name=f"hybrid_tpe3_400_batch1_round1", num_ite=400, mode="hybrid", algo="newtpe", bsize=1)
-    obj.run()
+    aa = fir30_host(name=f"simulation_newtpe_400_batch2_round2", num_ite=400, mode="simulation", algo="newtpe", bsize=1)
+    aa.run()
 
     # obj.test_sim_batch()
 
