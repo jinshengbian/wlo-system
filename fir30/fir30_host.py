@@ -53,19 +53,17 @@ class fir30_host(fir_host):
     
     # test
     def test_sim_batch(self):
-        self.bsize = 2
+        self.bsize = 1
         self.gen_sim_input()
         self.ref_seq = self.read_ref_seq()
 
-        config = np.ones((15),dtype=int)*0
-        config1 = np.ones((15),dtype=int)*1
-       
+        config = np.ones((30),dtype=int)*10
 
         self.run_sim(config)
         sim_seq = self.read_output()
         sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
         print("sim mse: ",sim_prec)
-        config = np.append(config,config1)
+
         # syn_result = self.ssh_cad_run(config)
         # syn_result = float(syn_result)
 
@@ -82,13 +80,13 @@ class fir30_host(fir_host):
         mse_val = 0
         for j in range(8):
             mse_val = mse_val + msg[0*8+j]*256**j
-        mse_val = mse_val/131072/2**16
+        mse_val = mse_val/131072/2**24
         print("hyb mse: ", mse_val)
-        mse_val = 0
-        for j in range(8):
-            mse_val = mse_val + msg[1*8+j]*256**j
-        mse_val = mse_val/131072/2**16
-        print("hyb mse: ", mse_val)
+        # mse_val = 0
+        # for j in range(8):
+        #     mse_val = mse_val + msg[1*8+j]*256**j
+        # mse_val = mse_val/131072/2**16
+        # print("hyb mse: ", mse_val)
 
     ####################################################################
 
@@ -96,9 +94,12 @@ class fir30_host(fir_host):
 if __name__ == "__main__":
     
 
-    obj = fir30_host(name=f"simulation_watanabe_400_batch1_round0", num_ite=400, mode="simulation", algo="watanabe", bsize=1)
+    obj = fir30_host(name=f"simulation_watanabe_400_batch1_round0", num_ite=400, mode="hybrid", algo="watanabe", bsize=1)
     # obj.run()
-
+    obj.test_sim_batch()
+    obj.test_sim_batch()
+    obj.test_sim_batch()
+    obj.test_sim_batch()
 
 
     # obj = fir30_host(name=f"hybrid_watanabe_400_batch1_round0", num_ite=400, mode="hybrid", algo="watanabe", bsize=1)
@@ -112,8 +113,8 @@ if __name__ == "__main__":
 
     
 
-    cur_config = np.ones((30),dtype=int)*24
-    obj.run_sim(cur_config)
-    cur_seq = obj.read_output()
-    mse = np.mean((obj.ref_seq-cur_seq)**2)
-    print(mse)
+    # cur_config = np.ones((30),dtype=int)*24
+    # obj.run_sim(cur_config)
+    # cur_seq = obj.read_output()
+    # mse = np.mean((obj.ref_seq-cur_seq)**2)
+    # print(mse)

@@ -105,7 +105,7 @@ FIR dut_sys (
     .data_out(output_data),
     .out_valid()
 );
-assign sw_frac_ref = {8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16};
+assign sw_frac_ref = {8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24};
 FIR ref_sys (
     .clk(clk),
     .rst(sys_rst),
@@ -117,7 +117,7 @@ FIR ref_sys (
 );
 
 
-data_collector data_collector_inst (
+data_collector #(OUTPUT_WL) data_collector_inst (
     .clk(clk),
     .rstn(sys_rstn),
     .start(start),

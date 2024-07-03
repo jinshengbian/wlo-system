@@ -91,20 +91,21 @@ end
 
 genvar i;
 generate
-    // for (i=0; i<n_taps; i=i+1) begin
+     for (i=0; i<n_taps; i=i+1) begin
     //     if (PRODUCT_FRAC_WL>PRODUCT_FRAC_WL_ARRAY[i]) begin
     //         assign product_new[i] = {product[i][PRODUCT_INTE_WL-1:-(PRODUCT_FRAC_WL_ARRAY[i])],(PRODUCT_FRAC_WL-PRODUCT_FRAC_WL_ARRAY[i])'(0)};
     //     end
     //     else begin
     //         assign product_new[i] = product[i];
     //     end
-    // end
-    bit_switch #(32,24) sw (
+            bit_switch #(32,24) sw (
             .num_int(8'd8),
             .num_frac(frac_wl[i]),
             .data_i(product[i]),
             .data_o(product_new[i])
         );
+     end
+
 endgenerate
 
 assign data_out = sum_reg[0][OUT_INTE_WL-1:-OUT_FRAC_WL];

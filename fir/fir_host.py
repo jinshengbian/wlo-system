@@ -136,14 +136,20 @@ class fir_host(host):
     def run_sim(self,vals):
         self.modify_sim_wl(vals)
         try:
-            tcl_commands = f"""
-            vlib work
-            vmap work work
-            vlog ./simu/*.sv
-            vsim FIR_tb -voptargs=+acc
+            # tcl_commands = f"""
+            # vlib work
+            # vmap work work
+            # vlog ./simu/*.sv
+            # vsim FIR_tb -voptargs=+acc
 
-            run -all
-            quit sim
+            # run -all
+            # quit sim
+            # """
+            tcl_commands = f"""
+                vlib work
+                vmap work work
+                vlog ./simu/*.sv
+                vsim -c FIR_tb -voptargs=+acc -do "run -all; quit"
             """
             # Start ModelSim and pass TCL commands via stdin
             p = subprocess.Popen(['vsim', '-c'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -159,7 +165,7 @@ class fir_host(host):
     
     def read_ref_seq(self):
         print(self.dimension)
-        wl_config = np.ones(self.dimension)*16
+        wl_config = np.ones(self.dimension)*self.search_space
         self.run_sim(wl_config)
         ref_seq = self.read_output()
         return ref_seq

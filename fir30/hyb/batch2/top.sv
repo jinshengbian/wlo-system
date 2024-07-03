@@ -127,7 +127,7 @@ FIR dut_sys1 (
     .data_out(output_data[1]),
     .out_valid()
 );
-assign sw_frac_ref = {8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16};
+assign sw_frac_ref = {8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24,8'd24};
 
 FIR ref_sys (
     .clk(clk),
@@ -141,7 +141,7 @@ FIR ref_sys (
 
 // data_collector
 
-data_collector data_collector_0 (
+data_collector #(OUTPUT_WL) data_collector_0 (
     .clk(clk),
     .rstn(sys_rstn),
     .start(start),
@@ -150,7 +150,7 @@ data_collector data_collector_0 (
     .data_out(mse_data[0]),
     .data_valid(mse_valid[0])
 );
-data_collector data_collector_1 (
+data_collector #(OUTPUT_WL) data_collector_1 (
     .clk(clk),
     .rstn(sys_rstn),
     .start(start),

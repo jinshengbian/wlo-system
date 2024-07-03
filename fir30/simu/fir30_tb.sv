@@ -9,7 +9,7 @@ localparam IN_INTE_WL    = 4;
 localparam IN_FRAC_WL    = 12;
 localparam OUT_INTE_WL   = 4;
 localparam OUT_FRAC_WL   = 12;
-localparam int PRODUCT_FRAC_WL_ARRAY [0:29] = {24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24} ;
+localparam int PRODUCT_FRAC_WL_ARRAY [0:29] = {10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10} ;
 
 logic clk,rst,in_valid,out_valid;
 logic signed [IN_INTE_WL-1:-IN_FRAC_WL] data_in;
