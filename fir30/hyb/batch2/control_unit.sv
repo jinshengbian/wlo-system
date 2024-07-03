@@ -1,5 +1,5 @@
 module control_unit #(
-    parameter NUM_CHAN = 15
+    parameter NUM_CHAN = 30
 )(
     input clk,
     input rstn,
@@ -154,9 +154,9 @@ always @(state or sw_frac_gen or sw_int_gen or mse_data_reg or mse_byte_count) b
     com_txdata  <= 0;
 
     for (i = 0; i < 2; i++) begin
-        for (j = 0; j < 15; j++) begin
-            sw_frac[i][j] <= sw_frac_gen[i*15+j];
-            sw_int[i][j]  <= sw_int_gen[i*15+j];
+        for (j = 0; j < NUM_CHAN; j++) begin
+            sw_frac[i][j] <= sw_frac_gen[i*NUM_CHAN+j];
+            sw_int[i][j]  <= sw_int_gen[i*NUM_CHAN+j];
         end
     end
 

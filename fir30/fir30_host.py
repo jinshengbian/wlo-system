@@ -29,7 +29,7 @@ class fir30_host(fir_host):
         self.search_space = 24 # 0-24
         self.max_cost = 20000
         self.frac_wl = 12
-
+        self.bsize = bsize
         if mode == "simulation":
             self.gen_sim_input()
             self.ref_seq = self.read_ref_seq()
@@ -55,12 +55,12 @@ class fir30_host(fir_host):
     
     # test
     def test_sim_batch(self):
-        self.bsize = 1
+        self.bsize = 2
         self.gen_sim_input()
         self.ref_seq = self.read_ref_seq()
 
-        # config = np.ones((30),dtype=int)*22
-        config = np.array([23,23,22,23,23,23,22,22,23,22,23,22,23,23,22,23,23,23,23,23,23,23,23,23,23,23,22,22,23,23])
+        config = np.ones((30),dtype=int)*24
+        config1 = np.ones((30),dtype=int)*23
         self.run_sim(config)
         sim_seq = self.read_output()
         sim_prec =  np.mean((self.ref_seq-sim_seq)**2)
@@ -70,7 +70,8 @@ class fir30_host(fir_host):
         # syn_result = float(syn_result)
 
         # print("syn area: ", syn_result)
-
+        config = np.append(config,config1)
+        print(config)
         self.uart_send_config(config)
         time.sleep(0.001)
         self.uart_hw_start()
@@ -84,11 +85,11 @@ class fir30_host(fir_host):
             mse_val = mse_val + msg[0*8+j]*256**j
         mse_val = mse_val/131072/(2**(2*self.frac_wl))
         print("hyb mse: ", mse_val)
-        # mse_val = 0
-        # for j in range(8):
-        #     mse_val = mse_val + msg[1*8+j]*256**j
-        # mse_val = mse_val/131072/2**16
-        # print("hyb mse: ", mse_val)
+        mse_val = 0
+        for j in range(8):
+            mse_val = mse_val + msg[1*8+j]*256**j
+        mse_val = mse_val/131072/(2**(2*self.frac_wl))
+        print("hyb mse: ", mse_val)
 
     ####################################################################
 
@@ -101,7 +102,7 @@ if __name__ == "__main__":
 
 
 
-    obj = fir30_host(name=f"hybrid_watanabe_400_batch1_round0", num_ite=1000, mode="hybrid", algo="watanabe", bsize=1)
+    obj = fir30_host(name=f"hybrid_tpe3_400_batch1_round1", num_ite=400, mode="hybrid", algo="newtpe", bsize=1)
     obj.run()
 
     # obj.test_sim_batch()

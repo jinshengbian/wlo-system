@@ -40,7 +40,7 @@ class fir_host(host):
                 self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
             self.bsize = bsize
-            self.uart_ob = serial.Serial("/dev/ttyUSB0",115200)
+            self.uart_ob = serial.Serial("/dev/ttyUSB1",115200)
 
         if algo == "newtpe":
             self.bsize = bsize
@@ -244,7 +244,7 @@ class fir_host(host):
     ####################################################################
 
     def get_cost(self): # cadence
-        global force_a
+
         for i in range(self.bsize):
             cur_index = self.index-(self.bsize-i-1)
             if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
@@ -254,7 +254,6 @@ class fir_host(host):
                 for i in range(1,cur_index):
                     if np.all(self.conf[cur_index] == self.conf[i]):
                             self.cost = np.append(self.cost, self.cost[i])
-                            force_a = force_a + 1
                             return
                     # if self.prec[cur_index]-self.prec[cur_index]%1e-5 == self.prec[i]-self.prec[i]%1e-5:
                     #     if np.all(self.conf[cur_index] >= self.conf[i]):
@@ -382,13 +381,12 @@ if __name__ == "__main__":
     # for i in range(1):
     #     obj = fir_host(name=f"hybrid_watanabe_250_batch1_round{i}", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
     #     obj.run()
-    global force_a,force_b
-    force_a = 0
+
 
     obj = fir_host(name=f"simulation_watanabe_250_batch1_round0", num_ite=250, mode="simulation", algo="watanabe", bsize=1)
     obj.run()
 
 
-    force_a = 0
+
     obj = fir_host(name=f"hybrid_watanabe_250_batch1_round0", num_ite=250, mode="hybrid", algo="watanabe", bsize=1)
     obj.run()
