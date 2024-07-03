@@ -14,21 +14,28 @@ import matplotlib.pyplot as plt
 import ConfigSpace as CS
 import ConfigSpace.hyperparameters as CSH
 from tpe.optimizer import TPEOptimizer
+import os
 
 class fir_host(host):
     def __init__(self, name="test", num_ite=100, mode="simulation", algo="watanabe", bsize=1):
         super().__init__(name, num_ite, mode, algo)
-        self.dimension = 15
 
-        self.ssh_cad = paramiko.client.SSHClient()
-        self.ssh_cad.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh_cad.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
-        self.ssh_cad_chan = self.ssh_cad.invoke_shell()
-        self.ssh_cad_init()
+        self.dimension = 15
+        self.search_space = 16 # 0-16
+        self.max_cost = 4625
+
+        # self.ssh_cad = paramiko.client.SSHClient()
+        # self.ssh_cad.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # self.ssh_cad.connect("knuffodrag.ita.chalmers.se", username="bianj", password="BJS1998@Chalmers")
+        # self.ssh_cad_chan = self.ssh_cad.invoke_shell()
+        # self.ssh_cad_init()
+
+
         if mode == "simulation":
             self.bsize = 1
-            self.gen_sim_input()
-            self.ref_seq = self.read_ref_seq()
+            if type(self) == fir_host:
+                self.gen_sim_input()
+                self.ref_seq = self.read_ref_seq()
         elif mode == "hybrid":
             self.bsize = bsize
             self.uart_ob = serial.Serial("/dev/ttyUSB0",115200)
@@ -114,7 +121,7 @@ class fir_host(host):
         # Open files outside the loop
         with open("simu/input.txt", "w") as input_file:
             for _ in range(n_simulations):
-                random_data = random.randint(0, 2**10)
+                random_data = random.randint(0, 2**((self.search_space/2)+2)) # assume int_wl = 4
                 
                 # Write data to files using the file objects
                 input_file.write(str(random_data) + "\n")
@@ -122,7 +129,7 @@ class fir_host(host):
     def modify_sim_wl(self,config):
         command = './simu/sim_wl.sh'
         for i in range(self.dimension):
-            command = command + f" {config[i]}"
+            command = command + f" {int(config[i])}"
         os.system(command)
 
     def run_sim(self,vals):
@@ -150,6 +157,7 @@ class fir_host(host):
             print(f"Error adding waveform in ModelSim: {e}")
     
     def read_ref_seq(self):
+        print(self.dimension)
         wl_config = np.ones(self.dimension)*16
         self.run_sim(wl_config)
         ref_seq = self.read_output()
@@ -165,7 +173,7 @@ class fir_host(host):
                     except ValueError:
                         pass
         seq = np.array(seq)
-        seq = seq/2**8
+        seq = seq/2**(self.search_space/2)
         return seq
     # # hyp mode: UART communication
     def uart_send_config(self,config: np.array):
@@ -284,7 +292,7 @@ class fir_host(host):
         for i in range(self.bsize):
             cur_index = self.index-(self.bsize-i-1)
             if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
-                loss_val = abs(self.prec[cur_index]-self.tar)*4625
+                loss_val = abs(self.prec[cur_index]-self.tar)*self.max_cost
             else :
                 loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
             self.loss = np.append(self.loss, np.array([loss_val]))
@@ -325,10 +333,10 @@ class fir_host(host):
             cs = CS.ConfigurationSpace()
             dim = self.dimension
             for d in range(dim):
-                cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x{d}", lower=0, upper=16))
+                cs.add_hyperparameter(CSH.UniformIntegerHyperparameter(f"x{d}", lower=0, upper=self.search_space))
 
         elif self.algo == "newtpe":
-            search_space = np.tile(np.array([0,16]),(self.dimension,1))
+            search_space = np.tile(np.array([0,self.search_space]),(self.dimension,1))
 
         # print information
         print(">>>>>>>>>>>>>>> Start optimization")

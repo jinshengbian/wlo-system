@@ -1,15 +1,15 @@
-`timescale 1ns/1ps
+`timescale 1ns/1ns
 module FIR_tb (
 );
 
 
 localparam COE_INTE_WL   = 4;
-localparam COE_FRAC_WL   = 8;
+localparam COE_FRAC_WL   = 12;
 localparam IN_INTE_WL    = 4;
-localparam IN_FRAC_WL    = 8;
+localparam IN_FRAC_WL    = 12;
 localparam OUT_INTE_WL   = 4;
-localparam OUT_FRAC_WL   = 8;
-localparam int PRODUCT_FRAC_WL_ARRAY [0:14] = {13,13,14,11,10,12,10,13,10,12,12,9,13,12,11} ;
+localparam OUT_FRAC_WL   = 12;
+localparam int PRODUCT_FRAC_WL_ARRAY [0:29] = {24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24} ;
 
 logic clk,rst,in_valid,out_valid;
 logic signed [IN_INTE_WL-1:-IN_FRAC_WL] data_in;

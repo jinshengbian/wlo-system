@@ -26,10 +26,18 @@ class fir30_host(fir_host):
     def __init__(self, name="test", num_ite=100, mode="simulation", algo="watanabe", bsize=1):
         super().__init__(name, num_ite, mode, algo)
         self.dimension = 30
+        self.search_space = 24 # 0-24
+        self.max_cost = 4625
+
+        if mode == "simulation":
+            self.gen_sim_input()
+            self.ref_seq = self.read_ref_seq()
 
         self.ht = 0.00006
         self.lt = 0.00003
         self.tar = (self.ht+self.lt)/2
+
+        self.conf = np.array([[None for _ in range(self.dimension)]])
         
     ########################## self defined functions ##################
 
@@ -84,22 +92,28 @@ class fir30_host(fir_host):
 
     ####################################################################
 
-    def calc_loss(self):
-        for i in range(self.bsize):
-            cur_index = self.index-(self.bsize-i-1)
-            if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
-                loss_val = abs(self.prec[cur_index]-self.tar)*4625
-            else :
-                loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
-            self.loss = np.append(self.loss, np.array([loss_val]))
     
 if __name__ == "__main__":
     
 
     obj = fir30_host(name=f"simulation_watanabe_400_batch1_round0", num_ite=400, mode="simulation", algo="watanabe", bsize=1)
-    obj.run()
+    # obj.run()
 
 
-    force_a = 0
-    obj = fir30_host(name=f"hybrid_watanabe_400_batch1_round0", num_ite=400, mode="hybrid", algo="watanabe", bsize=1)
-    obj.run()
+
+    # obj = fir30_host(name=f"hybrid_watanabe_400_batch1_round0", num_ite=400, mode="hybrid", algo="watanabe", bsize=1)
+    # obj.run()
+
+
+
+
+
+
+
+    
+
+    cur_config = np.ones((30),dtype=int)*24
+    obj.run_sim(cur_config)
+    cur_seq = obj.read_output()
+    mse = np.mean((obj.ref_seq-cur_seq)**2)
+    print(mse)
