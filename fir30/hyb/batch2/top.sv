@@ -9,9 +9,9 @@ module top (
 //////////////////////////////////////////////////////////////// signals & param
 
 // parameter
-parameter NUM_CHAN = 15;
-parameter INPUT_WL = 12;
-parameter OUTPUT_WL = 12;
+parameter NUM_CHAN = 30;
+parameter INPUT_WL = 16;
+parameter OUTPUT_WL = 16;
 
 // system
 logic soft_rstn;
@@ -91,7 +91,7 @@ uart_receiver uart_receiver_inst (
     .com_rdata(com_rxdata)
 );
 
-control_unit #(15) control_unit_inst (
+control_unit #(NUM_CHAN) control_unit_inst (
     .clk(clk),
     .rstn(rstn),
     .com_rxvalid(com_rxvalid),
@@ -128,6 +128,7 @@ FIR dut_sys1 (
     .out_valid()
 );
 assign sw_frac_ref = {8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16,8'd16};
+
 FIR ref_sys (
     .clk(clk),
     .rst(sys_rst),
