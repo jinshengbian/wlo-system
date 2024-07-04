@@ -103,7 +103,7 @@ if __name__ == "__main__":
     # obj = fir30_host(name=f"hybrid_newtpe_400_batch2_round2", num_ite=400, mode="hybrid", algo="newtpe", bsize=2)
     # obj.run()
 
-    aa = fir30_host(name=f"simulation_newtpe_400_batch2_round2", num_ite=400, mode="simulation", algo="newtpe", bsize=1)
+    aa = fir30_host(name=f"simulation_newtpe_400_batch1_round2", num_ite=400, mode="simulation", algo="newtpe", bsize=1)
     aa.run()
 
     # obj.test_sim_batch()
