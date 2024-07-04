@@ -44,7 +44,7 @@ class fir_host(host):
 
         if algo == "newtpe":
             self.bsize = bsize
-            num_init = 40
+            num_init = 16
             if num_ite%2 != 0 or num_init%2 != 0:
                 raise ValueError("num_ite and num_init should be even numbers.")
             self.num_init = num_init
@@ -301,7 +301,7 @@ class fir_host(host):
             cur_index = self.index-(self.bsize-i-1)
             print("lencost",len(self.cost))
             if self.prec[cur_index] < self.lt or self.prec[cur_index] > self.ht:
-                loss_val = abs(self.prec[cur_index]*10-self.tar)*self.max_cost
+                loss_val = abs(self.prec[cur_index]-self.tar)*self.max_cost
             else :
                 loss_val = abs(self.prec[cur_index]-self.tar)*(self.cost[cur_index])
             self.loss = np.append(self.loss, np.array([loss_val]))
@@ -355,7 +355,7 @@ class fir_host(host):
         time_start = time.time()
         # optimization 
         if self.algo == "watanabe":
-            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=40)
+            opt = TPEOptimizer(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="obj_func", max_evals=self.num_ite,n_ei_candidates=50,n_init=16)
             print(opt.optimize(logger_name="obj_func"))
         elif self.algo == "watabatch":
             opt = TPEOptimizer_batch(obj_func=self.obj_func, config_space=cs, min_bandwidth_factor=1e-2, resultfile="result_TPE",n_ei_candidates=50,max_evals=self.num_ite,n_init=16,batch_size=self.bsize)
@@ -375,5 +375,5 @@ if __name__ == "__main__":
 
 
 
-    obj = fir_host(name=f"hybrid_tpe3_250_batch2_round1", num_ite=250, mode="hybrid", algo="newtpe", bsize=2)
+    obj = fir_host(name=f"simulation_tpe3_250_batch1_round1", num_ite=250, mode="simulation", algo="newtpe", bsize=1)
     obj.run()
