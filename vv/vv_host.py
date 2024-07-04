@@ -372,7 +372,13 @@ class vv_host(host):
 if __name__ == "__main__":
     # obj = vv_host(name = "hybrid_watanabe_100_batch1_round0", num_ite=100, mode="hybrid", algo="watanabe")
     # obj.run()
-    obj = vv_host(name = "hybrid_watabatch_100_batch1_round1", num_ite=100, mode="hybrid", algo="watabatch")
+    obj = vv_host(name = "simulation_newtpe3_100_batch1_round0", num_ite=100, mode="simulation", algo="newtpe")
+    obj.run()
+
+    obj = vv_host(name = "simulation_newtpe3_100_batch1_round1", num_ite=100, mode="simulation", algo="newtpe")
+    obj.run()
+
+    obj = vv_host(name = "hybrid_newtpe3_100_batch1_round1", num_ite=100, mode="hybrid", algo="newtpe")
     obj.run()
     
     
